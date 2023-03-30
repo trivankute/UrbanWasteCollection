@@ -50,4 +50,4 @@ hoạch, ít tiêu tốn nhiên liệu,. . . như hình minh họa sau đây.
 ![Hình 1.1](/pictures/ForREADME/open.png?raw=true)
 
 #### To see more (click here)
-[click here](/pictures/)
+[click here](/documents/)
