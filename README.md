@@ -46,5 +46,8 @@ Y. Cụ thể là một hệ thống vận hành các phương tiện vận chuy
 các phương tiện vận chuyển rác thải) đến các Disposal Facility (các cơ sở xử lý) một cách tuần tự, có kế
 hoạch, ít tiêu tốn nhiên liệu,. . . như hình minh họa sau đây.
 
+#### Hình 1.1
 ![Hình 1.1](/pictures/ForREADME/open.png?raw=true)
 
+#### To see more (click here)
+[click here](/pictures/)
