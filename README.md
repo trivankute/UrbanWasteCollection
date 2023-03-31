@@ -1,4 +1,4 @@
-# HK222-CO3001-UWC-2.0
+# **HK222-CO3001-UWC-2.0**
 **Team name** nhomTV\
 **Task 1**  Requirement elicitation\
 **Task 2**  System modelling\
@@ -6,7 +6,7 @@
 **Task 4**  Implementation - Sprint 1\
 **Date:** March 30<sup>th</sup>, 2022 (task 4)
 
-## Members
+## **Members**
 - Trịnh Trí Văn (2012406)
 - Nguyễn Minh Phát (2011795)
 - Nguyễn Chung Sơn (2011981)
@@ -15,9 +15,7 @@
 - Lê Thị Hồng Thắm (2012069)
 - Dư Văn An (2012545)
 
-## Task 1
-### Task 1.1
-#### Context of Project
+## **Context of Project**
 - Quản lý chất thải đô thị là một trong những vấn đề quan trọng mà nhiều quốc gia phải đối mặt trên
 thế giới, do đó nó được coi là một trong những điểm quan trọng được cải thiện để phát triển bền vững.
 Mục tiêu được đặt ra: Phát triển thành phố bền vững, nguồn nước sạch được đảm bảo, cụ thể dành sự
@@ -46,8 +44,8 @@ Y. Cụ thể là một hệ thống vận hành các phương tiện vận chuy
 các phương tiện vận chuyển rác thải) đến các Disposal Facility (các cơ sở xử lý) một cách tuần tự, có kế
 hoạch, ít tiêu tốn nhiên liệu,. . . như hình minh họa sau đây.
 
-#### Hình 1.1
+#### **Hình 1.1**
 ![Hình 1.1](/pictures/ForREADME/open.png?raw=true)
 
-#### To see more (click here)
-[click here](/documents/)
+#### **To see more (click here)**
+**[click here](/documents/)**

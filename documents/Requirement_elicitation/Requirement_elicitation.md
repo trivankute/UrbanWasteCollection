@@ -1,8 +1,8 @@
-# Task 1
+# **Task 1**
 
-## 1.1 Describe the domain context of Urban waste management in Vietnam. Who  are relevant stakeholders? What are their current needs? In your opinion, what benefits UWC 2.0 will be for each stakeholder?
+## **1.1 Describe the domain context of Urban waste management in Vietnam. Who  are relevant stakeholders? What are their current needs? In your opinion, what benefits UWC 2.0 will be for each stakeholder?**
 
-### 1.1.2 Who are relevant stakeholders? What are their current needs? Trong dự án này, Stakeholder bao gồm
+### **1.1.2 Who are relevant stakeholders? What are their current needs? Trong dự án này, Stakeholder bao gồm**
 
 - End User:\
 &#8722; Back officer: Lên lịch và phân công nhiệm vụ cho Collectors và Janitors, thực hiện nhiệm vụ quản lý\
@@ -22,7 +22,7 @@ hoạch vứt rác phù hợp, biết được chi phí phải trả hàng thán
 &#8722; Chính phủ và các công ty chính phủ liên quan: Có thể báo cáo đến hệ thống những vấn
 đề khiến hệ thống cần phải tạm dừng như thời tiết, khi có bộ luật liên quan thay đổi,...\
 
-#### Nhu cầu của các Stakeholder như sau
+#### **Nhu cầu của các Stakeholder như sau**
 
 - End User:\
 &#8722; Back officer:\
@@ -64,7 +64,7 @@ phân tích hệ thống với đối tác trong việc kí hợp đồng\
 ∗ Dịch vụ đáp ứng được nhu cầu\
 ∗ Có chi phí hợp lí
 
-### 1.1.3 In your opinion, what benefits UWC 2.0 will be for each stakeholder?
+### **1.1.3 In your opinion, what benefits UWC 2.0 will be for each stakeholder?**
 
 - Back officer:\
 – Dễ dàng quản lí, giám sát và phân công nhiệm vụ cho Collectors and Janitors\
@@ -82,11 +82,14 @@ diễn ra thuận lợi
 – Dựa vào dữ liệu thu được nắm được tình hình để có thể thực hiện định hướng tiếp
 theo cho công ty
 
-## Task 1.2 Chức năng dự kiến
+## **Task 1.2 Chức năng dự kiến**
+<br>
 
-### 1.2.1 Describe all functional and non-functional requirements that can be inferred from the project description
+### **1.2.1 Describe all functional and non-functional requirements that can be inferred from the project description**
+<br>
 
-#### 1.2.1.1 Functional
+#### **1.2.1.1 Functional**
+<br>
 
 Tính năng chung: chat realtime, trao đổi thông tin, thông báo, chỉnh sửa và cập nhật thông tin cá nhân,
 quan sát bản đồ thấy các phương tiện vận chuyển đang trong nhiệm vụ hoạt động.
@@ -132,7 +135,163 @@ trong quá trình hoạt động.
 - Quan sát được các thông báo mới nhất về công ty như dừng làm việc ngày lễ,. . 
 
 
-#### 1.2.1.2 Non-functional
+#### **1.2.1.2 Non-functional**
 
-![1.2.1.1-1.png](/pictures/ForREADME/1.2.1.1-1.png?raw=true)
+<br>
 
+![1.2.1.1-1.png](/pictures/Task1/1.2.1.1-1.png?raw=true)
+<br>
+
+
+### **1.2.2 Draw a use-case diagram for the whole system**
+<br>
+
+![1.2.2-1.png](/pictures/Task1/1.2.2-1.png?raw=true)
+<br>
+
+#### **Hình 1.2: Use-case diagram cho toàn bộ hệ thống**
+
+**[Link to google drive](https://drive.google.com/file/d/1mUXlPXcTUjHFyZXjKRO0sx3bpjcn5Rl0/view)**
+<!-- make the picture centered -->
+
+<p align="center">
+    <img  src="../../pictures/Task1/1.2.1.1-2.png?raw=true" alt="1.2.1.1-2.png"/>
+</p>
+
+
+#### **Bảng danh sách các actor**
+<br>
+
+![1.2.1.1-3.png](/pictures/Task1/1.2.1.1-3.png?raw=true)
+
+<br>
+
+## **Task 1.3 For the Task assignment module, draw its use-case diagram and describe the use-case using a table format**
+
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-1.png?raw=true" alt="1.3-1.png"/>
+</p>
+
+#### **Use-case diagram cho module phân công nhiệm vụ**
+
+**[Link to google drive](https://drive.google.com/file/d/16KF7FsB64_N8_SJT8eT3SHvaRNM_d-BF/view)**
+
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-2.png?raw=true" alt="1.3-2.png"/>
+</p>
+
+
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-3.png?raw=true" alt="1.3-3.png"/>
+</p>
+
+
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-4.png?raw=true" alt="1.3-4.png"/>
+</p>
+
+
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-5.1.png?raw=true" alt="1.3-5.1.png"/>
+</p>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-5.2.png?raw=true" alt="1.3-5.2.png"/>
+</p>
+
+
+<br>
+
+### **1.3.1 Describe all functional and non-functional requirements that can be inferred from the project description**
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-6.1.png?raw=true" alt="1.3-6.1.png"/>
+</p>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-6.2.png?raw=true" alt="1.3-6.2.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-7.png?raw=true" alt="1.3-7.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-8.png?raw=true" alt="1.3-8.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-9.png?raw=true" alt="1.3-9.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-10.png?raw=true" alt="1.3-10.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-11.png?raw=true" alt="1.3-11.png"/>
+</p>
+
+### **1.3.2 Module chỉ định công việc cho collectors và janitors**
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-12.png?raw=true" alt="1.3-12.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-13.png?raw=true" alt="1.3-13.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-14.png?raw=true" alt="1.3-14.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-15.png?raw=true" alt="1.3-15.png"/>
+</p>
+
+### **1.3.3 Module chỉ định công việc cho collectors và janitors**
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-16.png?raw=true" alt="1.3-16.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-17.png?raw=true" alt="1.3-17.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-18.png?raw=true" alt="1.3-18.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-19.png?raw=true" alt="1.3-19.png"/>
+</p>
+
+### **1.3.4 Module gửi tin nhắn cho collectors và janitors**
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-20.png?raw=true" alt="1.3-20.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img  src="../../pictures/Task1/1.3-21.png?raw=true" alt="1.3-21.png"/>
+</p>
