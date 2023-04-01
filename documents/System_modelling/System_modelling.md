@@ -7,7 +7,7 @@
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.1-1.png?raw=true" alt="2.1-1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.1-1.png?raw=true" alt="2.1-1.png"/>
 </p>
 
 #### **Activity diagram tổng quát cho task assignment**
@@ -48,7 +48,7 @@ Các entity liên quan
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.2-1.png?raw=true" alt="2.2-1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.2-1.png?raw=true" alt="2.2-1.png"/>
 </p>
 
 #### **Sequence diagram for the vehicles assigning task**
@@ -87,20 +87,20 @@ Mô tả Assigned Workers UI
 ### **2.3.1 Class Account**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-1.png?raw=true" alt="2.3-1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-1.png?raw=true" alt="2.3-1.png"/>
 </p>
 
 
 ### **2.3.2 Class Employee**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-2.png?raw=true" alt="2.3-2.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-2.png?raw=true" alt="2.3-2.png"/>
 </p>
 
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-3.png?raw=true" alt="2.3-3.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-3.png?raw=true" alt="2.3-3.png"/>
 </p>
 
 
@@ -111,19 +111,54 @@ Mô tả Assigned Workers UI
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-4.png?raw=true" alt="2.3-4.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-4.png?raw=true" alt="2.3-4.png"/>
 </p>
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-5.png?raw=true" alt="2.3-5.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-5.png?raw=true" alt="2.3-5.png"/>
 </p>
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task2/2.3-6.png?raw=true" alt="2.3-6.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-6.png?raw=true" alt="2.3-6.png"/>
 </p>
 
 <br>
 
 ### **2.3.4 Class Routes**
+
+<br>
+<p align="center">
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-7.png?raw=true" alt="2.3-7.png"/>
+</p>
+
+<br>
+
+### **2.3.5 Class vehicles**
+<br>
+<p align="center">
+    <img style="width:500px; height:500px;" src="../../pictures/Task2/2.3-8.png?raw=true" alt="2.3-8.png"/>
+</p>
+<br>
+
+### **2.3.6 Class Diagram of Task Assignment module**
+
+<br>
+<p align="center">
+    <img src="../../pictures/Task2/2.3-9.png?raw=true" alt="2.3-9.png"/>
+</p>
+<br>
+
+#### **Activity diagram tổng quát cho task assignment**
+**[Link to google drive](https://drive.google.com/file/d/1k09Um2rymlbh6AJ2VIQ-IrwnwwVJ8m48/view?usp=sharing)**
+
+
+<br>
+
+## **2.4 Develop MVP 1 as user interfaces of either a Desktop-view central dashboard for Task Management for back-officers**
+
+<br>
+
+#### **Activity diagram tổng quát cho task assignment**
+**[Link to figma](https://www.figma.com/file/iqOUdjmkFKlZVXzlmmbIsN/CNPM?node-id=0%3A1&t=XoAHWW200uwvuvir-0)**

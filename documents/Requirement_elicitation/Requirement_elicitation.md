@@ -155,7 +155,7 @@ trong quá trình hoạt động.
 <!-- make the picture centered -->
 
 <p align="center">
-    <img  src="../../pictures/Task1/1.2.1.1-2.png?raw=true" alt="1.2.1.1-2.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.2.1.1-2.png?raw=true" alt="1.2.1.1-2.png"/>
 </p>
 
 
@@ -170,7 +170,7 @@ trong quá trình hoạt động.
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-1.png?raw=true" alt="1.3-1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-1.png?raw=true" alt="1.3-1.png"/>
 </p>
 
 #### **Use-case diagram cho module phân công nhiệm vụ**
@@ -179,31 +179,31 @@ trong quá trình hoạt động.
 
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-2.png?raw=true" alt="1.3-2.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-2.png?raw=true" alt="1.3-2.png"/>
 </p>
 
 
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-3.png?raw=true" alt="1.3-3.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-3.png?raw=true" alt="1.3-3.png"/>
 </p>
 
 
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-4.png?raw=true" alt="1.3-4.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-4.png?raw=true" alt="1.3-4.png"/>
 </p>
 
 
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-5.1.png?raw=true" alt="1.3-5.1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-5.1.png?raw=true" alt="1.3-5.1.png"/>
 </p>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-5.2.png?raw=true" alt="1.3-5.2.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-5.2.png?raw=true" alt="1.3-5.2.png"/>
 </p>
 
 
@@ -212,86 +212,86 @@ trong quá trình hoạt động.
 ### **1.3.1 Describe all functional and non-functional requirements that can be inferred from the project description**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-6.1.png?raw=true" alt="1.3-6.1.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-6.1.png?raw=true" alt="1.3-6.1.png"/>
 </p>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-6.2.png?raw=true" alt="1.3-6.2.png"/>
-</p>
-<br>
-<br>
-<p align="center">
-    <img  src="../../pictures/Task1/1.3-7.png?raw=true" alt="1.3-7.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-6.2.png?raw=true" alt="1.3-6.2.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-8.png?raw=true" alt="1.3-8.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-7.png?raw=true" alt="1.3-7.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-9.png?raw=true" alt="1.3-9.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-8.png?raw=true" alt="1.3-8.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-10.png?raw=true" alt="1.3-10.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-9.png?raw=true" alt="1.3-9.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-11.png?raw=true" alt="1.3-11.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-10.png?raw=true" alt="1.3-10.png"/>
+</p>
+<br>
+<br>
+<p align="center">
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-11.png?raw=true" alt="1.3-11.png"/>
 </p>
 
 ### **1.3.2 Module chỉ định công việc cho collectors và janitors**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-12.png?raw=true" alt="1.3-12.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-12.png?raw=true" alt="1.3-12.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-13.png?raw=true" alt="1.3-13.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-13.png?raw=true" alt="1.3-13.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-14.png?raw=true" alt="1.3-14.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-14.png?raw=true" alt="1.3-14.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-15.png?raw=true" alt="1.3-15.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-15.png?raw=true" alt="1.3-15.png"/>
 </p>
 
 ### **1.3.3 Module chỉ định công việc cho collectors và janitors**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-16.png?raw=true" alt="1.3-16.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-16.png?raw=true" alt="1.3-16.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-17.png?raw=true" alt="1.3-17.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-17.png?raw=true" alt="1.3-17.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-18.png?raw=true" alt="1.3-18.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-18.png?raw=true" alt="1.3-18.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-19.png?raw=true" alt="1.3-19.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-19.png?raw=true" alt="1.3-19.png"/>
 </p>
 
 ### **1.3.4 Module gửi tin nhắn cho collectors và janitors**
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-20.png?raw=true" alt="1.3-20.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-20.png?raw=true" alt="1.3-20.png"/>
 </p>
 <br>
 <br>
 <p align="center">
-    <img  src="../../pictures/Task1/1.3-21.png?raw=true" alt="1.3-21.png"/>
+    <img style="width:500px; height:500px;" src="../../pictures/Task1/1.3-21.png?raw=true" alt="1.3-21.png"/>
 </p>
