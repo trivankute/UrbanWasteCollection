@@ -1,0 +1,7 @@
+npm --save-dev prisma
+import {PrismaClient} from '@prisma/client'
+phai su dung mongodbAtlas ko dc local vi ph config
+npx prisma --init mongodb
+ph co map("_id") ph la auto() voi @db.Object
+moi lan chinh phai delete het trong dbs r ctrl P roi typescript restart server r run lai
+mongoDb ko support autoincrement ?
