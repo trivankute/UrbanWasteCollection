@@ -21,6 +21,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ';
 const TestGraph = () => {
+    // test github protection rule
     const [startPoint, setStartPoint] = useState<any>(null);
     const [endPoint, setEndPoint] = useState<any>(null);
 
