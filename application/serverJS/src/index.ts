@@ -27,10 +27,14 @@ app.get("/healthcheck", (req: Request, res: Response) => {
 });
 
 import userRoutes from './routes/route.user'
+import mcpRoutes from './routes/route.mcp'
+import taskRoutes from './routes/route.task'
 
 app.listen(port, host, async () => {
     log.info(`server list at http://${host}:${port}`);
     userRoutes(app)
+    mcpRoutes(app)
+    taskRoutes(app)
 })
 
 // app.all('*', (req: Request, res: Response, next: NextFunction) => {
