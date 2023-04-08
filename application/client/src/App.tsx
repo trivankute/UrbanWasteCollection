@@ -17,6 +17,8 @@ function App() {
   const location = useLocation();
   return (
     <div className="App">
+      {/* comments cua trivan */}
+      <TestGraph/>
       <AnimatePresence mode="wait">
         <Routes key={location.pathname} location={location}>
           <Route path="/" element={<Home/>} />
