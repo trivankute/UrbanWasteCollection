@@ -27,7 +27,7 @@ const TestGraph = () => {
     const [viewport, setViewport] = useState({
         width: 400,
         height: 400,
-        latitude: 10.74436,
+        latitude: 10.74436, hkhk
         longitude: 106.6559759,
         zoom: 15
     });
