@@ -31,6 +31,7 @@ import mcpRoutes from './routes/route.mcp'
 import taskRoutes from './routes/route.task'
 
 app.listen(port, host, async () => {
+    // comment cua Tri Van
     log.info(`server list at http://${host}:${port}`);
     userRoutes(app)
     mcpRoutes(app)
