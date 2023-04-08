@@ -5,6 +5,7 @@ import TestGraph from './Components/TestGraph/TestGraph';
 function App() {
   return (
     <div className="App">
+      {/* comments cua trivan */}
       <TestGraph/>
     </div>
   );
