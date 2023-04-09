@@ -20,7 +20,7 @@ async function deserializeUser(req: Request, res: Response, next: NextFunction) 
         }
     }
     catch (err: any) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.status(401).json({ status:"fail", message: "Unauthorized" });
     }
     return next();
 }
