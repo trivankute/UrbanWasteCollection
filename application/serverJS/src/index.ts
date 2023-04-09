@@ -11,6 +11,10 @@ import cors from 'cors';
 const port = config.get("port") as number;
 const host = config.get("host") as string;
 
+if(process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}  
+
 const app = express();
 app.use(cors({
     origin: '*',
@@ -29,23 +33,30 @@ app.get("/healthcheck", (req: Request, res: Response) => {
 import userRoutes from './routes/route.user'
 import mcpRoutes from './routes/route.mcp'
 import taskRoutes from './routes/route.task'
+import vehicleRoutes from './routes/route.vehicle'
+import workersRoutes from './routes/route.workers'
+import disposalfactoryRoutes from './routes/route.disposalfactory'
+
+userRoutes(app)
+mcpRoutes(app)
+taskRoutes(app)
+vehicleRoutes(app)
+workersRoutes(app)
+disposalfactoryRoutes(app)
 
 app.listen(port, host, async () => {
     // comment cua Tri Van
     log.info(`server list at http://${host}:${port}`);
-    userRoutes(app)
-    mcpRoutes(app)
-    taskRoutes(app)
 })
 
-// app.all('*', (req: Request, res: Response, next: NextFunction) => {
-//     return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
-// })
-// type ErrorType = {
-//     status: number,
-//     message: string
-// }
-// app.use((err: ErrorType, req: Request, res: Response, next: NextFunction) => {
-//     const { status = 500, message = 'Something went wrong' } = err;
-//     res.status(status).send(message)
-// })
+type ErrorType = {
+    status: number,
+    message: string
+}
+app.all('*', (err: ErrorType, req: Request, res: Response, next: NextFunction) => {
+    return next(new ExpressError('Not Found', StatusCodes.NOT_FOUND))
+})
+app.use((err: ErrorType, req: Request, res: Response, next: NextFunction) => {
+    const { status = 500, message = 'Something went wrong' } = err;
+    res.status(status).json({status:"fail", message: message})
+})

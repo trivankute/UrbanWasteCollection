@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.ts",
+    "updateIndexDb": "npx prisma db push",
     "updatedb": "npx prisma generate"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash": "^4.14.192",
+    "@types/multer": "^1.4.7",
     "@types/node": "^18.15.11",
     "@types/nodemailer": "^6.4.7",
     "pino-pretty": "^10.0.0",
@@ -39,6 +41,8 @@
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^7.0.3",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "nanoid": "^4.0.2",
     "nodemailer": "^6.9.1",
     "pino": "^8.11.0",

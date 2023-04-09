@@ -11,56 +11,69 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String?
-  password  String
-  salt String
-  role      String @default("user")
-  age       Int?
-  address String?
-  nationality String?
-  image String?
-  birthday String?
-  gender String?
-  state     String    @default("nothing")
-  checkin Boolean @default(false)
-  checkout Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  vehicle   Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
-  vehicleId String?   @db.ObjectId
-  reviews   Review[]
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  email        String    @unique
+  name         String?
+  password     String
+  salt         String
+  role         String    @default("user")
+  age          Int?
+  address      String?
+  nationality  String?
+  image        String?
+  birthday     String?
+  gender       String?
+  phone        String?
+  state        String    @default("nothing")
+  checkin      Boolean   @default(false)
+  checkinTime  DateTime?
+  checkout     Boolean   @default(false)
+  checkoutTime DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  vehicle      Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  vehicleId    String?   @db.ObjectId
+  reviews      Review[]
+  disposalFactory DisposalFactory? @relation(fields: [disposalId], references: [id], onDelete: Cascade)
+  disposalId   String?   @db.ObjectId
 }
 
 // model vehicle
 model Vehicle {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  capacity Int @default(100)
-  fuel Int @default(100)
-  state     String    @default("nothing")
-  type String? @default("nothing")
-  currentPlace String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  users     User[]
-  tasks     Task[]
+  id                       String           @id @default(auto()) @map("_id") @db.ObjectId
+  numberPlate              String           @unique
+  maxWorkerSlot            Int              @default(4)
+  capacity                 Int              @default(100)
+  fuel                     Int              @default(100)
+  state                    String           @default("nothing")
+  type                     String?          @default("nothing")
+  currentPlacePoint        String?
+  currentDisposalFactory   DisposalFactory? @relation(fields: [currentDisposalFactoryId], references: [id], onDelete: Cascade)
+  currentDisposalFactoryId String?          @db.ObjectId
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  workers                  User[]
+  task                    Task?            @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId                   String?          @db.ObjectId @unique
 }
 
 model Task {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String  @unique
-  type      String
-  state     String    @default("in progress")
-  routes    String[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  doneAt    DateTime?
-  vehicle   Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
-  vehicleId String?   @db.ObjectId
-  mcps      MCP[]
-
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  name              String           @unique
+  type              String
+  state             String           @default("in progress")
+  accept Boolean @default(false)
+  routes            String[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  doneAt            DateTime?
+  vehicle           Vehicle?        
+  disposalFactories   DisposalFactory[] @relation(fields: [disposalFactoriesIds], references: [id])
+  disposalFactoriesIds String[]        @db.ObjectId
+  mcp               MCP?             
+  mcpId             String?          @db.ObjectId
+  mcpPreviousCapacity Int?
+  mcpResultCapacity Int?
 }
 
 model Review {
@@ -75,12 +88,25 @@ model Review {
 }
 
 model MCP {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String @unique
-  capacity Int @default(0)
-  address String @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  taskId    String?  @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String   @unique
+  capacity     Int      @default(0)
+  addressPoint String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  task         Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String? @db.ObjectId @unique
+}
+
+model DisposalFactory {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String    @unique
+  addressPoint String    @unique
+  image        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  vehicles     Vehicle[]
+  users User[]
+  tasks        Task[] @relation(fields: [tasksIDs], references: [id])
+  tasksIDs     String[] @db.ObjectId
 }
