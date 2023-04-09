@@ -1,5 +1,6 @@
 import {z} from 'zod'
-const mcpCreateSchema = z.object({
+
+const disposalCreateSchema = z.object({
     name: z.string({
         required_error: "Name is required",
     }).nonempty(
@@ -16,7 +17,7 @@ const mcpCreateSchema = z.object({
     )
 })
 
-const mcpGetSchema = z.object({
+const disposalGetSchema = z.object({
     id: z.string({
         required_error: "id is required",
     }).nonempty(
@@ -26,10 +27,10 @@ const mcpGetSchema = z.object({
     )
 })
 
-type mcpCreateInput = z.infer<typeof mcpCreateSchema>
-type mcpGetInput = z.infer<typeof mcpGetSchema>
+type disposalCreateInput = z.infer<typeof disposalCreateSchema>
+type disposalGetInput = z.infer<typeof disposalGetSchema>
 
 export {
-    mcpCreateSchema,mcpCreateInput,
-    mcpGetSchema,mcpGetInput
+    disposalCreateSchema, disposalCreateInput,
+    disposalGetSchema, disposalGetInput
 }

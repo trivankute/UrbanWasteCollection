@@ -1,41 +1,57 @@
 import { NextFunction, Request, Response } from "express"
-import { PrismaClient } from "@prisma/client";
 import { mcpCreateInput } from "../schemas/schema.mcp";
+import prisma from "../utils/prisma";
+import ExpressError from "../utils/expressError";
+import { StatusCodes } from "http-status-codes";
 
-const prisma = new PrismaClient();
 
 const createMcpHandle = async (req:Request<{},{},mcpCreateInput>, res:Response, next: NextFunction) => {
-    let {name, address} = req.body
-    const newMCP = await prisma.mCP.create({
-        data: {
-            name,
-            address
-        },
-        select: {
-            id: true,
-            name: true,
-            address: true
-        }
-    })
-    res.status(201).json(newMCP)
+    try {
+        let {name, addressPoint} = req.body
+        const newMCP = await prisma.mCP.create({
+            data: {
+                name,
+                addressPoint
+            },
+            select: {
+                id: true,
+                name: true,
+                addressPoint: true
+            }
+        })
+        res.status(201).json({status:"success", data: newMCP})
+    }
+    catch(err) {
+        next(new ExpressError('Cannot create MCP', StatusCodes.INTERNAL_SERVER_ERROR))
+    }
 }
 
 const getAllMcpHandle = async (req:Request, res:Response, next: NextFunction) => {
-    const allMcps = await prisma.mCP.findMany()
-    res.status(200).json(allMcps)
+    try {
+        const allMcps = await prisma.mCP.findMany()
+        res.status(200).json({status:"success", data: allMcps})
+    }
+    catch(err) {
+        next(new ExpressError('Cannot get all MCP', StatusCodes.INTERNAL_SERVER_ERROR))
+    }
 }
 
 const getMcpHandle = async (req:Request, res:Response, next: NextFunction) => {
-    const {id} = req.params
-    const mcp = await prisma.mCP.findUnique({
-        where: {
-            id
+    try {
+        const {id} = req.params
+        const mcp = await prisma.mCP.findUnique({
+            where: {
+                id
+            }
+        })
+        if(!mcp) {
+            return res.status(404).json({status:"fail", message: "MCP not found"})
         }
-    })
-    if(!mcp) {
-        return res.status(404).json({message: "MCP not found"})
+        res.status(200).json({status:"success", data: mcp})
     }
-    res.status(200).json(mcp)
+    catch(err) {
+        next(new ExpressError('Cannot get MCP', StatusCodes.INTERNAL_SERVER_ERROR))
+    }
 }
 
 export {

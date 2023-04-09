@@ -5,3 +5,8 @@ npx prisma --init mongodb
 ph co map("_id") ph la auto() voi @db.Object
 moi lan chinh phai delete het trong dbs r ctrl P roi typescript restart server r run lai
 mongoDb ko support autoincrement ?
+
+npx prisma studio de bat
+ph npx prisma generate always
+
+doi voi database hoan chinh phai them indexes cho may cai unique bang "npx prisma db push" cc ko la no kochay
