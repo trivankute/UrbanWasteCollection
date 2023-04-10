@@ -1,9 +1,9 @@
 import "./index.css";
-import TestGraph from './components/TestGraph/TestGraph';
+import TestGraph from './Components/TestGraph/TestGraph';
 import { AnimatePresence } from "framer-motion";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import Notification from "./components/Notification/Notification";
+import Notification from "./Components/Notification/Notification";
 import UserPageLayout from "./layout/UserPageLayout/UserPageLayout";
 import UserPage from "./pages/UserPage/UserPage";
 import ReviewsPage from "./pages/ReviewsPage/ReviewsPage";
