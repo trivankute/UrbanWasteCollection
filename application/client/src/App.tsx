@@ -28,18 +28,18 @@ function App() {
           <Route path="/login/failure" element={<Notification/>} />
 
           <Route path="/user" element={<UserPageLayout/>}>
-            <Route path="/" element={<UserPage/>} />
+            <Route path="" element={<UserPage/>} />
             {/* can perform query in url */}
-            <Route path="/reviews" element={<ReviewsPage/>} />
-            <Route path="/schedule" element={<UserSchedulePage/>} />
+            <Route path="reviews" element={<ReviewsPage/>} />
+            <Route path="schedule" element={<UserSchedulePage/>} />
           </Route>
 
           <Route path="/admin" element={<AdminPageLayout/>
           }>
-            <Route path="/" element={<UserPage/>} />
-            <Route path="/vehicles" element={<VehiclesPage/>} />
-            <Route path="/tasks" element={<TasksPage/>} />
-            <Route path="/tasks/add" element={<TaskAddPage/>} />
+            <Route path="" element={<UserPage/>} />
+            <Route path="vehicles" element={<VehiclesPage/>} />
+            <Route path="tasks" element={<TasksPage/>} />
+            <Route path="tasks/add" element={<TaskAddPage/>} />
           </Route>
           
           {/* testing route trivan*/}
