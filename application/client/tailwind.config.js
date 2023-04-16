@@ -4,9 +4,26 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/flowbite/**/*.js",
   ],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        headerLg: '64px',
+        headerSm: '60px',
+      },
+      fontSize:{
+        'ant':'10px',
+        'super-small' : '12px',
+        'big-size': '1.6rem'
+      },
+      top: {
+        headerLg: '64px',
+        headerSm: '60px',
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }
 

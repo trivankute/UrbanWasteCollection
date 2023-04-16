@@ -77,6 +77,7 @@ const TestGraph = () => {
                             coordinates: lineStringCoordinates
                         }
                     };
+                    console.log(lineString)
                     setRouteFeature(lineString);
                 })
                 .catch(error => console.log('error', error));
