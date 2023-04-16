@@ -8,8 +8,7 @@ import { StatusCodes } from "http-status-codes";
 
 
 const registerHandle = async (req: Request<{}, {}, Omit<registerUserInput, "confirmPassword">>, res: Response, next: NextFunction) => {
-    try
-    {
+    try {
         const { name, email, password } = req.body;
         const { role, disposalId } = req.query
         const { hash, salt } = hashPassword(password)
@@ -35,7 +34,7 @@ const registerHandle = async (req: Request<{}, {}, Omit<registerUserInput, "conf
                     disposalFactory: true
                 }
             })
-            res.json({ status: "success", data: newUser })
+            res.json({ status: "success", message: "User registered successfully" })
         }
         else {
             const newUser = await prisma.user.create({
@@ -51,11 +50,10 @@ const registerHandle = async (req: Request<{}, {}, Omit<registerUserInput, "conf
                     name: true
                 }
             })
-            res.json({ status: "success", data: newUser })
+            res.json({ status: "success", message: "User registered successfully" })
         }
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot register", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -66,6 +64,13 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
         const user = await prisma.user.findUnique({
             where: {
                 email
+            },
+            include: {
+                disposalFactory: {
+                    select: {
+                        name: true,
+                    }
+                }
             }
         })
         if (!user) {
@@ -83,8 +88,7 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
         )
         res.status(200).json({ status: "success", accessToken, user: rest })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot login", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -94,16 +98,22 @@ const getMeHandle = async (req: Request, res: Response, next: NextFunction) => {
         const user = await prisma.user.findUnique({
             where: {
                 id: res.locals.user.id
+            },
+            include: {
+                disposalFactory: {
+                    select: {
+                        name: true,
+                    }
+                }
             }
         })
         if (!user) {
             return res.status(404).json({ status: "fail", message: "User not found" })
         }
         const { password, salt, ...rest } = user;
-        res.status(200).json(rest)
+        res.status(200).json({ status: "success", user: rest })
     }
-    catch(err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot get user", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -112,8 +122,7 @@ const logoutHandle = async (req: Request, res: Response, next: NextFunction) => 
     try {
         res.status(200).json({ status: "success", message: "Logout successfully" })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot logout", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -135,45 +144,54 @@ const updateRoleHandle = async (req: Request<{}, {}, updateRoleInput>, res: Resp
         else
             res.status(200).json({ status: "success", data: user })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot update role", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
 
-const searchUserHandle = async (req: Request<{},{},searchUserInput>, res: Response, next: NextFunction) => {
-    try{
+const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Response, next: NextFunction) => {
+    try {
         const { name, role, page, pageSize, disposalName, state } = req.body;
-        const user = await prisma.user.findMany({
+        let user = await prisma.user.findMany({
             take: pageSize as number,
             skip: (page as number - 1) * pageSize as number,
             where: {
                 name: {
                     contains: name as string
                 },
-                role: role as string,
-                disposalFactory: disposalName!==""?{
+                role: {
+                    contains: role as string
+                },
+                disposalFactory: {
                     name: {
                         contains: disposalName as string
-                        }
-                        }:null,
-                state: state as string,
-            },
-                select: {
-                    id: true,
-                    email: true,
-                    name: true,
+                    }
                 },
-            })
-                
-        if (!user) {
+                state: {
+                    contains: state as string
+                },
+            },
+            include: {
+                vehicle:{
+                    include: {
+                        task: true
+                    }
+                }
+            }
+        })
+
+        // select the user
+        let userSelect = user.map((item) => {
+            const { password, salt, ...rest } = item;
+            return rest
+        })
+        if (!userSelect) {
             return res.status(404).json({ status: "fail", message: "User not found" })
         }
         else
-            res.status(200).json({ status: "success", data: user })
+            res.status(200).json({ status: "success", data: userSelect })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot search user", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -197,7 +215,7 @@ const updateProfileHandle = async (req: Request<{}, {}, updateProfileInput>, res
             gender } = req.body;
         // age to int
         let correctAge: number = parseInt(age as string)
-    
+
         const user = await prisma.user.update({
             where: {
                 id: res.locals.user.id
@@ -219,8 +237,7 @@ const updateProfileHandle = async (req: Request<{}, {}, updateProfileInput>, res
         else
             res.status(200).json({ status: "success", data: user })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot update profile", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -324,8 +341,7 @@ const checkoutHandle = async (req: Request, res: Response, next: NextFunction) =
         })
         res.status(200).json({ status: "success", data: newUser })
     }
-    catch (err)
-    {
+    catch (err) {
         next(new ExpressError("Cannot checkout", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
@@ -354,7 +370,7 @@ const resetcheckincheckoutHandle = async (req: Request, res: Response, next: Nex
         if (!user.checkout) {
             return res.status(400).json({ status: "fail", message: "User has not checked out" })
         }
-    
+
         // update user
         const newUser = await prisma.user.update({
             where: {

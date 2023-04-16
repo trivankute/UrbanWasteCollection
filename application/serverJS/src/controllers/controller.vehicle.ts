@@ -8,7 +8,7 @@ const createVehicleHandle = async (req: Request<{},{},VehicleInputSchema>, res: 
         let { numberPlate, currentDisposalFactoryId } = req.body
         const newVehicle = await prisma.vehicle.create({
             data: {
-                numberPlate,
+                numberPlate:numberPlate,
                 currentDisposalFactory: {
                     connect: {
                         id: currentDisposalFactoryId
@@ -22,9 +22,9 @@ const createVehicleHandle = async (req: Request<{},{},VehicleInputSchema>, res: 
             }
         }).catch((err) => {
             // res
-            res.json({ status: "fail", message: "Vehicle already exists" })
+            return res.json({ status: "fail", message: "Vehicle already exists" })
         })
-        res.status(201).json({ status: "success", data: newVehicle })
+        return res.status(201).json({ status: "success", data: newVehicle })
     }
     catch (err) {
         // create fail
@@ -108,7 +108,7 @@ const updateWorkerToVehicleHandle = async (req: Request, res: Response, next: Ne
     try {
         const { vehicleId, workerIds, typeVehicle } = req.body
         // find that vehicle
-        const vehicle = await prisma.vehicle.findUnique({
+        let vehicle = await prisma.vehicle.findUnique({
             where: {
                 id: vehicleId
             }
@@ -123,7 +123,7 @@ const updateWorkerToVehicleHandle = async (req: Request, res: Response, next: Ne
         }
 
         // remove all worker from vehicle
-        await prisma.vehicle.update({
+        vehicle = await prisma.vehicle.update({
             where: {
                 id: vehicleId
             },
