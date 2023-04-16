@@ -83,11 +83,11 @@ const searchUserSchema = z.object({
     name: z.string({
         required_error: "Name is required",
     }),
-    role:z.union([z.literal("user"), z.literal("janitor"), z.literal("collector"), z.literal("backofficer")]),
+    role:z.union([z.literal("user"), z.literal("janitor"), z.literal("collector"), z.literal("backofficer"), z.literal("")]),
     disposalName:z.string({
         required_error: "Disposal name is required",
     }),
-    state:z.union([z.literal("nnothing"), z.literal("in progress")]),
+    state:z.union([z.literal("nothing"), z.literal("in progress"), z.literal("")]),
 })
 
 

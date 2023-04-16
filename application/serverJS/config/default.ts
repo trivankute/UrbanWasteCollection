@@ -1,4 +1,4 @@
 export default {
-    port: 1339,
+    port: 3001,
     host: "localhost",
 };

@@ -7,6 +7,7 @@ import deserializeUser from "./middlewares/deserializeUser";
 import ExpressError from "./utils/expressError";
 import { StatusCodes } from "http-status-codes";
 import cors from 'cors';
+import http from 'http';
 
 const port = config.get("port") as number;
 const host = config.get("host") as string;
@@ -36,6 +37,7 @@ import taskRoutes from './routes/route.task'
 import vehicleRoutes from './routes/route.vehicle'
 import workersRoutes from './routes/route.workers'
 import disposalfactoryRoutes from './routes/route.disposalfactory'
+import configureSocket from "./socket";
 
 userRoutes(app)
 mcpRoutes(app)
@@ -43,8 +45,11 @@ taskRoutes(app)
 vehicleRoutes(app)
 workersRoutes(app)
 disposalfactoryRoutes(app)
+const server = http.createServer(app);
 
-app.listen(port, host, async () => {
+configureSocket(server)
+
+server.listen(port, async () => {
     // comment cua Tri Van
     log.info(`server list at http://${host}:${port}`);
 })

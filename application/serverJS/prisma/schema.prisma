@@ -20,7 +20,7 @@ model User {
   age          Int?
   address      String?
   nationality  String?
-  image        String?
+  image        String? @default("https://res.cloudinary.com/dotr7u5kq/image/upload/v1655879064/cld-sample.jpg")
   birthday     String?
   gender       String?
   phone        String?
@@ -31,10 +31,10 @@ model User {
   checkoutTime DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  vehicle      Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  vehicle      Vehicle?  @relation(fields: [vehicleId], references: [id], onUpdate: Cascade)
   vehicleId    String?   @db.ObjectId
   reviews      Review[]
-  disposalFactory DisposalFactory? @relation(fields: [disposalId], references: [id], onDelete: Cascade)
+  disposalFactory DisposalFactory? @relation(fields: [disposalId], references: [id], onUpdate: Cascade)
   disposalId   String?   @db.ObjectId
 }
 
@@ -45,16 +45,15 @@ model Vehicle {
   maxWorkerSlot            Int              @default(4)
   capacity                 Int              @default(100)
   fuel                     Int              @default(100)
-  state                    String           @default("nothing")
+  state                    String           @default("nothing") // in progress
   type                     String?          @default("nothing")
-  currentPlacePoint        String?
-  currentDisposalFactory   DisposalFactory? @relation(fields: [currentDisposalFactoryId], references: [id], onDelete: Cascade)
+  currentMovingPointIndex        Int? @default(0)
+  currentDisposalFactory   DisposalFactory? @relation(fields: [currentDisposalFactoryId], references: [id], onUpdate: Cascade)
   currentDisposalFactoryId String?          @db.ObjectId
   createdAt                DateTime         @default(now())
   updatedAt                DateTime         @updatedAt
   workers                  User[]
-  task                    Task?            @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  taskId                   String?          @db.ObjectId @unique
+  task Task[]
 }
 
 model Task {
@@ -67,11 +66,12 @@ model Task {
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   doneAt            DateTime?
-  vehicle           Vehicle?        
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id], onUpdate: Cascade)
+  vehicleId String? @db.ObjectId
   disposalFactories   DisposalFactory[] @relation(fields: [disposalFactoriesIds], references: [id])
   disposalFactoriesIds String[]        @db.ObjectId
-  mcp               MCP?             
-  mcpId             String?          @db.ObjectId
+  mcp MCP? @relation(fields: [mcpId], references: [id], onUpdate: Cascade)
+  mcpId String? @db.ObjectId
   mcpPreviousCapacity Int?
   mcpResultCapacity Int?
 }
@@ -83,7 +83,7 @@ model Review {
   rating    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onUpdate: Cascade)
   userId    String?  @db.ObjectId
 }
 
@@ -94,8 +94,7 @@ model MCP {
   addressPoint String   @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  task         Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  taskId String? @db.ObjectId @unique
+  task         Task[] 
 }
 
 model DisposalFactory {

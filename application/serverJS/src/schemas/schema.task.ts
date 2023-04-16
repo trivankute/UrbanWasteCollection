@@ -58,11 +58,37 @@ const searchTaskSchema = z.object({
     }),
 })
 
+const updateNeedReviewTaskSchema = z.object({
+    id: z.string({
+        required_error: "Task id is required",
+    }).nonempty({
+        message: "Task id must be not empty"
+    })
+})
+
+const backOfficerReviewTaskParamsSchema = z.object({
+    id: z.string({
+        required_error: "Task id is required",
+    }).nonempty({
+        message: "Task id must be not empty"
+    }),
+})
+
+const backOfficerReviewTaskBodySchema = z.object({
+    answer: z.union([z.literal('accept'), z.literal('refuse')]),
+})
 
 type createTaskInput = z.infer<typeof createTaskSchema>
 type searchTaskInput = z.infer<typeof searchTaskSchema>
+type updateNeedReviewTaskInput = z.infer<typeof updateNeedReviewTaskSchema>
+type backOfficerReviewTaskParamsInput = z.infer<typeof backOfficerReviewTaskParamsSchema>
+type backOfficerReviewTaskBodyInput = z.infer<typeof backOfficerReviewTaskBodySchema>
+
 
 export {
     createTaskSchema, createTaskInput,
-    searchTaskSchema, searchTaskInput
+    searchTaskSchema, searchTaskInput,
+    updateNeedReviewTaskSchema, updateNeedReviewTaskInput,
+    backOfficerReviewTaskParamsSchema, backOfficerReviewTaskParamsInput,
+    backOfficerReviewTaskBodySchema, backOfficerReviewTaskBodyInput,
 }
