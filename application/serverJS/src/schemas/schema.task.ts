@@ -1,5 +1,5 @@
 import {z} from 'zod'
-const taskTypes = z.union([z.literal('janitor'), z.literal('collector')]);
+const taskTypes = z.union([z.literal('janitor'), z.literal('collector'), z.literal("")]);
 const createTaskSchema = z.object({
     name: z.string({
         required_error: "Name is required",
@@ -52,7 +52,7 @@ const searchTaskSchema = z.object({
         required_error: "Disposal name is required",
     }),
     type: taskTypes,
-    state: z.union([z.literal('need review'), z.literal('in progress'), z.literal('done')]),
+    state: z.union([z.literal('need review'), z.literal('in progress'), z.literal('done'), z.literal("")]),
     mcpName:z.string({
         required_error: "Mcp name is required",
     }),

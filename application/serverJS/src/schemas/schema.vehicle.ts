@@ -27,7 +27,7 @@ const getVehicleSchema = z.object({
     })
 })
 
-export const assignWorkersToVehicleSchema = z.object({
+const assignWorkersToVehicleSchema = z.object({
     vehicleId: z.string({
         required_error: "Vehicle id is required",
     }).nonempty({
@@ -40,16 +40,46 @@ export const assignWorkersToVehicleSchema = z.object({
             message: "Worker id must be not empty"
         })
     })),
-    typeVehicle: z.string({
-        required_error: "Type vehicle is required",
+    typeVehicle: z.union([z.literal('janitor'), z.literal('collector'), z.literal('')]),
+})
+
+const refuelVehicleParamHandle = z.object({
+    id: z.string({
+        required_error: "Vehicle id is required",
     }).nonempty({
-        message: "Type vehicle must be not empty"
-    })
+        message: "Vehicle id must be not empty"
+    }),
+})
+
+const searchVehicleSchema = z.object({
+    page: z.number({
+        required_error: "Page is required",
+    }).min(1, {
+        message: "Page must be at least 1"
+    }),
+    pageSize: z.number({
+        required_error: "Page size is required",
+    }).min(1, {
+        message: "Page size must be at least 1"
+    }),
+    disposalName:z.string({
+        required_error: "Disposal name is required",
+    }),
+    type: z.union([z.literal('janitor'), z.literal('collector'), z.literal("")]),
+    state: z.union([z.literal('in progress'), z.literal('nothing'), z.literal("")]),
 })
 
 type VehicleInputSchema = z.infer<typeof VehicleSchema>
+type GetVehicleInputSchema = z.infer<typeof getVehicleSchema>
+type AssignWorkersToVehicleInputSchema = z.infer<typeof assignWorkersToVehicleSchema>
+type RefuelVehicleInputParamHandle = z.infer<typeof refuelVehicleParamHandle>
+type SearchVehicleInputSchema = z.infer<typeof searchVehicleSchema>
+// lol hehe
 
 export {
     VehicleSchema, VehicleInputSchema,
-    getVehicleSchema
+    getVehicleSchema, GetVehicleInputSchema,
+    assignWorkersToVehicleSchema, AssignWorkersToVehicleInputSchema,
+    refuelVehicleParamHandle, RefuelVehicleInputParamHandle,
+    searchVehicleSchema, SearchVehicleInputSchema
 }

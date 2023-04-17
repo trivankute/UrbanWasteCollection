@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import ExpressError from "../utils/expressError"
 import { StatusCodes } from "http-status-codes"
 import prisma from "../utils/prisma"
-import { VehicleInputSchema } from "../schemas/schema.vehicle"
+import { RefuelVehicleInputParamHandle, SearchVehicleInputSchema, VehicleInputSchema } from "../schemas/schema.vehicle"
 const createVehicleHandle = async (req: Request<{},{},VehicleInputSchema>, res: Response, next: NextFunction) => {
     try {
         let { numberPlate, currentDisposalFactoryId } = req.body
@@ -48,7 +48,8 @@ const getAllVehicleHandle = async (req: Request, res: Response, next: NextFuncti
                         id: true,
                         name: true,
                     }
-                }
+                },
+                task : true
             }
         })
         res.json({ status: "success", data: allVehicles })
@@ -78,8 +79,10 @@ const getVehicleHandle = async (req: Request, res: Response, next: NextFunction)
                     select: {
                         id: true,
                         name: true,
+                        state: true
                     }
-                }
+                },
+                task: true
             }
         })
         if (!vehicle) {
@@ -172,10 +175,96 @@ const updateWorkerToVehicleHandle = async (req: Request, res: Response, next: Ne
     }
 }
 
+const refuelVehicleHandle = async (req: Request<RefuelVehicleInputParamHandle,{},{}>, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+        // find that vehicle
+        let vehicle = await prisma.vehicle.findUnique({
+            where: {
+                id: id
+            }
+        })
+        if (!vehicle) {
+            return res.json({ status: "fail", message: "Vehicle not found" })
+        }
+        // check if vehicle is full
+        if (vehicle.fuel == 100) {
+            return res.json({ status: "fail", message: "Vehicle is full" })
+        }
+        // check if vehicle min capacity
+        if (vehicle.capacity === 0) {
+            return res.json({ status: "fail", message: "Vehicle has nothing to reset capacity" })
+        }
+        // update vehicle
+        vehicle = await prisma.vehicle.update({
+            where: {
+                id: id
+            },
+            data: {
+                fuel: 100,
+                capacity: 0
+            }
+        })
+        res.json({ status: "success", data: vehicle })
+    }
+    catch (err) {
+        // refuel vehicle fail
+        next(new ExpressError('Cannot refuel vehicle', StatusCodes.INTERNAL_SERVER_ERROR))
+    }
+}
+
+const searchVehicleHandle = async (req: Request<{},{},SearchVehicleInputSchema>, res: Response, next: NextFunction) => {
+    try {
+        const { type, state, page, pageSize, disposalName } = req.body
+        const skip = (page - 1) * pageSize
+        const take = pageSize
+        const where = {
+            type: {
+                contains: type
+            },
+            state: {
+                contains: state
+            },
+            currentDisposalFactory: {
+                name: {
+                    contains: disposalName
+                }
+            }
+        }
+        const allVehicles = await prisma.vehicle.findMany({
+            where: where,
+            skip: skip,
+            take: take,
+            include: {
+                currentDisposalFactory: true,
+                workers: {
+                    select: {
+                        id: true,
+                        name: true,
+                        role: true,
+                        state: true
+                    }
+                },
+                task: true
+            }
+        })
+        res.json({ status: "success", data: allVehicles })
+    }
+    catch (err) {
+        // search vehicle fail
+        console.log(err)
+        next(new ExpressError('Cannot find vehicle', StatusCodes.INTERNAL_SERVER_ERROR))
+    }
+}
+
+
+
 export {
     createVehicleHandle,
     getAllVehicleHandle,
     getVehicleHandle,
     deleteAllVehiclesHandle,
-    updateWorkerToVehicleHandle
+    updateWorkerToVehicleHandle,
+    refuelVehicleHandle,
+    searchVehicleHandle
 }
