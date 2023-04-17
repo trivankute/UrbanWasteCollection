@@ -3,7 +3,6 @@ import { backOfficerReviewTaskBodyInput, backOfficerReviewTaskParamsInput, creat
 import prisma from "../utils/prisma"
 import ExpressError from "../utils/expressError"
 import { StatusCodes } from "http-status-codes"
-import { any } from "zod"
 
 const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Response, next: NextFunction) => {
     try {
@@ -117,6 +116,7 @@ const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Resp
                     }
                 },
                 mcpPreviousCapacity: true,
+                mcpResultCapacity: true,
             }
         })
         res.status(201).json({ status: "success", data: newTask })
@@ -137,7 +137,7 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
             },
             select: {
                 id: true,
-                state:true,
+                state: true,
                 vehicle: {
                     select: {
                         id: true,
@@ -198,6 +198,7 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                     }
                 },
                 mcpPreviousCapacity: true,
+                mcpResultCapacity: true,
             }
         })
         res.status(200).json({ status: "success", data: newTask })
@@ -223,8 +224,12 @@ const searchTask = async (req: Request<{}, {}, searchTaskInput>, res: Response, 
                 name: {
                     contains: name
                 },
-                type,
-                state,
+                type: {
+                    contains: type
+                },
+                state: {
+                    contains: state
+                },
                 disposalFactories: {
                     some: {
                         name: {
@@ -245,29 +250,33 @@ const searchTask = async (req: Request<{}, {}, searchTaskInput>, res: Response, 
                 state: true,
                 vehicle: {
                     select: {
-                        id: true,
-                        currentDisposalFactory: {
-                            select: {
-                                id: true,
-                                name: true,
+                        "id": true,
+                        "numberPlate": true,
+                        "maxWorkerSlot": true,
+                        "capacity": true,
+                        "fuel": true,
+                        "state": true,
+                        "type": true,
+                        "currentMovingPointIndex": true,
+                        "currentDisposalFactoryId": true,
+                        "createdAt": true,
+                        "updatedAt": true,
+                        "workers": {
+                            "select": {
+                                "id": true,
+                                "name": true,
+                                "age": true,
+                                role: true,
+                                "state": true,
                             }
                         }
                     }
                 },
                 routes: true,
-                disposalFactories: {
-                    select: {
-                        id: true,
-                        name: true,
-                    }
-                },
-                mcp: {
-                    select: {
-                        id: true,
-                        name: true,
-                    }
-                },
+                disposalFactories: true,
+                mcp: true,
                 mcpPreviousCapacity: true,
+                mcpResultCapacity: true,
             }
         })
         res.status(200).json({ status: "success", data: tasks })
@@ -314,7 +323,7 @@ const deleteTaskHandle = async (req: Request<{ id: string }, {}, {}>, res: Respo
             },
             data: {
                 disposalFactories: {
-                    set:[]
+                    set: []
                 },
                 vehicle: {
                     disconnect: true
@@ -340,8 +349,8 @@ const deleteTaskHandle = async (req: Request<{ id: string }, {}, {}>, res: Respo
 }
 
 const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskParamsInput, {}, backOfficerReviewTaskBodyInput>, res: Response, next: NextFunction) => {
-    const {id} = req.params
-    const {answer} = req.body
+    const { id } = req.params
+    const { answer } = req.body
     try {
         // find task
         let task = await prisma.task.findUnique({
@@ -354,20 +363,32 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 accept: true,
                 vehicle: {
                     select: {
-                        id: true,
+                        "id": true,
+                        "numberPlate": true,
+                        "maxWorkerSlot": true,
+                        "capacity": true,
+                        "fuel": true,
+                        "state": true,
+                        "type": true,
+                        "currentMovingPointIndex": true,
+                        "currentDisposalFactoryId": true,
+                        "createdAt": true,
+                        "updatedAt": true,
+                        "workers": {
+                            "select": {
+                                "id": true,
+                                "name": true,
+                                "age": true,
+                                role: true,
+                                "state": true,
+                            }
+                        }
                     }
                 },
-                mcp: {
-                    select: {
-                        id: true,
-                    }
-                },
-                disposalFactories: {
-                    select: {
-                        id: true,
-                    }
-                },
-                mcpPreviousCapacity: true
+                mcp: true,
+                disposalFactories: true,
+                mcpPreviousCapacity: true,
+                mcpResultCapacity: true,
             }
         })
         if (!task) {
@@ -381,8 +402,7 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
         }
 
         // update task
-        if(answer === "refuse")
-        {
+        if (answer === "refuse") {
             await prisma.task.update({
                 where: {
                     id
@@ -393,8 +413,8 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
             })
             res.status(200).json({ status: "success", data: "refuse" })
         }
-        else if (answer === "accept"){
-            // update fuel and capacity and currentDisposal equal new second disposal of task for vehicle
+        else if (answer === "accept") {
+            // update task to null and fuel and capacity and currentDisposal equal new second disposal of task for vehicle
             await prisma.vehicle.update({
                 where: {
                     id: task!.vehicle!.id
@@ -402,18 +422,30 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 data: {
                     currentDisposalFactory: {
                         connect: {
-                            id: task!.disposalFactories.length===1 ? task!.disposalFactories[0].id : task!.disposalFactories[1].id
+                            id: task!.disposalFactories.length === 1 ? task!.disposalFactories[0].id : task!.disposalFactories[1].id
                         }
                     },
                     fuel: {
-                        decrement: 10
+                        decrement: task!.vehicle!.fuel===0?0:10,
                     },
                     capacity: {
-                        increment: 10
+                        increment: task!.vehicle!.capacity===100?0:10,
                     },
-                    state : "nothing"
+                    state: "nothing",
                 },
             })
+            // update for those workers who are in this task
+            await prisma.user.updateMany({
+                where: {
+                    id: {
+                        in: task!.vehicle!.workers!.map(worker => worker.id)
+                    }
+                },
+                data: {
+                    state: "nothing",
+                }
+            })
+
             // update capacity for mcp
             await prisma.mCP.update({
                 where: {
@@ -421,7 +453,7 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 },
                 data: {
                     capacity: {
-                        decrement: 10
+                        decrement: task!.mcp!.capacity===0?0:10,
                     }
                 }
             })
@@ -434,7 +466,9 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     state: "done",
                     accept: true,
                     doneAt: new Date(),
-                    mcpResultCapacity: task!.mcpPreviousCapacity! - 10
+                    mcpResultCapacity: {
+                        decrement: task!.mcpPreviousCapacity===0?0:10
+                    },
 
                 }
             })
@@ -448,32 +482,35 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     accept: true,
                     vehicle: {
                         select: {
-                            id: true,
-                            currentDisposalFactory: {
-                                select: {
-                                    id: true,
-                                    name: true,
+                            "id": true,
+                            "numberPlate": true,
+                            "maxWorkerSlot": true,
+                            "capacity": true,
+                            "fuel": true,
+                            "state": true,
+                            "type": true,
+                            "currentMovingPointIndex": true,
+                            "currentDisposalFactoryId": true,
+                            "createdAt": true,
+                            "updatedAt": true,
+                            "workers": {
+                                "select": {
+                                    "id": true,
+                                    "name": true,
+                                    "age": true,
+                                    role: true,
+                                    "state": true,
                                 }
-                            },
+                            }
                         }
                     },
-                    mcp: {
-                        select: {
-                            id: true,
-                            name: true
-                        }
-                    },
-                    disposalFactories: {
-                        select: {
-                            id: true,
-                            name: true
-                        }
-                    },
+                    mcp: true,
+                    disposalFactories: true,
                     mcpPreviousCapacity: true,
                     mcpResultCapacity: true
                 }
             })
-            res.status(200).json({ status: "success", data: { message: "accept", task} })
+            res.status(200).json({ status: "success", data: { message: "accept", task } })
 
         }
         else {
