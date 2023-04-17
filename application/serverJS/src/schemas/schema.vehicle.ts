@@ -74,7 +74,7 @@ type GetVehicleInputSchema = z.infer<typeof getVehicleSchema>
 type AssignWorkersToVehicleInputSchema = z.infer<typeof assignWorkersToVehicleSchema>
 type RefuelVehicleInputParamHandle = z.infer<typeof refuelVehicleParamHandle>
 type SearchVehicleInputSchema = z.infer<typeof searchVehicleSchema>
-// lol
+// lol hehe
 
 export {
     VehicleSchema, VehicleInputSchema,
