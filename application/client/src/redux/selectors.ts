@@ -7,4 +7,5 @@ export const TaskModalStore = (state:any) => state.taskModal
 export const UserStore = (state:any) => state.user
 export const WorkersStore = (state:any) => state.workers
 export const VehiclesStore = (state:any) => state.vehicles
+export const SmallNotificationStore = (state:any) => state.smallNotification
 

@@ -61,7 +61,7 @@ function WorkersPage() {
                     </div>
                     :
                     workers.data && workers.data.map((worker: any) => {
-                        return <WorkerChild workerData={worker} name={worker.name} taskName={worker.vehicle ? worker.vehicle.task[0].name : "None"}
+                        return <WorkerChild workerData={worker} name={worker.name} taskName={(worker.vehicle&& worker.vehicle.task) ? worker.vehicle.task.name.substring(0,10)+"..." : "None"}
                             vehicleNumberPlate={worker.vehicle ? worker.vehicle.numberPlate : "None"} role={worker.role} />
                     })
             }

@@ -21,7 +21,7 @@ import SignInForm from "./Components/SignInForm/SignInForm";
 import WorkersPage from "./pages/WorkersPage/WorkersPage";
 import ResponsiveSlice from "./redux/slices/ResponsiveSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { UserStore } from "./redux/selectors";
+import { SmallNotificationStore, UserStore } from "./redux/selectors";
 import { getAllMcps, getMcpById } from "./redux/slices/McpSlice";
 import { getMe, login, registeUser } from "./redux/slices/UserSlice";
 import { assignWorkersToVehicle, getAllVehicles, getVehicleById } from "./redux/slices/VehiclesSlice";
@@ -30,11 +30,12 @@ import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Loggedin from "./middlewares/Loggedin";
 import CheckMe from "./middlewares/CheckMe";
 import BackofficerOnly from "./middlewares/BackofficerOnly";
+import SmallNotification from "./Components/SmallNotification/SmallNotification";
 
 function App() {
   const location = useLocation();
   const dispatch = useDispatch<any>();
-  const user = useSelector(UserStore)
+  const errorIsShow = useSelector(SmallNotificationStore).show
   useEffect(() => {
     // dispatch(login({
     //   "email": "trivan@gmail.com",
@@ -77,6 +78,12 @@ function App() {
       {/* <TestGraph/> */}
       <Header />
       <div className="w-full h-headerSm lg:h-headerLg"></div>
+      <AnimatePresence mode="wait">
+        {
+          errorIsShow &&
+          <SmallNotification />
+        }
+      </AnimatePresence>
       <AnimatePresence mode="wait">
         <Routes key={location.pathname} location={location}>
           <Route path="" element={<CheckMe />} >

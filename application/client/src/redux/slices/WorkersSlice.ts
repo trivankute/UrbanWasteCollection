@@ -11,6 +11,14 @@ const WorkersSlice = createSlice({
         data:false
     },
     reducers:{  
+        handleRemoveWorkerForTemp(state, action) {
+            // @ts-ignore
+            state.data = state.data.filter((item:any)=>item.id !== action.payload);
+        },
+        handleAddWorkerForTemp(state, action) {
+            // @ts-ignore
+            state.data = [...state.data, action.payload.worker];
+        },
     },
     extraReducers(builder) {
         builder
@@ -30,7 +38,9 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
     disposalName:string,
     state:string,
     page:number,
-    pageSize:number
+    pageSize:number,
+    forAssignVehicleModal?:boolean,
+    workersTempForAssignVehicle?:any
 }) => {
     //{{host}}/user
     try {
@@ -39,6 +49,11 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
+        if(input.forAssignVehicleModal)
+        {
+            // filter out workers that are already in workersTempForAssignVehicle
+            data.data = data.data.filter((item:any)=>!input.workersTempForAssignVehicle.find((item2:any)=>item2.id === item.id));
+        }
         if(data.status === 'success'){
             return {status:"success",data:data.data};
         }

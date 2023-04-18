@@ -1,10 +1,11 @@
 import { memo } from "react";
 import clsx from "clsx";
 
-function WorkerItem({data, type, handleSortToArrayWorkers}:{type:"nothing"|"janitor"|"collector", data:any, handleSortToArrayWorkers?:any}) {
+function WorkerItem({adjust, data, type, handleSortToArrayWorkers, handleRemoveWorker}:{adjust?:boolean, type:"nothing"|"janitor"|"collector", data:any, handleSortToArrayWorkers?:any, handleRemoveWorker?:any}) {
     return ( <>
         <div onClick={()=>{
             if(handleSortToArrayWorkers) handleSortToArrayWorkers(data)
+            if(handleRemoveWorker && data && adjust) handleRemoveWorker(data)
         }} className="cursor-pointer hover:bg-gray-200 w-full h-fit p-2 rounded-xl bg-[#F5F5F5] flex justify-around items-center">
             {
                 (type==="janitor"||type==="collector") ?
@@ -20,7 +21,8 @@ function WorkerItem({data, type, handleSortToArrayWorkers}:{type:"nothing"|"jani
             }
             <div className={clsx("ml-2 w-20 h-fit rounded-xl text-white text-sm font-semibold capitailize flex justify-center items-center",{
                 "bg-gray-400 p-2":type==="nothing",
-                "bg-green-400":(type==="janitor"||type==="collector")
+                "bg-green-400":type==="collector",
+                "bg-red-400":type==="janitor"
             })}>{
                 type==="nothing" ? "None" : 
                 type==="janitor" ? "Janitor" :

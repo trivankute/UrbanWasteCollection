@@ -9,6 +9,7 @@ import TaskModalSlice from './slices/Modals/TaskModalslice';
 import UserSlice from './slices/UserSlice';
 import WorkersSlice from './slices/WorkersSlice';
 import VehiclesSlice from './slices/VehiclesSlice';
+import SmallNotificationSlice from './slices/Modals/SmallNotificationSlice';
 
 
 
@@ -23,6 +24,7 @@ const store = configureStore({
         user: UserSlice.reducer,
         workers: WorkersSlice.reducer,
         vehicles: VehiclesSlice.reducer,
+        smallNotification: SmallNotificationSlice.reducer
     }
 })
 
