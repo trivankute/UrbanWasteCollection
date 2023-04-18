@@ -47,6 +47,10 @@ const getAllVehicleHandle = async (req: Request, res: Response, next: NextFuncti
                     select: {
                         id: true,
                         name: true,
+                        vehicleId:true,
+                        state: true,
+                        role:true,
+                        image:true
                     }
                 },
                 task : true
@@ -79,7 +83,10 @@ const getVehicleHandle = async (req: Request, res: Response, next: NextFunction)
                     select: {
                         id: true,
                         name: true,
-                        state: true
+                        vehicleId:true,
+                        state: true,
+                        role:true,
+                        image:true
                     }
                 },
                 task: true
@@ -159,7 +166,10 @@ const updateWorkerToVehicleHandle = async (req: Request, res: Response, next: Ne
                     select: {
                         id: true,
                         name: true,
-                        email: true,
+                        vehicleId:true,
+                        state: true,
+                        role:true,
+                        image:true
                     }
                 }
             }
@@ -215,10 +225,13 @@ const refuelVehicleHandle = async (req: Request<RefuelVehicleInputParamHandle,{}
 
 const searchVehicleHandle = async (req: Request<{},{},SearchVehicleInputSchema>, res: Response, next: NextFunction) => {
     try {
-        const { type, state, page, pageSize, disposalName } = req.body
+        const { type, state, page, pageSize, disposalName, numberPlate } = req.body
         const skip = (page - 1) * pageSize
         const take = pageSize
         const where = {
+            numberPlate: {
+                contains: numberPlate
+            },
             type: {
                 contains: type
             },
@@ -241,8 +254,10 @@ const searchVehicleHandle = async (req: Request<{},{},SearchVehicleInputSchema>,
                     select: {
                         id: true,
                         name: true,
-                        role: true,
-                        state: true
+                        vehicleId:true,
+                        state: true,
+                        role:true,
+                        image:true
                     }
                 },
                 task: true

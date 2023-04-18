@@ -62,6 +62,9 @@ const searchVehicleSchema = z.object({
     }).min(1, {
         message: "Page size must be at least 1"
     }),
+    numberPlate: z.string({
+        required_error: "Number plate is required",
+    }),
     disposalName:z.string({
         required_error: "Disposal name is required",
     }),
