@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import {AnimatePresence, motion } from "framer-motion";
 import { memo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskModalStore } from "../../../redux/selectors";
@@ -18,9 +18,6 @@ function TaskModal() {
     const taskModalData = useSelector(TaskModalStore).data
     const dispatch = useDispatch<any>()
     return (<>
-        <AnimatePresence mode="wait">
-            {
-                taskModalIsShow &&
                 <div className="w-full h-full fixed flex justify-center items-center  z-30">
                     <div onClick={() => {
                         dispatch(TaskModalSlice.actions.handleClose({}))
@@ -107,10 +104,10 @@ function TaskModal() {
                                                 </div>
                                                 <div className="w-full h-fit flex space-y-2 flex-col">
                                                     <span className="text-sm font-semibold">Workers:</span>
+                                                    {/* <WorkerItem type="workers" />
                                                     <WorkerItem type="workers" />
                                                     <WorkerItem type="workers" />
-                                                    <WorkerItem type="workers" />
-                                                    <WorkerItem type="workers" />
+                                                    <WorkerItem type="workers" /> */}
                                                 </div>
                                             </div>
                                             <div onClick={() => {
@@ -203,8 +200,6 @@ function TaskModal() {
                         </div>
                     </motion.div>
                 </div>
-            }
-        </AnimatePresence>
     </>);
 }
 

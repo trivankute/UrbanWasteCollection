@@ -2,16 +2,55 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios';
 import serverUrl from '../urls/urls';
 
-const VehicleSlice = createSlice({
-    name:"VehicleSlice",
+const VehiclesSlice = createSlice({
+    name:"VehiclesSlice",
     initialState:{
         loading:false,
-        data:false
+        vehicles:false,
+        vehicle:false
     },
     reducers:{
     },
     extraReducers(builder) {
-        // builder
+        builder
+        .addCase(getAllVehicles.pending, (state, action) => {
+            state.loading = true;
+        })
+        .addCase(getAllVehicles.fulfilled, (state, action) => {
+            state.loading = false;
+            if(action.payload.status === "success"){
+                state.vehicles = action.payload.data;
+            }
+            else {
+                state.vehicles = false;
+            }
+        })
+        .addCase(getVehicleById.pending, (state, action) => {
+            state.loading = true;
+            })
+        .addCase(getVehicleById.fulfilled, (state, action) => {
+            state.loading = false;
+            if(action.payload.status === "success"){
+                state.vehicle = action.payload.data;
+            }
+            else {
+                state.vehicle = false;
+            }
+        })
+        .addCase(handleSearchVehicle.pending, (state, action) => {
+            state.loading = true;
+            })
+        .addCase(handleSearchVehicle.fulfilled, (state, action) => {
+            state.loading = false;
+            if(action.payload.status === "success"){
+                state.vehicles = action.payload.data;
+            }
+            else {
+                state.vehicles = false;
+            }
+        }
+        )
+
     }
 })
 
@@ -71,6 +110,32 @@ export const getVehicleById = createAsyncThunk('getVehicleById', async (id:strin
 }
 )
 
+export const handleSearchVehicle = createAsyncThunk('handleSearchVehicle', async (input:any) => {
+    //{{host}}/vehicle
+    try {
+        const {data} = await axios.post(`${serverUrl}/vehicle`, input, {});
+        if(data.status === 'success'){
+            return {status:"success",data:data.data};
+        }
+        else {
+            return {status:"fail", message:data.message};
+        }
+    }
+    catch (error : any) {
+        if(Array.isArray(error.response.data)) {
+            let errorMessage = ""
+            error.response.data[0].errors.issues.map((item:any)=>{
+                errorMessage += item.message;
+                errorMessage += ", ";
+                return item.message;
+            })
+            return {status:"fail",message:errorMessage};
+        }
+        else {
+            return {status:"fail",message:error.response.data.message};
+        }
+    }
+})
 export const assignWorkersToVehicle = createAsyncThunk('assignWorkersToVehicle', async ({vehicleId,workerIds,typeVehicle}:{
     vehicleId:string,
     workerIds:{id:string}[],
@@ -112,4 +177,4 @@ export const assignWorkersToVehicle = createAsyncThunk('assignWorkersToVehicle',
 )
 
 
-export default VehicleSlice
+export default VehiclesSlice

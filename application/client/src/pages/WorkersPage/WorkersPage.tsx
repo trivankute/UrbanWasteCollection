@@ -15,7 +15,6 @@ function WorkersPage() {
     const [state, setState] = useState("")
     const [name, setName] = useState("")
     const workers = useSelector(WorkersStore)
-    console.log(workers)
     useEffect(() => {
         handleSearch()
     }, [])
@@ -61,7 +60,7 @@ function WorkersPage() {
                         <Spinner />
                     </div>
                     :
-                    workers.data.map((worker: any) => {
+                    workers.data && workers.data.map((worker: any) => {
                         return <WorkerChild workerData={worker} name={worker.name} taskName={worker.vehicle ? worker.vehicle.task[0].name : "None"}
                             vehicleNumberPlate={worker.vehicle ? worker.vehicle.numberPlate : "None"} role={worker.role} />
                     })

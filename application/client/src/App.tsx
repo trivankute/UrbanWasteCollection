@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UserStore } from "./redux/selectors";
 import { getAllMcps, getMcpById } from "./redux/slices/McpSlice";
 import { getMe, login, registeUser } from "./redux/slices/UserSlice";
-import { assignWorkersToVehicle, getAllVehicles, getVehicleById } from "./redux/slices/VehicleSlice";
+import { assignWorkersToVehicle, getAllVehicles, getVehicleById } from "./redux/slices/VehiclesSlice";
 import OverviewPage from "./pages/OverviewPage/OverviewPage";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Loggedin from "./middlewares/Loggedin";

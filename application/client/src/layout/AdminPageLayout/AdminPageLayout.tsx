@@ -6,9 +6,16 @@ import WorkerModal from "../../Components/ForWorkerPage/WorkerModal/WorkerModal"
 import VehicleAddModal from "../../Components/ForVehiclePage/VehicleAddModal/VehicleAddModal";
 import VehicleModal from "../../Components/ForVehiclePage/VehicleModal/VehicleModal";
 import TaskModal from "../../Components/ForTaskPage/TaskModal/TaskModal";
+import { AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import { TaskModalStore, VehicleAddModalStore, VehicleModalStore, WorkerModalStore } from "../../redux/selectors";
 
 function AdminPageLayout() {
     const location = useLocation()
+    const vehicleModalIsShow = useSelector(VehicleModalStore).data
+    const workerModalIsShow = useSelector(WorkerModalStore).data
+    const vehicleAddModalIsShow = useSelector(VehicleAddModalStore).data
+    const taskModalIsShow = useSelector(TaskModalStore).show
     return (<>
         <div className="bg-[#D2E7D6] min-h-screen w-full h-full flex">
             <SidebarAdmin />
@@ -16,22 +23,41 @@ function AdminPageLayout() {
                 <Outlet />
             </div>
             {
-                location.pathname.includes("workers") && 
-                <WorkerModal />
+                location.pathname.includes("workers") &&
+                <AnimatePresence mode="wait">
+                    {
+                        workerModalIsShow &&
+                        <WorkerModal />
+                    }
+                </AnimatePresence>
             }
             {
-                location.pathname.includes("vehicles") && 
+                location.pathname.includes("vehicles") &&
                 <>
-                <VehicleAddModal />
-                <VehicleModal />
+                    <AnimatePresence mode="wait">
+                        {
+                            vehicleModalIsShow &&
+                            <VehicleModal />
+                        }
+                        {
+                            vehicleAddModalIsShow &&
+                            <VehicleAddModal />
+                        }
+                    </AnimatePresence>
                 </>
             }
             {
-                (location.pathname.includes("tasks")||location.pathname.includes("overview")) &&
-                <TaskModal/>
+                (location.pathname.includes("tasks") || location.pathname.includes("overview")) &&
+                <AnimatePresence mode="wait">
+                    {
+                        taskModalIsShow &&
+                        <TaskModal />
+
+                    }
+                </AnimatePresence>
             }
         </div>
-        <MenuResponsiveBar/>
+        <MenuResponsiveBar />
     </>);
 }
 

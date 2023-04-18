@@ -1,11 +1,35 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { pageMotionTime } from "../../configs";
 import PageHeaderSearchAdd from "../../Components/PageHeaderSearchAdd/PageHeaderSearchAdd";
 import ListFilter from "../../Components/ListFilter/ListFilter";
 import VehicleChild from "../../Components/ForVehiclePage/VehicleChild/VehicleChild";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllVehicles, handleSearchVehicle } from "../../redux/slices/VehiclesSlice";
+import { VehiclesStore } from "../../redux/selectors";
+import Spinner from "../../Components/Spinner/Spinner";
 
 function VehiclesPage() {
+    const [role, setRole] = useState("")
+    const [state, setState] = useState("")
+    const [numberPlate, setNumberPlate] = useState("")
+    const dispatch = useDispatch<any>()
+    const vehilces = useSelector(VehiclesStore).vehicles
+    const handleSearch = () => {
+        dispatch(handleSearchVehicle(
+            {
+                "page":1,
+                "pageSize":20,
+                "numberPlate":numberPlate,
+                "type":role,
+                "state":state,
+                "disposalName":""
+            }
+        ))
+    }
+    useEffect(()=>{
+        dispatch(getAllVehicles())
+    },[])
     return ( <>
         <motion.div
             initial={{
@@ -25,18 +49,21 @@ function VehiclesPage() {
             }}
             className="h-full"
         >
-            <PageHeaderSearchAdd type="vehicles" />
+            <PageHeaderSearchAdd state={numberPlate} setState={setNumberPlate} handleSearch={handleSearch} type="vehicles" />
             <div className="w-full flex py-2 gap-x-4 mb-4">
-                <ListFilter ListArrayText={["type worker", "janitor", "collector"]}/>
-                <ListFilter ListArrayText={["type state","nothing", "in progress"]}/>
+                <ListFilter setState={setRole} ListArrayText={["type worker", "janitor", "collector"]}/>
+                <ListFilter setState={setState} ListArrayText={["type state","nothing", "in progress"]}/>
             </div>
             <div className="space-y-4 max-h-screen overflow-y-auto">
-                <VehicleChild/>
-                <VehicleChild/>
-                <VehicleChild/>
-                <VehicleChild/>
-                <VehicleChild/>
-                <VehicleChild/>
+                {
+                    vehilces ? vehilces.map((item:any, index:number) => {
+                        return <VehicleChild data={item} key={index} />
+                    })
+                    :
+                    <div className="w-full h-[300px] flex justify-center items-center">
+                        <Spinner />
+                    </div>
+                }
             </div>
         </motion.div>
     </> );
