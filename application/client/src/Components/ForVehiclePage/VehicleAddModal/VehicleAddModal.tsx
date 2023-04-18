@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { VehicleAddModalStore } from "../../../redux/selectors";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import VehicleAddModalSlice from "../../../redux/slices/Modals/VehicleAddModalSlice";
 import { pageMotionTime } from "../../../configs";
 import xerac from '../../../assets/vehicles/xerac.jpg'
@@ -10,9 +10,6 @@ function VehicleAddModal() {
     const dispatch = useDispatch<any>()
     const vehicleAddModalIsShow = useSelector(VehicleAddModalStore).data
     return (<>
-        <AnimatePresence mode="wait">
-            {
-                vehicleAddModalIsShow &&
                 <div className="w-full h-full fixed flex justify-center items-center">
                     <div onClick={() => {
                         dispatch(VehicleAddModalSlice.actions.handleClose({}))
@@ -69,9 +66,6 @@ function VehicleAddModal() {
                         </div>
                     </motion.div>
                 </div>
-            }
-        </AnimatePresence>
-
     </>);
 }
 

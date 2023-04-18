@@ -160,7 +160,8 @@ const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Resp
                     contains: name as string
                 },
                 role: {
-                    contains: role as string
+                    contains: role as string,
+                    not: "backofficer"
                 },
                 disposalFactory: {
                     name: {

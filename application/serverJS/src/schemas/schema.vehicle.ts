@@ -40,7 +40,7 @@ const assignWorkersToVehicleSchema = z.object({
             message: "Worker id must be not empty"
         })
     })),
-    typeVehicle: z.union([z.literal('janitor'), z.literal('collector'), z.literal('')]),
+    typeVehicle: z.union([z.literal('janitor'), z.literal('collector'), z.literal('nothing')]),
 })
 
 const refuelVehicleParamHandle = z.object({
@@ -61,6 +61,9 @@ const searchVehicleSchema = z.object({
         required_error: "Page size is required",
     }).min(1, {
         message: "Page size must be at least 1"
+    }),
+    numberPlate: z.string({
+        required_error: "Number plate is required",
     }),
     disposalName:z.string({
         required_error: "Disposal name is required",
