@@ -40,7 +40,7 @@ const assignWorkersToVehicleSchema = z.object({
             message: "Worker id must be not empty"
         })
     })),
-    typeVehicle: z.union([z.literal('janitor'), z.literal('collector'), z.literal('')]),
+    typeVehicle: z.union([z.literal('janitor'), z.literal('collector'), z.literal('nothing')]),
 })
 
 const refuelVehicleParamHandle = z.object({
