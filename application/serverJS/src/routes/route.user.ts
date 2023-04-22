@@ -43,6 +43,11 @@ export default function(app: Express) {
     // reset checking
     app.get(baseUrl+"/resetcheck", requireUser, catchAsync(resetcheckincheckoutHandle))
 
+    // // // for Comments
+    // // // create
+    // app.post("/api/posts/:postId/comments",
+    // [requiresUser, validateRequest(createCommentSchema)], createCommentHandler)
+    
     // // for Posts
     // // create
     // app.post("/api/posts",
