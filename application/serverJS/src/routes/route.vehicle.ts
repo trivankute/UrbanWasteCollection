@@ -23,6 +23,8 @@ export default function (app: Express) {
     // assign workers to vehicle
     app.put(baseUrl+"/assign", requireUser, requireBackofficer, processRequestBody(assignWorkersToVehicleSchema), catchAsync(updateWorkerToVehicleHandle))
 
+    // // search by disposal and state, type with pagination(need more, get by disposalName and state)
+    
     // search by disposal and state, type with pagination(need more, get by disposalName and state)
 
 }

@@ -16,5 +16,6 @@ export default function(app: Express) {
     // // get disposal by id
     app.get(baseUrl+"/:id", processRequestParams(disposalGetSchema), catchAsync(getDisposalFactoryHandle))
 
-    
+   // // get disposal by class
+    // app.get(baseUrl+"/class/:class", processRequestParams(disposalGetSchema), catchAsync(getDisposalFactoryHandle)) 
 }
