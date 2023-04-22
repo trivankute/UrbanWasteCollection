@@ -2,6 +2,7 @@ import { memo, useState } from 'react'
 import { motion } from 'framer-motion'
 import {useNavigate} from 'react-router-dom'
 import { pageMotionTime } from '../../configs'
+// import { useAuth } from '../../Contexts/AuthContext'
 
 function SignUpForm() {
     const [name, setName] = useState<string>('')

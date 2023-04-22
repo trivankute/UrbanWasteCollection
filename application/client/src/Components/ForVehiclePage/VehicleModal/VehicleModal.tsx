@@ -14,6 +14,8 @@ import Spinner from "../../Spinner/Spinner";
 import { assignWorkersToVehicle, getAllVehicles } from "../../../redux/slices/VehiclesSlice";
 import SmallNotificationSlice from "../../../redux/slices/Modals/SmallNotificationSlice";
 
+//this is for modal
+
 function VehicleModal() {
     const [workerName, setWorkerName] = useState("")
     const [workerRole, setWorkerRole] = useState("")

@@ -1,4 +1,6 @@
 import {memo} from 'react'
+
+//this function is for MCP schedule page
 function MCPchild({content}:{content:string}) {
     return ( <>
         <div className="w-full border-b-[1px] hover:bg-gray-200 border-gray-200 bg-white flex justify-center items-center p-2">

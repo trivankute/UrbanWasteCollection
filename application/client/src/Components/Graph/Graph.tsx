@@ -4,6 +4,9 @@ import xerac from '../../assets/vehicles/xerac.jpg'
 import { useSelector } from "react-redux";
 import { ResponsiveStore } from "../../redux/selectors";
 import socket, { graphShowAllVehiclesEvent, graphShowAllVehiclesHandle } from "../../utils/socket";
+
+
+//this is for some map
 function Graph() {
     // const [showPopup, setShowPopup] = useState(false);
     const isResponsive = useSelector(ResponsiveStore).data

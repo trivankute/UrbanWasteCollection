@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+//this function is for filtering the list
 function ListFilter({ ListArrayText, setState=null }: { ListArrayText: string[], setState?: any }) {
     return (<>
         <select onChange={(e) => {
