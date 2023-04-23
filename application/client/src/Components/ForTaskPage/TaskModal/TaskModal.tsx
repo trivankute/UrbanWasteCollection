@@ -12,7 +12,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import TaskMap from "../TaskMap/TaskMap";
 import formatTime from "../../../utils/formatTime";
-import { getTaskById, searchTasks, taskAnswer, updateTaskToNeedReview } from "../../../redux/slices/TasksSlice";
+import { searchTasks, taskAnswer, updateTaskToNeedReview } from "../../../redux/slices/TasksSlice";
 import Spinner from "../../Spinner/Spinner";
 import SmallNotification from "../../../redux/slices/Modals/SmallNotificationSlice";
 
@@ -181,7 +181,7 @@ function TaskModal() {
                                     </div>
                                     <div className="p-6 space-y-4 w-full">
                                         {
-                                            taskModalData&&taskModalData.disposalFactories&&taskModalData.disposalFactories.length === 1 ?
+                                            taskModalData && taskModalData.disposalFactories && taskModalData.disposalFactories.length === 1 ?
                                                 <>
                                                     <div className="w-full h-fit text-base font-semibold">Departure and arrival disposal: {taskModalData.disposalFactories[0].name}</div>
                                                 </>
@@ -193,101 +193,121 @@ function TaskModal() {
                                         }
 
                                         <div className="w-full h-fit text-base font-semibold">Routes And Current Location with red is departure and green is arrival: </div>
-                                        <TaskMap routes={taskModalData.routes} mcp={taskModalData.mcp} disposalFactories={taskModalData.disposalFactories}
-                                        vehicle={taskModalData.vehicle} taskState={taskModalData.state} />
-                                        <div className="w-full h-fit flex flex-col space-y-2">
-                                            <span className="w-full h-fit text-base font-semibold">MCP Before: </span>
-                                            <span className="w-full h-fit text-base ml-4">+ MCP: {taskModalData.mcp.name}, capacity: {taskModalData.mcpPreviousCapacity}%</span>
-                                        </div>
+                                        <TaskMap state={taskModalData.state} routes={taskModalData.routes} mcps={taskModalData.mcps} disposalFactories={taskModalData.disposalFactories}
+                                            vehicle={taskModalData.vehicle} />
                                         {
-                                            taskModalData.state !== "in progress" &&
-                                            <div className="w-full h-fit flex flex-col space-y-2">
-                                                <span className="w-full h-fit text-base font-semibold">MCP After: </span>
-                                                <span className="w-full h-fit text-base ml-4">+ MCP: {taskModalData.mcp.name}, capacity: {taskModalData.mcpResultCapacity}%</span>
-                                            </div>
+                                            taskModalData.state !== "in progress" ?
+                                                <>
+                                                    {
+                                                        taskModalData.mcps.map((mcp: any, index: number) => {
+                                                            return (
+                                                                <>
+                                                                    <div className="w-full h-fit flex flex-col space-y-2">
+                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
+                                                                    </div>
+                                                                    <div className="w-full h-fit flex flex-col space-y-2">
+                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity after: <span className="font-normal">{taskModalData.mcpResultCapacitys[index]}%</span></span>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
+                                                </>
+                                                :
+                                                <>
+                                                    {
+                                                        taskModalData.mcps.map((mcp: any, index: number) => {
+                                                            return (
+                                                                <>
+                                                                    <div className="w-full h-fit flex flex-col space-y-2">
+                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
+                                                </>
                                         }
                                     </div>
                                     {
                                         taskModalData.state === "need review" && user.role === "backofficer" &&
                                         <div className="p-4 flex items-center justify-end border-t space-x-4">
-                                            <div onClick={()=>{
+                                            <div onClick={() => {
                                                 dispatch(taskAnswer({
-                                                    id:taskModalData.id,
-                                                    answer:"refuse"
+                                                    id: taskModalData.id,
+                                                    answer: "refuse"
                                                 }))
-                                                .then((res:any)=>{
-                                                    dispatch(TaskModalSlice.actions.handleClose({}))
-                                                    dispatch(SmallNotification.actions.handleOpen({type:"success",content:"Task refused"}))
-                                                    dispatch(searchTasks(
-                                                        {
-                                                            "page": 1,
-                                                            "pageSize": 20,
-                                                            "name": "",
-                                                            "type": "",
-                                                            "state": "",
-                                                            "disposalName": "",
-                                                            "mcpName": ""
-                                                        }))
-                                                })
+                                                    .then((res: any) => {
+                                                        dispatch(TaskModalSlice.actions.handleClose({}))
+                                                        dispatch(SmallNotification.actions.handleOpen({ type: "success", content: "Task refused" }))
+                                                        dispatch(searchTasks(
+                                                            {
+                                                                "page": 1,
+                                                                "pageSize": 20,
+                                                                "name": "",
+                                                                "type": "",
+                                                                "state": "",
+                                                                "disposalName": "",
+                                                                "mcpName": ""
+                                                            }))
+                                                    })
                                             }} className="w-20 min-w-20 h-fit p-2 rounded-lg font-semibold text-white bg-red-400 cursor-pointer hover:bg-red-300 flex justify-center items-center">
                                                 {
-                                                    taskLoading  ?
-                                                    <Spinner/>
-                                                    :
-                                                    "Refuse"
+                                                    taskLoading ?
+                                                        <Spinner />
+                                                        :
+                                                        "Refuse"
                                                 }
                                             </div>
-                                            <div onClick={()=>{
+                                            <div onClick={() => {
                                                 dispatch(taskAnswer({
-                                                    id:taskModalData.id,
-                                                    answer:"accept"
+                                                    id: taskModalData.id,
+                                                    answer: "accept"
                                                 }))
-                                                .then((res:any)=>{
-                                                    dispatch(TaskModalSlice.actions.handleClose({}))
-                                                    dispatch(SmallNotification.actions.handleOpen({type:"success",content:"Task accepted"}))
-                                                    dispatch(searchTasks(
-                                                        {
-                                                            "page": 1,
-                                                            "pageSize": 20,
-                                                            "name": "",
-                                                            "type": "",
-                                                            "state": "done",
-                                                            "disposalName": "",
-                                                            "mcpName": ""
-                                                        }))
-                                                })
+                                                    .then((res: any) => {
+                                                        dispatch(TaskModalSlice.actions.handleClose({}))
+                                                        dispatch(SmallNotification.actions.handleOpen({ type: "success", content: "Task accepted" }))
+                                                        dispatch(searchTasks(
+                                                            {
+                                                                "page": 1,
+                                                                "pageSize": 20,
+                                                                "name": "",
+                                                                "type": "",
+                                                                "state": "done",
+                                                                "disposalName": "",
+                                                                "mcpName": ""
+                                                            }))
+                                                    })
                                             }} className="w-20 min-w-20 h-fit p-2 rounded-lg font-semibold text-white bg-green-400 cursor-pointer hover:bg-green-300 flex justify-center items-center">
                                                 {
-                                                    taskLoading  ?
-                                                    <Spinner/>
-                                                    :
-                                                    "Accept"
+                                                    taskLoading ?
+                                                        <Spinner />
+                                                        :
+                                                        "Accept"
                                                 }
                                             </div>
                                         </div>
                                     }
                                     {
-                                        taskModalData.state === "in progress" && (user.role==="janitor"||user.role==="collector") &&
+                                        taskModalData.state === "in progress" && (user.role === "janitor" || user.role === "collector") &&
                                         <div className="p-4 flex items-center justify-end border-t space-x-4">
-                                            <div onClick={()=>{
+                                            <div onClick={() => {
                                                 dispatch(updateTaskToNeedReview(taskModalData.id))
-                                                .then((res:any)=>{
-                                                    if(res.payload.status==="success")
-                                                    {
-                                                        dispatch(TaskModalSlice.actions.handleClose({}))
-                                                        dispatch(SmallNotification.actions.handleOpen({type:"success",content:"Send task to backofficer"}))
-                                                    }
-                                                    else
-                                                    {
-                                                        dispatch(SmallNotification.actions.handleOpen({type:"error",content:res.payload.message}))
-                                                    }
-                                                })
+                                                    .then((res: any) => {
+                                                        if (res.payload.status === "success") {
+                                                            dispatch(TaskModalSlice.actions.handleClose({}))
+                                                            dispatch(SmallNotification.actions.handleOpen({ type: "success", content: "Send task to backofficer" }))
+                                                        }
+                                                        else {
+                                                            dispatch(SmallNotification.actions.handleOpen({ type: "error", content: res.payload.message }))
+                                                        }
+                                                    })
                                             }} className="w-fit min-w-20 h-fit p-2 rounded-lg font-semibold text-white bg-green-400 cursor-pointer hover:bg-green-300 flex justify-center items-center">
                                                 {
-                                                    taskLoading  ?
-                                                    <Spinner/>
-                                                    :
-                                                    "Send need review"
+                                                    taskLoading ?
+                                                        <Spinner />
+                                                        :
+                                                        "Send need review"
                                                 }
                                             </div>
                                         </div>

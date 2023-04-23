@@ -12,6 +12,7 @@ import Spinner from "../../Components/Spinner/Spinner";
 function VehiclesPage() {
     const [role, setRole] = useState("")
     const [state, setState] = useState("")
+    const [disposalName, setDisposalName] = useState("")
     const [numberPlate, setNumberPlate] = useState("")
     const dispatch = useDispatch<any>()
     const vehicles = useSelector(VehiclesStore).vehicles
@@ -24,7 +25,7 @@ function VehiclesPage() {
                 "numberPlate":numberPlate,
                 "type":role,
                 "state":state,
-                "disposalName":""
+                "disposalName":disposalName
             }
         ))
     }
@@ -54,6 +55,7 @@ function VehiclesPage() {
             <div className="w-full flex py-2 gap-x-4 mb-4">
                 <ListFilter setState={setRole} ListArrayText={["type worker", "janitor", "collector"]}/>
                 <ListFilter setState={setState} ListArrayText={["type state","nothing", "in progress"]}/>
+                <ListFilter setState={setDisposalName} ListArrayText={["disposal?", "cao xuan duc", "disposal 2"]}/>
             </div>
             <div className="space-y-4 max-h-screen overflow-y-auto">
                 {
@@ -62,9 +64,12 @@ function VehiclesPage() {
                         <Spinner />
                     </div>
                     :
-                    vehicles && vehicles.map((item:any, index:number) => {
+                    vehicles && vehicles.length>0? vehicles.map((item:any, index:number) => {
                         return <VehicleChild data={item} key={index} />
                     })
+                    :
+                    <>
+                    None</>
                 }
             </div>
         </motion.div>

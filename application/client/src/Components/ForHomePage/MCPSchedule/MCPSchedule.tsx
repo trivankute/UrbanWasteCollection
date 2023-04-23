@@ -22,7 +22,7 @@ function MCPSchedule() {
                     !user &&
                     <MCPChild onClick={()=>{
                         navigate('/signin')
-                    }} content= "Log in to review our service"/>
+                    }} content= "Log in to see in detail and review our service"/>
                 }
             </div>
         </div>

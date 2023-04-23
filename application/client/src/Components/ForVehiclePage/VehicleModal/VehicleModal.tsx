@@ -223,7 +223,7 @@ function VehicleModal() {
                                                 Number: {vehicle.workers.length}/4 Workers
                                             </span>
                                             {
-                                                user.data==="backofficer"&&
+                                                user.role==="backofficer"&&
                                                 <>
                                                 {
                                                 !vehicleLoading ?

@@ -22,9 +22,8 @@ function TaskAddPage() {
     const [taskName, setTaskName] = useState("")
     const [disposalBefore, setDisposalBefore] = useState<any>(null)
     const [disposalAfter, setDisposalAfter] = useState<any>(null)
-    const [mcp, setMcp] = useState<any>(null)
-    const [route1ForStore, setRoute1ForStore] = useState<any>(null)
-    const [route2ForStore, setRoute2ForStore] = useState<any>(null)
+    const [mcps, setMcps] = useState<any>(null)
+    const [routes, setRoutes] = useState<any>(null)
     const [time, setTime] = useState<any>(null)
     const navigate = useNavigate();
     const dispatch = useDispatch<any>()
@@ -53,7 +52,7 @@ function TaskAddPage() {
     }, [type, (disposalBefore && disposalBefore.name)])
     const tasksLoading = useSelector(TasksStore).loading
     async function handleSubmit() {
-        if (!taskName || !vehicle || !disposalBefore || !disposalAfter || !mcp || !route1ForStore || !route2ForStore || !time) {
+        if (!taskName || !vehicle || !disposalBefore || !disposalAfter || !mcps || !routes || !time) {
             dispatch(SmallNotification.actions.handleOpen({ type: "error", content: "Please fill all fields" }))
             return
         }
@@ -63,7 +62,7 @@ function TaskAddPage() {
                     "name": taskName,
                     "type": vehicle.type,
                     "vehicleId": vehicle.id,
-                    "routes": [JSON.stringify(route1ForStore), JSON.stringify(route2ForStore)],
+                    "routes": routes.map((route: any) => JSON.stringify(route)),
                     "pathDisposalFactoriesIds": [
                         {
                             "id": disposalBefore.id
@@ -72,7 +71,11 @@ function TaskAddPage() {
                             "id": disposalAfter.id
                         }
                     ],
-                    "mcpId": mcp.id,
+                    "mcpIds": mcps.map((mcp: any) => {
+                        return {
+                            "id": mcp.id
+                        }
+                    }),
                     "createdTime": time
                 }
             ))
@@ -131,8 +134,8 @@ function TaskAddPage() {
 
             <span className="font-semibold text-base">Select DisposalName and MCPs with red is departure and green is arrival:</span>
             <div className="w-full h-fit flex justify-center items-center">
-                <TaskAddMap setDisposalBefore={setDisposalBefore} setDisposalAfter={setDisposalAfter} setMcp={setMcp}
-                    setRoute1ForStore={setRoute1ForStore} setRoute2ForStore={setRoute2ForStore} />
+                <TaskAddMap setDisposalBefore={setDisposalBefore} setDisposalAfter={setDisposalAfter} setMcpsForAdd={setMcps}
+                    setRoutesForAdd={setRoutes} />
             </div>
             <span className="font-semibold text-base">Select Available Vehicle From That Disposal:</span>
             <div className="w-full h-fit flex items-center space-x-2">
@@ -149,11 +152,13 @@ function TaskAddPage() {
                 <span className="font-semibold text-base">Arrival Disposal: {disposalAfter.name}</span>
             }
             {
-                mcp &&
-                <>
-                    <span className="font-semibold text-base">MCPs Before: </span>
-                    <span className="font-semibold text-base ml-4">+ MCP Name: {mcp.name}, capacity: {mcp.capacity}%</span>
-                </>
+                mcps && mcps.map((mcp:any, index:number)=>{
+                    return (
+                    <div className="w-full h-fit">
+                        <span className="font-semibold text-base">MCP Before: </span>
+                        <span className="font-semibold text-base ml-4">+ MCP Name: {mcp.name}, capacity: {mcp.capacity}%</span>
+                    </div>)
+                })
             }
             <CalendarForChoose taskName={taskName} time={time} setTime={setTime} />
             <span className="font-semibold text-base">Thời gian bắt đầu: {time && formatTime(time)}</span>

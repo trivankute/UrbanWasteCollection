@@ -34,39 +34,40 @@ function Graph() {
         setPopupInfo({ latitude, longitude, type, index })
         setShowPopup(true)
     }
-    const callAllInProgressVehicle = useCallback(() =>
-    {
+    const callAllInProgressVehicle = useCallback(() => {
         dispatch(handleSearchVehicle(
             {
-                "page":1,
-                "pageSize":20,
-                "numberPlate":"",
-                "type":"",
-                "state":"in progress",
-                "disposalName":""
+                "page": 1,
+                "pageSize": 20,
+                "numberPlate": "",
+                "type": "",
+                "state": "in progress",
+                "disposalName": ""
             }
         ))
-        .then((res: any) => {
-            if (res.payload.status === "success") {
-                let newVehiclePointsArray:any = []
-                res.payload.data.forEach((vehicle: any) => {
-                    const routes = vehicle.task.routes
-                    const currentIndex = vehicle.currentMovingPointIndex
-                    const route1 = JSON.parse(routes[0]).geometry.coordinates
-                    const route2 = JSON.parse(routes[1]).geometry.coordinates
-                    let newVehiclePoint = { latitude: 0, longitude: 0 }
-                    if (currentIndex < route1.length) {
-                        newVehiclePoint = { latitude: route1[currentIndex][1], longitude: route1[currentIndex][0] }
-                    } else if (currentIndex < route2.length) {
-                        newVehiclePoint = { latitude: route2[currentIndex - route1.length][1], longitude: route2[currentIndex - route1.length][0] }
-                    } else {
-                        newVehiclePoint = { latitude: route2[route2.length - 1][1], longitude: route2[route2.length - 1][0] }
-                    }
-                    newVehiclePointsArray.push({...vehicle, ...newVehiclePoint})
-                })
-                setVehiclePoints(newVehiclePointsArray)
-            }
-        })
+            .then((res: any) => {
+                if (res.payload.status === "success") {
+                    let newVehiclePointsArray: any = []
+                    res.payload.data.forEach((vehicle: any) => {
+                        const routes = vehicle.task.routes
+                        let currentPointLimit = 0;
+                        let pointIndex = vehicle.currentMovingPointIndex
+                        let addressPoint = {}
+                        routes.map((routeJson: any, index: number) => {
+                            const route = JSON.parse(routeJson).geometry.coordinates
+                            if (pointIndex < route.length + currentPointLimit) {
+                                addressPoint = { latitude: route[pointIndex - currentPointLimit][1], longitude: route[pointIndex - currentPointLimit][0] }
+                                return
+                            }
+                            else {
+                                currentPointLimit += route.length
+                            }
+                        })
+                        newVehiclePointsArray.push({ ...vehicle, ...addressPoint }) 
+                    })
+                    setVehiclePoints(newVehiclePointsArray)
+                }
+            })
     }, [])
     useEffect(() => {
         dispatch(getAllDisposals())
@@ -109,7 +110,7 @@ function Graph() {
         // onClick={handleMapClick}
         >
             {
-                vehiclePoints && vehiclePoints.map((vehiclePoint:any, index:number)=>{
+                vehiclePoints && vehiclePoints.map((vehiclePoint: any, index: number) => {
                     return (
                         <>
                             <Marker
@@ -123,16 +124,10 @@ function Graph() {
                                 offsetTop={-20}
                                 offsetLeft={-10}
                                 mapStyle="mapbox://styles/mapbox/streets-v9"
-                            onClick={() => {
-                                dispatch(HomeInteractingSlice.actions.handleFillVehicleId(vehiclePoint.id))
-                                handleShowPopUp({ latitude: vehiclePoint.latitude, longitude: vehiclePoint.longitude, type: "vehicle", index: index })
-                            }}
-                            onMouseEnter={()=>{
-                                dispatch(HomeInteractingSlice.actions.handleFillVehicleId(vehiclePoint.id))
-                            }}
-                            onMouseLeave={()=>{
-                                dispatch(HomeInteractingSlice.actions.handleClearVehicleId({}))
-                            }}
+                                onClick={() => {
+                                    dispatch(HomeInteractingSlice.actions.handleFillVehicleId(vehiclePoint.id))
+                                    handleShowPopUp({ latitude: vehiclePoint.latitude, longitude: vehiclePoint.longitude, type: "vehicle", index: index })
+                                }}
                             >
                                 <img src={xerac} alt="My Marker" className={clsx("w-10 h-10 cursor-pointer rounded-full hover:border-pink-700 border-2 border-red-500", {
                                     "border-yellow-500 w-16 h-16": taskIdForHomeInteracting === vehiclePoint.task.id
@@ -146,8 +141,8 @@ function Graph() {
                 disposals && disposals.map((disposal: any, index: number) => {
                     return (
                         <Marker
-                            latitude={JSON.parse(JSON.parse(disposal.addressPoint))[1]}
-                            longitude={JSON.parse(JSON.parse(disposal.addressPoint))[0]}
+                            latitude={JSON.parse(disposal.addressPoint)[1]}
+                            longitude={JSON.parse(disposal.addressPoint)[0]}
                             // get event when click on
                             // @ts-ignore
                             // onClick={handleMarkerClick}
@@ -157,7 +152,7 @@ function Graph() {
                             offsetLeft={-10}
                             mapStyle="mapbox://styles/mapbox/streets-v9"
                             onClick={(e: any) => {
-                                handleShowPopUp({ latitude: JSON.parse(JSON.parse(disposal.addressPoint))[1], longitude: JSON.parse(JSON.parse(disposal.addressPoint))[0], type: "disposal", index: index })
+                                handleShowPopUp({ latitude: JSON.parse(disposal.addressPoint)[1], longitude: JSON.parse(disposal.addressPoint)[0], type: "disposal", index: index })
                             }}
                         >
                             <img src={disposalImage} alt="My Marker" className=" w-10 h-10 cursor-pointer rounded-full hover:border-blue-700 border-2 border-blue-500" />
@@ -169,8 +164,8 @@ function Graph() {
                 mcps && mcps.map((mcp: any, index: number) => {
                     return (
                         <Marker
-                            latitude={JSON.parse(JSON.parse(mcp.addressPoint))[1]}
-                            longitude={JSON.parse(JSON.parse(mcp.addressPoint))[0]}
+                            latitude={JSON.parse(mcp.addressPoint)[1]}
+                            longitude={JSON.parse(mcp.addressPoint)[0]}
                             // get event when click on
                             // @ts-ignore
                             // onClick={handleMarkerClick}
@@ -180,7 +175,7 @@ function Graph() {
                             offsetLeft={-10}
                             mapStyle="mapbox://styles/mapbox/streets-v9"
                             onClick={(e: any) => {
-                                handleShowPopUp({ latitude: JSON.parse(JSON.parse(mcp.addressPoint))[1], longitude: JSON.parse(JSON.parse(mcp.addressPoint))[0], type: "mcp", index: index })
+                                handleShowPopUp({ latitude: JSON.parse(mcp.addressPoint)[1], longitude: JSON.parse(mcp.addressPoint)[0], type: "mcp", index: index })
                             }}
                         >
                             <img src={mcpImage} alt="My Marker" className=" w-10 h-10 cursor-pointer rounded-full hover:border-blue-700 border-2 border-blue-500" />
@@ -189,44 +184,30 @@ function Graph() {
                 })
             }
             {
-                tasks && tasks.map((task: any, index: number) => {
-                    const route1 = (JSON.parse(task.routes[0]))
-                    const route2 = (JSON.parse(task.routes[1]))
-
-                    return (
-                        <>
-                        <Source id={`route1${index}`} type="geojson" data={route1}>
-                            <Layer
-                                id={`route1${index}`}
-                                type="line"
-                                source="route"
-                                layout={{
-                                    "line-join": "round",
-                                    "line-cap": "round"
-                                }}
-                                paint={{
-                                    "line-color": "red",
-                                    "line-width": 2
-                                }}
-                            />
-                        </Source>
-                        <Source id={`route2${index}`} type="geojson" data={route2}>
-                        <Layer
-                            id={`route2${index}`}
-                            type="line"
-                            source="route"
-                            layout={{
-                                "line-join": "round",
-                                "line-cap": "round"
-                            }}
-                            paint={{
-                                "line-color": "green",
-                                "line-width": 2
-                            }}
-                        />
-                    </Source>
-                    </>
+                tasks && tasks.map((task: any, taskIndex: number) => {
+                    const routes = task.routes
+                    return routes.map((route:any, routeIndex:number)=>{
+                        return (
+                            <>
+                                <Source id={`route${taskIndex}${routeIndex}`} type="geojson" data={JSON.parse(route)}>
+                                    <Layer
+                                        id={`route${taskIndex}${routeIndex}`}
+                                        type="line"
+                                        source="route"
+                                        layout={{
+                                            "line-join": "round",
+                                            "line-cap": "round"
+                                        }}
+                                        paint={{
+                                            "line-color": routeIndex===routes.length-1?"green":"red",
+                                            "line-width": 2
+                                        }}
+                                    />
+                                </Source>
+                            </>
                         )
+                    })
+
                 })
             }
             {showPopup && (
@@ -240,7 +221,7 @@ function Graph() {
                     offsetLeft={0}
                 >
                     <div
-                    className="h-fit w-fit text-sm"
+                        className="h-fit w-fit text-sm"
                     >
                         <div className="h-fit w-full capitalize font-semibold pb-2 border-b">{popupInfo.type + " Detail:"}</div>
                         {

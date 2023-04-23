@@ -60,10 +60,13 @@ function WorkersPage() {
                         <Spinner />
                     </div>
                     :
-                    workers.data && workers.data.map((worker: any) => {
-                        return <WorkerChild workerData={worker} name={worker.name} taskName={(worker.vehicle&& worker.vehicle.task) ? worker.vehicle.task.name.substring(0,10)+"..." : "None"}
+                    workers.data && workers.data.length>0? workers.data.map((worker: any) => {
+                        return <WorkerChild image={worker.image} workerData={worker} name={worker.name} taskName={(worker.vehicle&& worker.vehicle.task) ? worker.vehicle.task.name.substring(0,10)+"..." : "None"}
                             vehicleNumberPlate={worker.vehicle ? worker.vehicle.numberPlate : "None"} role={worker.role} />
                     })
+                    :
+                    <div className="mt-2">
+                    None</div>
             }
         </motion.div>
     </>);

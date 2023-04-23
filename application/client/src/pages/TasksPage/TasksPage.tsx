@@ -71,9 +71,13 @@ function TasksPage() {
                             <Spinner />
                         </div>
                         :
-                        tasks && tasks.map((task: any, index: number) => {
+                        tasks && tasks.length>0 ? tasks.map((task: any, index: number) => {
                             return <TaskChild key={index} task={task} />
                         })
+                        :
+                        <>
+                        None
+                        </>
                 }
             </div>
         </motion.div>

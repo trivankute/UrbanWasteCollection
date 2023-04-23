@@ -27,7 +27,7 @@ function VehicleChildList({ vehicles, vehicle, setVehicle }: { vehicles: any, ve
             onClick={() => {
                 let boolForUndefineds = false
                 const newVehiclesForCheck = vehicles.map((item: any) => {
-                    if (item.id !== vehicle.id && item.workers.length > 0)
+                    if (vehicle && item.id !== vehicle.id && item.workers.length > 0)
                         return item
                     else {
                         boolForUndefineds = true
@@ -51,7 +51,7 @@ function VehicleChildList({ vehicles, vehicle, setVehicle }: { vehicles: any, ve
                     <>
                     {vehicle && <VehicleChild setForAddTask={setVehicle} data={vehicle} />}
                     {
-                        vehicles && vehicles.map((item: any, index: number) => {
+                        vehicles && vehicle && vehicles.map((item: any, index: number) => {
                             if (open && item.id !== vehicle.id && item.workers.length > 0)
                                 return <VehicleChild setForAddTask={setVehicle} data={item} key={index} />
                         })

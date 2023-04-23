@@ -15,8 +15,8 @@ import polyline from '@mapbox/polyline';
 import { Feature } from 'geojson';
 import Spinner from "../../Spinner/Spinner";
 
-function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForStore, setRoute2ForStore }
-    : { setDisposalBefore: any, setDisposalAfter:any, setMcp:any, setRoute1ForStore:any, setRoute2ForStore:any }) {
+function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRoutesForAdd }
+    : { setDisposalBefore: any, setDisposalAfter: any, setMcpsForAdd: any, setRoutesForAdd: any }) {
     const [viewport, setViewport] = useState({
         height: 350,
         width: 550,
@@ -42,17 +42,16 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
     const [disposal1Signal, setDisposal1Signal] = useState<any>(false)
     const [disposalPoint2, setDisposalPoint2] = useState<any>(null)
     const [disposal2Signal, setDisposal2Signal] = useState<any>(false)
-    const [mcpPoint, setMcpPoint] = useState<any>(null)
+    const [mcpPoints, setMcpPoints] = useState<any>(null)
     const [mcpSignal, setMcpSignal] = useState<any>(false)
-    const [route1, setRoute1] = useState<any>(null)
-    const [route2, setRoute2] = useState<any>(null)
+    const [routes, setRoutes] = useState<any>(null)
     function handleDisposalsClick(disposal: any) {
         const addressPoint =
         {
             id: disposal.id,
             name: disposal.name,
-            latitude: JSON.parse(JSON.parse(disposal.addressPoint))[1],
-            longitude: JSON.parse(JSON.parse(disposal.addressPoint))[0]
+            latitude: JSON.parse(disposal.addressPoint)[1],
+            longitude: JSON.parse(disposal.addressPoint)[0]
         }
         if (disposalPoint1 === null && disposal1Signal === true) {
             setDisposalPoint1(addressPoint)
@@ -68,22 +67,53 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
         {
             id: mcp.id,
             name: mcp.name,
-            latitude: JSON.parse(JSON.parse(mcp.addressPoint))[1],
-            longitude: JSON.parse(JSON.parse(mcp.addressPoint))[0]
+            latitude: JSON.parse(mcp.addressPoint)[1],
+            longitude: JSON.parse(mcp.addressPoint)[0]
         }
-        if (mcpPoint === null && mcpSignal) {
-            setMcpPoint(addressPoint)
-            setMcp(mcp)
+        if (mcpSignal) {
+            // check if exist
+            let checkExist = false
+            if (mcpPoints)
+                mcpPoints.forEach((mcp: any) => {
+                    if (mcp.id === addressPoint.id) {
+                        checkExist = true
+                        return
+                    }
+                })
+            if (!checkExist)
+                setMcpPoints((prev: any) => {
+                    if (prev) {
+                        setMcpsForAdd([...prev, addressPoint])
+                        return [...prev, addressPoint]
+                    }
+                    else {
+                        setMcpsForAdd([addressPoint])
+                        return [addressPoint]
+                    }
+                }
+                )
+            setMcpSignal(false)
         }
     }
-    let findLoading = false
+    const [findLoading, setFindLoading] = useState(false)
+    useEffect(() => {
+        if (findLoading) {
+            handleFind()
+        }
+    }, [findLoading])
     const handleFind = async () => {
-        if (disposalPoint1 && disposalPoint2 && mcpPoint) {
+        if (disposalPoint1 && disposalPoint2 && mcpPoints) {
+            if (findLoading === false) {
+                setFindLoading(true)
+                return;
+            }
             var requestOptions = {
                 method: 'GET',
             };
-            findLoading = true
-            await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${disposalPoint1.longitude},${disposalPoint1.latitude};${mcpPoint.longitude},${mcpPoint.latitude}?access_token=pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ`, requestOptions)
+            let routes: any = []
+            let fetchUrl: string
+            fetchUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${disposalPoint1.longitude},${disposalPoint1.latitude};${mcpPoints[0].longitude},${mcpPoints[0].latitude}?access_token=pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ`
+            await fetch(fetchUrl, requestOptions)
                 .then(response => response.text())
                 .then(result => {
                     const route = JSON.parse(result);
@@ -94,15 +124,34 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                         properties: {},
                         geometry: {
                             type: 'LineString',
-                            coordinates: lineStringCoordinates
-                        }
+                            coordinates: lineStringCoordinates,
+                        },
                     };
-                    setRoute1(lineString);
-                    setRoute1ForStore(lineString)
+                    routes.push(lineString)
                 })
                 .catch(error => console.log('error', error));
-
-            await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${mcpPoint.longitude},${mcpPoint.latitude};${disposalPoint2.longitude},${disposalPoint2.latitude}?access_token=pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ`, requestOptions)
+            for (let i = 0; i < mcpPoints.length - 1; i++) {
+                fetchUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${mcpPoints[i].longitude},${mcpPoints[i].latitude};${mcpPoints[i + 1].longitude},${mcpPoints[i + 1].latitude}?access_token=pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ`
+                await fetch(fetchUrl, requestOptions)
+                    .then(response => response.text())
+                    .then(result => {
+                        const route = JSON.parse(result);
+                        const decodedGeometry = polyline.decode(route.routes[0].geometry);
+                        const lineStringCoordinates = decodedGeometry.map((coordinate) => [coordinate[1], coordinate[0]]);
+                        const lineString: Feature = {
+                            type: 'Feature',
+                            properties: {},
+                            geometry: {
+                                type: 'LineString',
+                                coordinates: lineStringCoordinates,
+                            },
+                        };
+                        routes.push(lineString)
+                    })
+                    .catch(error => console.log('error', error));
+            }
+            fetchUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${mcpPoints[mcpPoints.length - 1].longitude},${mcpPoints[mcpPoints.length - 1].latitude};${disposalPoint2.longitude},${disposalPoint2.latitude}?access_token=pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ`
+            await fetch(fetchUrl, requestOptions)
                 .then(response => response.text())
                 .then(result => {
                     const route = JSON.parse(result);
@@ -113,14 +162,15 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                         properties: {},
                         geometry: {
                             type: 'LineString',
-                            coordinates: lineStringCoordinates
-                        }
+                            coordinates: lineStringCoordinates,
+                        },
                     };
-                    setRoute2(lineString);
-                    setRoute2ForStore(lineString)
-                    findLoading = false
+                    routes.push(lineString)
                 })
                 .catch(error => console.log('error', error));
+            setRoutes(routes)
+            setRoutesForAdd(routes)
+            setFindLoading(false)
         }
         else {
             dispatch(SmallNotification.actions.handleOpen({ type: "error", content: "Please choose 2 disposals and 1 mcp" }))
@@ -140,8 +190,8 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                 disposals && disposals.map((disposal: any, index: number) => {
                     return (
                         <Marker
-                            latitude={JSON.parse(JSON.parse(disposal.addressPoint))[1]}
-                            longitude={JSON.parse(JSON.parse(disposal.addressPoint))[0]}
+                            latitude={JSON.parse(disposal.addressPoint)[1]}
+                            longitude={JSON.parse(disposal.addressPoint)[0]}
                             // get event when click on
                             // @ts-ignore
                             // onClick={handleMarkerClick}
@@ -152,11 +202,16 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                             mapStyle="mapbox://styles/mapbox/streets-v9"
                             onClick={(e: any) => {
                                 handleDisposalsClick(disposal)
-                                handleShowPopUp({ latitude: JSON.parse(JSON.parse(disposal.addressPoint))[1], longitude: JSON.parse(JSON.parse(disposal.addressPoint))[0], type: "disposal", index: index })
+                                handleShowPopUp({ latitude: JSON.parse(disposal.addressPoint)[1], longitude: JSON.parse(disposal.addressPoint)[0], type: "disposal", index: index })
                             }}
                         >
                             <img src={disposalImage} alt="My Marker" className={clsx(" w-10 h-10 cursor-pointer rounded-full hover:border-blue-700 border-2 border-blue-500", {
-                                "border-yellow-500 hover:border-yellow-700": ((disposalPoint1 && disposalPoint1.id === disposal.id) || (disposalPoint2 && disposalPoint2.id === disposal.id)),
+                                "border-yellow-500 hover:border-yellow-700": (() => {
+                                    if ((disposalPoint1 && disposalPoint1.id === disposal.id) || (disposalPoint2 && disposalPoint2.id === disposal.id))
+                                        return true
+                                    else
+                                        return false
+                                })(),
                             })} />
                         </Marker>
                     )
@@ -166,8 +221,8 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                 mcps && mcps.map((mcp: any, index: number) => {
                     return (
                         <Marker
-                            latitude={JSON.parse(JSON.parse(mcp.addressPoint))[1]}
-                            longitude={JSON.parse(JSON.parse(mcp.addressPoint))[0]}
+                            latitude={JSON.parse(mcp.addressPoint)[1]}
+                            longitude={JSON.parse(mcp.addressPoint)[0]}
                             // get event when click on
                             // @ts-ignore
                             // onClick={handleMarkerClick}
@@ -177,12 +232,18 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                             offsetLeft={-10}
                             mapStyle="mapbox://styles/mapbox/streets-v9"
                             onClick={(e: any) => {
-                                handleShowPopUp({ latitude: JSON.parse(JSON.parse(mcp.addressPoint))[1], longitude: JSON.parse(JSON.parse(mcp.addressPoint))[0], type: "mcp", index: index })
+                                handleShowPopUp({ latitude: JSON.parse(mcp.addressPoint)[1], longitude: JSON.parse(mcp.addressPoint)[0], type: "mcp", index: index })
                                 handleMcpClick(mcp)
                             }}
                         >
                             <img src={mcpImage} alt="My Marker" className={clsx(" w-10 h-10 cursor-pointer rounded-full hover:border-blue-700 border-2 border-blue-500", {
-                                "border-yellow-500 hover:border-yellow-700": (mcpPoint && mcpPoint.id === mcp.id),
+                                "border-yellow-500 hover:border-yellow-700": (() => {
+                                    if (!mcpPoints) return false;
+                                    for (let i = 0; i < mcpPoints.length; i++) {
+                                        if (mcpPoints[i].id === mcp.id) return true;
+                                    }
+                                    return false;
+                                })(),
                             })} />
                         </Marker>
                     )
@@ -217,40 +278,28 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                     </div>
                 </Popup>
             )}
-            {route1 && (<Source id="route1" type="geojson" data={route1}>
-                <Layer
+            {
+                routes && routes.map((route: any, index: number) => {
+                    return (
+                        <Source id={"route" + index} type="geojson" data={route}>
+                            <Layer
 
-                    id="route1"
-                    type="line"
-                    source="route"
-                    layout={{
-                        "line-join": "round",
-                        "line-cap": "round"
-                    }}
-                    paint={{
-                        "line-color": "red",
-                        "line-width": 2
-                    }}
-                />
-            </Source>
-            )}
-            {route2 && (<Source id="route2" type="geojson" data={route2}>
-                <Layer
-
-                    id="route2"
-                    type="line"
-                    source="route"
-                    layout={{
-                        "line-join": "round",
-                        "line-cap": "round"
-                    }}
-                    paint={{
-                        "line-color": "green",
-                        "line-width": 2
-                    }}
-                />
-            </Source>
-            )}
+                                id={"route" + index}
+                                type="line"
+                                source="route"
+                                layout={{
+                                    "line-join": "round",
+                                    "line-cap": "round"
+                                }}
+                                paint={{
+                                    "line-color": index === routes.length - 1 ? "green" : "red",
+                                    "line-width": 2
+                                }}
+                            />
+                        </Source>
+                    )
+                })
+            }
         </ReactMapGL>
         <div className="w-full h-fit flex flex-col space-y-2">
             <button onClick={() => {
@@ -261,14 +310,27 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                 "bg-green-300": disposal1Signal,
                 "bg-green-400": !disposal1Signal
             })}>Choose Departure Disposal{disposalPoint1 && `: ${disposalPoint1.name}`}</button>
-            <button onClick={() => {
-                setDisposal1Signal(false)
-                setDisposal2Signal(false)
-                setMcpSignal(true)
-            }} className={clsx("h-fit w-fit p-2 rounded-xl text-white hover:bg-green-300", {
-                "bg-green-300": mcpSignal,
-                "bg-green-400": !mcpSignal
-            })}>Choose MCP{mcpPoint && `: ${mcpPoint.name}`}</button>
+
+            <div className="flex space-x-4">
+                {
+                    mcpPoints && mcpPoints.map((mcp: any, index: number) => {
+                        return (<>
+                            <div className="h-fit w-fit p-2 rounded-xl text-white bg-green-300">
+                                MCP {index + 1}: {mcp.name}
+                            </div>
+                        </>)
+                    })
+                }
+                <button onClick={() => {
+                    setDisposal1Signal(false)
+                    setDisposal2Signal(false)
+                    setMcpSignal(true)
+                }} className={clsx("h-fit w-fit p-2 rounded-xl text-white hover:bg-green-300", {
+                    "bg-green-300": mcpSignal,
+                    "bg-green-400": !mcpSignal
+                })}>+ MCP</button>
+            </div>
+
             <button onClick={() => {
                 setDisposal1Signal(false)
                 setDisposal2Signal(true)
@@ -283,14 +345,13 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                 setMcpSignal(false)
                 setDisposalPoint1(null)
                 setDisposalPoint2(null)
-                setMcpPoint(null)
-                setRoute1(null)
-                setRoute2(null)
+                setMcpPoints(null)
+                setRoutes(null)
                 setDisposalBefore(null)
                 setDisposalAfter(null)
-                setMcp(null)
-                setRoute2ForStore(null)
-                setRoute1ForStore(null)
+                setMcpsForAdd(null)
+                setRoutesForAdd(null)
+                setFindLoading(false)
             }} className={clsx("h-fit w-fit p-2 rounded-xl text-white bg-green-400 hover:bg-green-300", {
             })}>Reset All</button>
             <button onClick={() => {
@@ -303,7 +364,7 @@ function TaskAddMap({ setDisposalBefore,setDisposalAfter, setMcp, setRoute1ForSt
                         </div>
                         :
                         "Find"
-            }</button>
+                }</button>
         </div>
     </div>);
 }
