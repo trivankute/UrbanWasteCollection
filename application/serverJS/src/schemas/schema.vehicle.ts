@@ -10,7 +10,7 @@ const VehicleSchema = z.object({
     }).max(10, {
         message: "Number plate must be at most 10 characters"
     }),
-    currentDisposalFactoryId: z.string({
+    disposalName: z.string({
         required_error: "Current disposal factory id is required",
     }).nonempty({
         message: "Current disposal factory id must be not empty"

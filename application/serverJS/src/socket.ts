@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import prisma from "./utils/prisma";
 
-async function showAllVehiclesPoints(socket:any) {
+async function updateAllVehiclesPoints(socket:any) {
     const vehicles = await prisma.vehicle.findMany({
         where: {
             state: "in progress"
@@ -22,27 +22,29 @@ async function showAllVehiclesPoints(socket:any) {
             },
         },
     });
+
+    if(vehicles.length==0){
+        // emit error
+        socket.emit("callVehiclesAfterUpdateAddressEvent", {
+            status:"error",
+            message:"No vehicles in progress"
+        });
+        return
+    }
+
     const vehiclePointsPromises = vehicles.map(async (vehicle:any)=>{
-        const routes = vehicle.taskId[0].routes
+        const routes = vehicle.task.routes
         const route1 = JSON.parse(routes[0]).geometry.coordinates
         const route2 = JSON.parse(routes[1]).geometry.coordinates
         let pointIndex = vehicle.currentMovingPointIndex
-        let addressPoint 
-        if(route1.length>pointIndex){
-            addressPoint = route1[pointIndex]
-        }else{
-            addressPoint = route2[pointIndex-route1.length]
-        }
-
         pointIndex++;
-        if(pointIndex==route1.length+route2.length+1){
+        if(pointIndex===route1.length+route2.length+1){
             await prisma.vehicle.update({
                 where: {
                     id: vehicle.id
                 },
                 data: {
-                    state: "nothing",
-                    currentMovingPointIndex: pointIndex
+                    currentMovingPointIndex: 0
                 }
 
             })
@@ -59,25 +61,12 @@ async function showAllVehiclesPoints(socket:any) {
 
             })
         }
-
-
-        return {
-            id: vehicle.id,
-            numberPlate: vehicle.numberPlate,
-            workersQuantities: vehicle.workers.length,
-            type: vehicle.type,
-            capacity: vehicle.capacity,
-            state: vehicle.state,
-            currentMovingPointIndex: vehicle.currentMovingPointIndex,
-            addressPoint: addressPoint
-        }
     })
 
-    const vehiclePoints = await Promise.all(vehiclePointsPromises)
+    await Promise.all(vehiclePointsPromises)
 
-    socket.emit("showAllVehiclesPoints", {
-        status:"success",
-        data: vehiclePoints
+    socket.emit("callVehiclesAfterUpdateAddressEvent", {
+        status:"success"
     });
 }
 
@@ -91,13 +80,12 @@ export default function configureSocket(server: any) {
   });
   io.on("connection", (socket) => {
     console.log("a user connected");
-    // const test = setInterval(()=>{
-    //     showAllVehiclesPoints(socket)
-    // },5000)
-    // socket.on("disconnect", () => {
-    //   console.log("user disconnected");
-    //     clearInterval(test)
-    // });
+    const test = setInterval(()=>{
+        updateAllVehiclesPoints(socket)
+    },5000)
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
+    });
   })
   return io;
 }

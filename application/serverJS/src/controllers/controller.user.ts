@@ -44,10 +44,21 @@ const registerHandle = async (req: Request<{}, {}, Omit<registerUserInput, "conf
                     password: hash,
                     salt
                 },
-                select: {
-                    id: true,
-                    email: true,
-                    name: true
+                include: {
+                    disposalFactory: {
+                        select: {
+                            name: true,
+                        }
+                    },
+                    vehicle: {
+                        include: {
+                            task: {
+                                select: {
+                                    id: true
+                                }
+                            }
+                        }
+                    }
                 }
             })
             res.json({ status: "success", message: "User registered successfully" })
@@ -69,6 +80,15 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
                 disposalFactory: {
                     select: {
                         name: true,
+                    }
+                },
+                vehicle: {
+                    include: {
+                        task: {
+                            select: {
+                                id: true
+                            }
+                        }
                     }
                 }
             }
@@ -103,6 +123,15 @@ const getMeHandle = async (req: Request, res: Response, next: NextFunction) => {
                 disposalFactory: {
                     select: {
                         name: true,
+                    }
+                },
+                vehicle: {
+                    include: {
+                        task: {
+                            select: {
+                                id: true
+                            }
+                        }
                     }
                 }
             }
@@ -173,9 +202,25 @@ const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Resp
                 },
             },
             include: {
-                vehicle:{
+                vehicle: {
                     include: {
-                        task: true
+                        task: {
+                            select: {
+                                id: true,
+                                name: true,
+                                type: true,
+                                state: true,
+                                accept: true,
+                                routes: true,
+                                vehicleId: true,
+                                mcpId:true,
+                                vehicle: {
+                                    select: {
+                                        "id": true,
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -251,12 +296,6 @@ const checkinHandle = async (req: Request, res: Response, next: NextFunction) =>
             where: {
                 id
             },
-            select: {
-                checkin: true,
-                checkinTime: true,
-                checkout: true,
-                checkoutTime: true
-            }
         })
         if (!user) {
             return res.status(404).json({ status: "fail", message: "User not found" })
@@ -276,16 +315,27 @@ const checkinHandle = async (req: Request, res: Response, next: NextFunction) =>
                 checkin: true,
                 checkinTime: new Date()
             },
-            select:
-            {
-                id: true,
-                email: true,
-                name: true,
-                checkin: true,
-                checkinTime: true,
+            include: {
+                disposalFactory: {
+                    select: {
+                        name: true
+                    }
+                },
+                vehicle: {
+                    include: {
+                        task: {
+                            select: {
+                                id: true,
+                            }
+                        }
+                    }
+                }
             }
+
         })
-        res.status(200).json({ status: "success", data: newUser })
+        // remove password and salt
+        const { password, salt, ...rest } = newUser;
+        res.status(200).json({ status: "success", data: rest })
     }
     catch (err) {
         next(new ExpressError("Cannot checkin", StatusCodes.INTERNAL_SERVER_ERROR))
@@ -299,12 +349,6 @@ const checkoutHandle = async (req: Request, res: Response, next: NextFunction) =
         const user = await prisma.user.findUnique({
             where: {
                 id
-            },
-            select: {
-                checkin: true,
-                checkinTime: true,
-                checkout: true,
-                checkoutTime: true
             }
         })
         if (!user) {
@@ -329,18 +373,26 @@ const checkoutHandle = async (req: Request, res: Response, next: NextFunction) =
                 checkout: true,
                 checkoutTime: new Date()
             },
-            select:
-            {
-                id: true,
-                email: true,
-                name: true,
-                checkin: true,
-                checkinTime: true,
-                checkout: true,
-                checkoutTime: true,
+            include: {
+                disposalFactory: {
+                    select: {
+                        name: true
+                    }
+                },
+                vehicle: {
+                    include: {
+                        task: {
+                            select: {
+                                id: true,
+                            }
+                        }
+                    }
+                }
             }
         })
-        res.status(200).json({ status: "success", data: newUser })
+        // remove password and salt
+        const { password, salt, ...rest } = newUser;
+        res.status(200).json({ status: "success", data: rest })
     }
     catch (err) {
         next(new ExpressError("Cannot checkout", StatusCodes.INTERNAL_SERVER_ERROR))
@@ -383,18 +435,26 @@ const resetcheckincheckoutHandle = async (req: Request, res: Response, next: Nex
                 checkout: false,
                 checkoutTime: null
             },
-            select:
-            {
-                id: true,
-                email: true,
-                name: true,
-                checkin: true,
-                checkinTime: true,
-                checkout: true,
-                checkoutTime: true,
+            include: {
+                disposalFactory: {
+                    select: {
+                        name: true
+                    }
+                },
+                vehicle: {
+                    include: {
+                        task: {
+                            select: {
+                                id: true,
+                            }
+                        }
+                    }
+                }
             }
         })
-        res.status(200).json({ status: "success", data: newUser })
+        // remove password and salt
+        const { password, salt, ...rest } = newUser;
+        res.status(200).json({ status: "success", data: rest })
     }
     catch (error) {
         next(new ExpressError("Cannot reset checkin checkout", StatusCodes.INTERNAL_SERVER_ERROR))
