@@ -42,7 +42,7 @@ const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Resp
         const mcps = await prisma.mCP.findMany({
             where: {
                 id: {
-                    in: mcpIds
+                    in: mcpIds.map(mcp => mcp.id)
                 }
             },
         })
@@ -78,11 +78,6 @@ const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Resp
             }
         })
 
-
-        if (!mcp) {
-            next(new ExpressError("Mcp not found", StatusCodes.BAD_REQUEST))
-        }
-
         // create task
         const newTask = await prisma.task.create({
             data: {
@@ -97,13 +92,11 @@ const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Resp
                     connect: pathDisposalFactoriesIds
                 },
                 routes,
-                mcp: {
-                    connect: {
-                        id: mcpId
-                    }
+                mcps: {
+                    connect: mcpIds
                 },
                 createdAt: createdTime,
-                mcpPreviousCapacity: mcp?.capacity,
+                mcpPreviousCapacitys: mcps.map((item) => item.capacity),
             },
             select: {
                 id: true,
@@ -137,9 +130,9 @@ const createTaskHandle = async (req: Request<{}, {}, createTaskInput>, res: Resp
                 },
                 routes: true,
                 disposalFactories: true,
-                mcp: true,
-                mcpPreviousCapacity: true,
-                mcpResultCapacity: true,
+                mcps: true,
+                mcpPreviousCapacitys: true,
+                mcpResultCapacitys: true,
                 accept: true,
                 createdAt: true, updatedAt: true, doneAt: true,
             }
@@ -179,7 +172,7 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                         }
                     }
                 },
-                mcpPreviousCapacity: true,
+                mcpPreviousCapacitys: true,
             }
         })
         // check if worker is in that task
@@ -199,7 +192,9 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                 },
                 data: {
                     state: "need review",
-                    mcpResultCapacity: task!.mcpPreviousCapacity === 100 ? 100 : task!.mcpPreviousCapacity! + 10
+                    mcpResultCapacitys: task!.mcpPreviousCapacitys!.map((item) => {
+                        return item === 100 ? 100 : item + 10
+                    }),
                 },
                 select: {
                     id: true,
@@ -233,9 +228,9 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                     },
                     routes: true,
                     disposalFactories: true,
-                    mcp: true,
-                    mcpPreviousCapacity: true,
-                    mcpResultCapacity: true,
+                    mcps: true,
+                    mcpPreviousCapacitys: true,
+                    mcpResultCapacitys: true,
                     accept: true,
                     createdAt: true, updatedAt: true, doneAt: true,
                 }
@@ -248,7 +243,9 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                 },
                 data: {
                     state: "need review",
-                    mcpResultCapacity: task!.mcpPreviousCapacity === 0 ? 0 : task!.mcpPreviousCapacity! - 10
+                    mcpResultCapacitys: task!.mcpPreviousCapacitys.map((item) => {
+                        return item === 0 ? 0 : item - 10
+                    })
                 },
                 select: {
                     id: true,
@@ -282,9 +279,9 @@ const updateNeedReviewTaskHandle = async (req: Request<updateNeedReviewTaskInput
                     },
                     routes: true,
                     disposalFactories: true,
-                    mcp: true,
-                    mcpPreviousCapacity: true,
-                    mcpResultCapacity: true,
+                    mcps: true,
+                    mcpPreviousCapacitys: true,
+                    mcpResultCapacitys: true,
                     accept: true,
                     createdAt: true, updatedAt: true, doneAt: true,
                 }
@@ -323,9 +320,11 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                             }
                         }
                     },
-                    mcp: {
-                        name: {
-                            contains: mcpName
+                    mcps: {
+                        some: {
+                            name: {
+                                contains: mcpName as string
+                            }
                         }
                     }
                 },
@@ -361,9 +360,9 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                     },
                     routes: true,
                     disposalFactories: true,
-                    mcp: true,
-                    mcpPreviousCapacity: true,
-                    mcpResultCapacity: true,
+                    mcps: true,
+                    mcpPreviousCapacitys: true,
+                    mcpResultCapacitys: true,
                     accept: true,
                     createdAt: true, updatedAt: true, doneAt: true,
                 }
@@ -392,9 +391,11 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                             }
                         }
                     },
-                    mcp: {
-                        name: {
-                            contains: mcpName
+                    mcps: {
+                        some: {
+                            name: {
+                                contains: mcpName
+                            }
                         }
                     }
                 },
@@ -430,9 +431,9 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                     },
                     routes: true,
                     disposalFactories: true,
-                    mcp: true,
-                    mcpPreviousCapacity: true,
-                    mcpResultCapacity: true,
+                    mcps: true,
+                    mcpPreviousCapacitys: true,
+                    mcpResultCapacitys: true,
                     accept: true,
                     createdAt: true, updatedAt: true, doneAt: true,
                 }
@@ -453,46 +454,10 @@ const deleteTaskHandle = async (req: Request<{ id: string }, {}, {}>, res: Respo
             where: {
                 id
             },
-            select: {
-                id: true,
-                vehicle: {
-                    select: {
-                        id: true,
-                    }
-                },
-                mcp: {
-                    select: {
-                        id: true,
-                    }
-                },
-                disposalFactories: {
-                    select: {
-                        id: true,
-                    }
-                }
-            }
         })
         if (!task) {
             next(new ExpressError("Cannot find task", StatusCodes.NOT_FOUND))
         }
-        // remove all connections
-        await prisma.task.update({
-            where: {
-                id
-            },
-            data: {
-                disposalFactories: {
-                    set: []
-                },
-                vehicle: {
-                    disconnect: true
-                },
-                mcp: {
-                    disconnect: true
-                }
-            }
-        })
-        // delete tas
 
         const newTask = await prisma.task.delete({
             where: {
@@ -524,7 +489,7 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 accept: true,
                 routes: true,
                 vehicleId: true,
-                mcpId: true,
+                mcpIds: true,
                 vehicle: {
                     select: {
                         "id": true,
@@ -550,10 +515,10 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                         }
                     }
                 },
-                mcp: true,
+                mcps: true,
                 disposalFactories: true,
-                mcpPreviousCapacity: true,
-                mcpResultCapacity: true,
+                mcpPreviousCapacitys: true,
+                mcpResultCapacitys: true,
                 createdAt: true, updatedAt: true, doneAt: true,
 
             }
@@ -576,14 +541,14 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 },
                 data: {
                     state: "in progress",
-                    mcpResultCapacity: null,
+                    mcpResultCapacitys: [],
                 }
             })
             res.status(200).json({ status: "success", data: "refuse" })
         }
         else if (answer === "accept") {
             // update task to null and fuel and capacity and currentDisposal equal new second disposal of task for vehicle
-            let mcp
+            let mcps
             if (task!.type === "janitor") {
                 await prisma.vehicle.update({
                     where: {
@@ -607,13 +572,30 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 })
 
                 // update capacity for mcp
-                mcp = await prisma.mCP.update({
+                // mcp = await prisma.mCP.update({
+                //     where: {
+                //         id: task!.mcp!.id
+                //     },
+                //     data: {
+                //         capacity: {
+                //             decrement: task!.mcp!.capacity === 0 ? 0 : 10,
+                //         }
+                //     }
+                // })
+
+                // update capacity for mcps
+                await prisma.mCP.updateMany({
                     where: {
-                        id: task!.mcp!.id
+                        id: {
+                            in: task!.mcps.map(mcp => mcp.id)
+                        },
+                        capacity: {
+                            gte: 10
+                        }
                     },
                     data: {
                         capacity: {
-                            decrement: task!.mcp!.capacity === 0 ? 0 : 10,
+                            decrement: 10
                         }
                     }
                 })
@@ -636,15 +618,20 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                         currentMovingPointIndex: 0
                     },
                 })
-                
-                // update capacity for mcp
-                mcp = await prisma.mCP.update({
+
+                // update capacity for mcps
+                await prisma.mCP.updateMany({
                     where: {
-                        id: task!.mcp!.id
+                        id: {
+                            in: task!.mcps.map(mcp => mcp.id)
+                        },
+                        capacity: {
+                            lte: 90
+                        }
                     },
                     data: {
                         capacity: {
-                            increment: task!.mcp!.capacity === 100 ? 100 : 10,
+                            increment: 10
                         }
                     }
                 })
@@ -661,6 +648,15 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                 }
             })
 
+            // find again mcps
+            mcps = await prisma.mCP.findMany({
+                where: {
+                    id: {
+                        in: task!.mcps.map(mcp => mcp.id)
+                    }
+                }
+            })
+
             // move task to doneTask
             await prisma.doneTasks.create({
                 data: {
@@ -672,16 +668,17 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     routes: task!.routes,
                     createdAt: task!.createdAt,
                     updatedAt: task!.updatedAt,
-                    doneAt: task!.doneAt,
                     vehicle: {
                         connect: {
                             id: task!.vehicle!.id
                         }
                     },
-                    mcp: {
-                        connect: {
-                            id: task!.mcp!.id
-                        }
+                    mcps: {
+                        connect: mcps.map(mcp => {
+                            return {
+                                id: mcp.id
+                            }
+                        })
                     },
                     disposalFactories: {
                         connect: task!.disposalFactories.map(disposalFactory => {
@@ -690,8 +687,11 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                             }
                         })
                     },
-                    mcpPreviousCapacity: task!.mcpPreviousCapacity,
-                    mcpResultCapacity: mcp.capacity,
+                    mcpPreviousCapacitys: task!.mcpPreviousCapacitys,
+                    mcpResultCapacitys: mcps.map(mcp => {
+                        return mcp.capacity
+                    }),
+                    doneAt: new Date()
                 }
             })
             // delete task
@@ -730,7 +730,7 @@ const getTaskById = async (req: Request, res: Response, next: NextFunction) => {
                 accept: true,
                 routes: true,
                 vehicleId: true,
-                mcpId: true,
+                mcpIds: true,
                 vehicle: {
                     select: {
                         "id": true,
@@ -756,10 +756,10 @@ const getTaskById = async (req: Request, res: Response, next: NextFunction) => {
                         }
                     }
                 },
-                mcp: true,
+                mcps: true,
                 disposalFactories: true,
-                mcpPreviousCapacity: true,
-                mcpResultCapacity: true,
+                mcpPreviousCapacitys: true,
+                mcpResultCapacitys: true,
                 createdAt: true, updatedAt: true, doneAt: true,
             }
         })

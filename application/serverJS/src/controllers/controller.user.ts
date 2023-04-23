@@ -213,7 +213,7 @@ const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Resp
                                 accept: true,
                                 routes: true,
                                 vehicleId: true,
-                                mcpId:true,
+                                mcpIds:true,
                                 vehicle: {
                                     select: {
                                         "id": true,

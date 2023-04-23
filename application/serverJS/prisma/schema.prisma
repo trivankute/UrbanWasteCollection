@@ -70,10 +70,10 @@ model Task {
   vehicleId         String?          @db.ObjectId @unique
   disposalFactories   DisposalFactory[] @relation(fields: [disposalFactoriesIds], references: [id])
   disposalFactoriesIds String[]        @db.ObjectId
-  mcp MCP[] @relation(fields: [mcpId], references: [id])
-  mcpId String[] @db.ObjectId
-  mcpPreviousCapacity Int[]
-  mcpResultCapacity Int[]
+  mcps MCP[] @relation(fields: [mcpIds], references: [id])
+  mcpIds String[] @db.ObjectId
+  mcpPreviousCapacitys Int[]
+  mcpResultCapacitys Int[]
 }
 
 model DoneTasks {
@@ -92,8 +92,8 @@ model DoneTasks {
   disposalFactoriesIds String[]        @db.ObjectId
   mcps MCP[] @relation(fields: [mcpIds], references: [id])
   mcpIds String[] @db.ObjectId
-  mcpPreviousCapacity Int[]
-  mcpResultCapacity Int[]
+  mcpPreviousCapacitys Int[]
+  mcpResultCapacitys Int[]
 }
 
 model Review {
@@ -114,7 +114,7 @@ model MCP {
   addressPoint String   @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  task         Task[]  @relation(fields: [taskIDs], references: [id])
+  tasks         Task[]  @relation(fields: [taskIDs], references: [id])
   taskIDs      String[] @db.ObjectId
   doneTasks         DoneTasks[] @relation(fields: [doneTasksIDs], references: [id])
   doneTasksIDs      String[] @db.ObjectId
