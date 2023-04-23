@@ -1,2 +1,2 @@
-const serverUrl = "http://localhost:3001"
+const serverUrl = process.env.serverURL||"http://localhost:3001"
 export default serverUrl
