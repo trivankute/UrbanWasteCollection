@@ -5,11 +5,14 @@ import { MenuStore, UserStore } from "../../redux/selectors";
 import clsx from 'clsx'
 import MenuSlice from "../../redux/slices/MenuSlice";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/slices/UserSlice";
+import SmallNotification from "../../redux/slices/Modals/SmallNotificationSlice";
+import Spinner from "../Spinner/Spinner";
 
 function MenuResponsiveBar() {
     const headerLg = 64
     const headerSm = 60
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<any>()
     const menuResponsive = useSelector(MenuStore)
     const user = useSelector(UserStore)
     const navigate = useNavigate()
@@ -28,20 +31,34 @@ function MenuResponsiveBar() {
                 <div className="w-full h-fit flex justify-between mb-4">
                     {
                         !user.data ?
-                        <>
-                        <button onClick={()=>{
-                            navigate("/signin")
-                            dispatch(MenuSlice.actions.toggleHandle({}))
-                        }} className="block lg:hidden text-gray-800 border-2 border-[#52D452] dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</button>
-                        <button onClick={()=>{
-                            navigate("/signup")
-                            dispatch(MenuSlice.actions.toggleHandle({}))
-                        }} className="block lg:hidden text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Sign Up</button>
-                        </>
-                        :
-                        <>
-                        <button className="mx-auto block lg:hidden text-gray-800 bg-red-400  dark:text-white hover:bg-red-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log out</button>
-                        </>
+                            <>
+                                <button onClick={() => {
+                                    navigate("/signin")
+                                    dispatch(MenuSlice.actions.toggleHandle({}))
+                                }} className="block lg:hidden text-gray-800 border-2 border-[#52D452] dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</button>
+                                <button onClick={() => {
+                                    navigate("/signup")
+                                    dispatch(MenuSlice.actions.toggleHandle({}))
+                                }} className="block lg:hidden text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Sign Up</button>
+                            </>
+                            :
+                            <>
+                                <button onClick={() => {
+                                    dispatch(logout())
+                                        .then((res: any) => {
+                                            if (res.payload.status === "success") {
+                                                navigate("/")
+                                                dispatch(MenuSlice.actions.toggleHandle({}))
+                                                dispatch(SmallNotification.actions.handleOpen({type: "success", content: "Logged out successfully!"}))
+                                            }
+                                        })
+
+                                }} className="mx-auto block lg:hidden text-gray-800 bg-red-400  dark:text-white hover:bg-red-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{
+                                user.loading?
+                                <Spinner/>
+                                :
+                                "Log out"}</button>
+                            </>
                     }
                 </div>
                 {
@@ -50,17 +67,27 @@ function MenuResponsiveBar() {
                         {
                             user.data.role === "backofficer" ? <>
                                 <SidebarChild content="Profile" link="profile" />
+                                <SidebarChild content="Overview" link="overview" />
                                 <SidebarChild content="Workers" link="workers" />
                                 <SidebarChild content="Vehicles" link="vehicles" />
                                 <SidebarChild content="Tasks" link="tasks" />
-                            </> : 
-                            <>
-                            </>
+                            </> :
+                                (user.data.role === "janitor" || user.data.role === "collector") ?
+                                    <>
+                                        <SidebarChild content="Profile" link="profile" />
+                                        <SidebarChild content="Check" link="check" />
+                                        <SidebarChild content="Overview" link="overview" />
+                                        {/* <SidebarChild content="Vehicles" link="vehicles" />
+                                        <SidebarChild content="Tasks" link="tasks" /> */}
+                                    </>
+                                    :
+                                    <>
+                                    </>
                         }
                     </ul>
                 }
             </div>
-        </aside>
+        </aside >
     </>);
 }
 

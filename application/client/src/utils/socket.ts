@@ -3,18 +3,26 @@ import serverUrl from '../redux/urls/urls';
 
 const socket = io(serverUrl);
 
-const graphShowAllVehiclesEvent = "showAllVehiclesPoints"
-function graphShowAllVehiclesHandle (setVehiclePoint: any) {
-    socket.on(graphShowAllVehiclesEvent, (res: any) => {
-        setVehiclePoint({
-            latitude: res.data[0].addressPoint[1],
-            longitude: res.data[0].addressPoint[0],
-        })
+const callVehiclesAfterUpdateAddressEvent = "callVehiclesAfterUpdateAddressEvent"
+function callVehiclesAfterUpdateAddressHandle (aFunction: any) {
+    socket.on(callVehiclesAfterUpdateAddressEvent, (res: any) => {
+        if(socket.connected)
+        {
+            if(res.status==="success")
+                aFunction()
+            else {
+                socket.off(callVehiclesAfterUpdateAddressEvent)
+            }
+        }
+        else {
+            socket.off(callVehiclesAfterUpdateAddressEvent)
+        }
     })
 }
 
 export default socket
 
 export {
-    graphShowAllVehiclesHandle, graphShowAllVehiclesEvent
+    callVehiclesAfterUpdateAddressHandle,
+    callVehiclesAfterUpdateAddressEvent
 }

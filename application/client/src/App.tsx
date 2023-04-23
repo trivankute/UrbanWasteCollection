@@ -13,7 +13,6 @@ import AdminPageLayout from "./layout/AdminPageLayout/AdminPageLayout";
 import VehiclesPage from "./pages/VehiclesPage/VehiclesPage";
 import TasksPage from "./pages/TasksPage/TasksPage";
 import TaskAddPage from "./pages/TaskAddPage/TaskAddPage";
-import Graph from "./Components/Graph/Graph";
 import Header from "./Components/Header/Header";
 import HomePageLayout from "./layout/HomePageLayout/HomePageLayout";
 import SignUpForm from "./Components/SignUpForm/SignUpForm";
@@ -21,16 +20,16 @@ import SignInForm from "./Components/SignInForm/SignInForm";
 import WorkersPage from "./pages/WorkersPage/WorkersPage";
 import ResponsiveSlice from "./redux/slices/ResponsiveSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { SmallNotificationStore, UserStore } from "./redux/selectors";
-import { getAllMcps, getMcpById } from "./redux/slices/McpSlice";
-import { getMe, login, registeUser } from "./redux/slices/UserSlice";
-import { assignWorkersToVehicle, getAllVehicles, getVehicleById } from "./redux/slices/VehiclesSlice";
+import { SmallNotificationStore } from "./redux/selectors";
 import OverviewPage from "./pages/OverviewPage/OverviewPage";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import Loggedin from "./middlewares/Loggedin";
 import CheckMe from "./middlewares/CheckMe";
 import BackofficerOnly from "./middlewares/BackofficerOnly";
 import SmallNotification from "./Components/SmallNotification/SmallNotification";
+import WorkerPageLayout from "./layout/WorkerPageLayout/WorkerPageLayout";
+import CheckPage from "./pages/CheckPage/CheckPage";
+import WorkerOnly from "./middlewares/WorkerOnly";
 
 function App() {
   const location = useLocation();
@@ -111,7 +110,7 @@ function App() {
               <Route path="schedule" element={<UserSchedulePage />} />
               <Route path="" element={<PageNotFound />} />
             </Route>
-
+              
             <Route path="" element={<BackofficerOnly />} >
               <Route path="/admin" element={<AdminPageLayout />
               }>
@@ -125,6 +124,15 @@ function App() {
               </Route>
             </Route>
 
+            <Route path="" element={<WorkerOnly />} >
+              <Route path="/worker" element={<WorkerPageLayout />}>
+                <Route path="profile" element={<UserPage />} />
+                <Route path="check" element={<CheckPage />} />
+                <Route path="overview" element={<OverviewPage />} />
+                {/* can perform query in url */}
+                <Route path="" element={<PageNotFound />} />
+              </Route>
+            </Route>
 
             {/* testing route trivan*/}
             <Route path="/testing/trivan" element={<Home />} />

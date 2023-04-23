@@ -71,6 +71,30 @@ const WorkerModal = () => {
                                                 <span className="text-sm font-semibold capitailize">Role: {workerModalData.role}</span>
                                                 <span className="text-sm font-semibold capitailize">Tel: <span className="text-sm font-normal">{workerModalData.phone}</span></span>
                                                 <span className="text-sm font-semibold capitailize">Nationality: <span className="text-sm font-normal">{workerModalData.nationality}</span></span>
+                                                <>
+                                                    {
+                                                        workerModalData.checkin ?
+                                                            <>
+                                                                <span className="font-semibold capitalize text-sm">Checkin: Yes</span>
+                                                                <span className="font-semibold capitalize text-sm">Checkin Time: {workerModalData.checkinTime}</span>
+                                                            </>
+                                                            :
+                                                            <>
+                                                                <span className="font-semibold capitalize text-sm">Checkin: No</span>
+                                                            </>
+                                                    }
+                                                    {
+                                                        workerModalData.checkout ?
+                                                            <>
+                                                                <span className="font-semibold capitalize text-sm">CheckOut: Yes</span>
+                                                                <span className="font-semibold capitalize text-sm">CheckOut Time: {workerModalData.checkoutTime}</span>
+                                                            </>
+                                                            :
+                                                            <>
+                                                                <span className="font-semibold capitalize text-sm">CheckOut: No</span>
+                                                            </>
+                                                    }
+                                                </>
                                             </div>
                                         </div>
                                         <div className="flex-1 h-full flex flex-col">
@@ -85,9 +109,9 @@ const WorkerModal = () => {
                                 </div>
                             </div>
                             {
-                                workerModalData && workerModalData.vehicle && workerModalData.vehicle.task &&
+                                workerModalData && workerModalData.vehicleId && workerModalData.vehicle.task && vehicle && vehicle.task &&
                                 <div className="w-full h-fit border-t">
-                                    <TaskChild type="in progress" />
+                                    <TaskChild task={vehicle.task} />
                                 </div>
                             }
                             {

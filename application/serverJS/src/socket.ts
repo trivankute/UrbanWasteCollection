@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import prisma from "./utils/prisma";
 
-async function showAllVehiclesPoints(socket:any) {
+async function updateAllVehiclesPoints(socket: any) {
     const vehicles = await prisma.vehicle.findMany({
         where: {
             state: "in progress"
@@ -22,82 +22,78 @@ async function showAllVehiclesPoints(socket:any) {
             },
         },
     });
-    const vehiclePointsPromises = vehicles.map(async (vehicle:any)=>{
-        const routes = vehicle.taskId[0].routes
-        const route1 = JSON.parse(routes[0]).geometry.coordinates
-        const route2 = JSON.parse(routes[1]).geometry.coordinates
+
+    if (vehicles.length == 0) {
+        // emit error
+        socket.emit("callVehiclesAfterUpdateAddressEvent", {
+            status: "error",
+            message: "No vehicles in progress"
+        });
+        return
+    }
+
+    const vehiclePointsPromises = vehicles.map(async (vehicle: any) => {
+        const routes = vehicle.task.routes
         let pointIndex = vehicle.currentMovingPointIndex
-        let addressPoint 
-        if(route1.length>pointIndex){
-            addressPoint = route1[pointIndex]
-        }else{
-            addressPoint = route2[pointIndex-route1.length]
-        }
+        let currentPointLimit = 0;
+        routes.map(async (routeJson: any, index: number) => {
+            const route = JSON.parse(routeJson).geometry.coordinates
+            if (pointIndex < route.length + currentPointLimit) {
+                pointIndex++;
+                if (index === routes.length - 1 && pointIndex === route.length + currentPointLimit) {
+                    await prisma.vehicle.update({
+                        where: {
+                            id: vehicle.id
+                        },
+                        data: {
+                            currentMovingPointIndex: 0
+                        }
 
-        pointIndex++;
-        if(pointIndex==route1.length+route2.length+1){
-            await prisma.vehicle.update({
-                where: {
-                    id: vehicle.id
-                },
-                data: {
-                    state: "nothing",
-                    currentMovingPointIndex: pointIndex
+                    })
                 }
+                else {
+                    await prisma.vehicle.update({
+                        where: {
+                            id: vehicle.id
+                        },
+                        data: {
+                            currentMovingPointIndex: pointIndex
+                        }
 
-            })
-        }
-        else
-        {
-            await prisma.vehicle.update({
-                where: {
-                    id: vehicle.id
-                },
-                data: {
-                    currentMovingPointIndex: pointIndex
+                    })
                 }
-
-            })
-        }
-
-
-        return {
-            id: vehicle.id,
-            numberPlate: vehicle.numberPlate,
-            workersQuantities: vehicle.workers.length,
-            type: vehicle.type,
-            capacity: vehicle.capacity,
-            state: vehicle.state,
-            currentMovingPointIndex: vehicle.currentMovingPointIndex,
-            addressPoint: addressPoint
-        }
+                return
+            }
+            else {
+                currentPointLimit += route.length
+            }
+        })
     })
 
-    const vehiclePoints = await Promise.all(vehiclePointsPromises)
+    await Promise.all(vehiclePointsPromises)
 
-    socket.emit("showAllVehiclesPoints", {
-        status:"success",
-        data: vehiclePoints
+    socket.emit("callVehiclesAfterUpdateAddressEvent", {
+        status: "success"
     });
 }
 
 
-
+let intervalId: NodeJS.Timeout;
 export default function configureSocket(server: any) {
-  const io = new Server(server, {
-    cors: {
-        origin: "*",
-    },
-  });
-  io.on("connection", (socket) => {
-    console.log("a user connected");
-    // const test = setInterval(()=>{
-    //     showAllVehiclesPoints(socket)
-    // },5000)
-    // socket.on("disconnect", () => {
-    //   console.log("user disconnected");
-    //     clearInterval(test)
-    // });
-  })
-  return io;
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+        },
+    });
+    io.on("connection", (socket) => {
+        console.log("a user connected");
+        if (intervalId) clearInterval(intervalId); // Clear previous interval if it exists
+        intervalId = setInterval(() => {
+            updateAllVehiclesPoints(socket);
+        }, 5000);
+        socket.on("disconnect", () => {
+            console.log("user disconnected");
+        });
+    })
+    return io;
 }

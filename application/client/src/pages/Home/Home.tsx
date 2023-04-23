@@ -1,6 +1,6 @@
 import { memo } from "react";
-import Graph from "../../Components/Graph/Graph";
-import MCPSchedule from "../../Components/MCPSchedule/MCPSchedule";
+import Graph from "../../Components/ForHomePage/Graph/Graph";
+import MCPSchedule from "../../Components/ForHomePage/MCPSchedule/MCPSchedule";
 import { pageMotionTime } from "../../configs";
 import { motion } from "framer-motion";
 

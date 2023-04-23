@@ -5,13 +5,13 @@ import prisma from "../utils/prisma"
 import { RefuelVehicleInputParamHandle, SearchVehicleInputSchema, VehicleInputSchema } from "../schemas/schema.vehicle"
 const createVehicleHandle = async (req: Request<{},{},VehicleInputSchema>, res: Response, next: NextFunction) => {
     try {
-        let { numberPlate, currentDisposalFactoryId } = req.body
+        let { numberPlate, disposalName } = req.body
         const newVehicle = await prisma.vehicle.create({
             data: {
                 numberPlate:numberPlate,
                 currentDisposalFactory: {
                     connect: {
-                        id: currentDisposalFactoryId
+                        name: disposalName
                     }
                 }
             },
@@ -204,6 +204,11 @@ const refuelVehicleHandle = async (req: Request<RefuelVehicleInputParamHandle,{}
         // check if vehicle min capacity
         if (vehicle.capacity === 0) {
             return res.json({ status: "fail", message: "Vehicle has nothing to reset capacity" })
+        }
+        
+        // check if state is in progress
+        if (vehicle.state === "in progress") {
+            return res.json({ status: "fail", message: "Vehicle is in progress" })
         }
         // update vehicle
         vehicle = await prisma.vehicle.update({

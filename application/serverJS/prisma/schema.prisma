@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -43,7 +42,7 @@ model Vehicle {
   id                       String           @id @default(auto()) @map("_id") @db.ObjectId
   numberPlate              String           @unique
   maxWorkerSlot            Int              @default(4)
-  capacity                 Int              @default(100)
+  capacity                 Int              @default(0)
   fuel                     Int              @default(100)
   state                    String           @default("nothing") // in progress
   type                     String?          @default("nothing")
@@ -54,11 +53,12 @@ model Vehicle {
   updatedAt                DateTime         @updatedAt
   workers                  User[]
   task Task? 
+  doneTasks DoneTasks[]
 }
 
 model Task {
   id                String           @id @default(auto()) @map("_id") @db.ObjectId
-  name              String           @unique
+  name              String           
   type              String
   state             String           @default("in progress")
   accept Boolean @default(false)
@@ -70,10 +70,30 @@ model Task {
   vehicleId         String?          @db.ObjectId @unique
   disposalFactories   DisposalFactory[] @relation(fields: [disposalFactoriesIds], references: [id])
   disposalFactoriesIds String[]        @db.ObjectId
-  mcp MCP? @relation(fields: [mcpId], references: [id], onUpdate: Cascade)
-  mcpId String? @db.ObjectId
-  mcpPreviousCapacity Int?
-  mcpResultCapacity Int?
+  mcps MCP[] @relation(fields: [mcpIds], references: [id])
+  mcpIds String[] @db.ObjectId
+  mcpPreviousCapacitys Int[]
+  mcpResultCapacitys Int[]
+}
+
+model DoneTasks {
+  id                String           @id @map("_id") @db.ObjectId
+  name              String           
+  type              String
+  state             String           @default("done")
+  accept Boolean @default(true)
+  routes            String[]
+  createdAt         DateTime         
+  updatedAt         DateTime         
+  doneAt            DateTime?
+  vehicle          Vehicle?         @relation(fields: [vehicleId], references: [id], onUpdate: Cascade)
+  vehicleId         String?       @db.ObjectId
+  disposalFactories   DisposalFactory[] @relation(fields: [disposalFactoriesIds], references: [id])
+  disposalFactoriesIds String[]        @db.ObjectId
+  mcps MCP[] @relation(fields: [mcpIds], references: [id])
+  mcpIds String[] @db.ObjectId
+  mcpPreviousCapacitys Int[]
+  mcpResultCapacitys Int[]
 }
 
 model Review {
@@ -94,7 +114,10 @@ model MCP {
   addressPoint String   @unique
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  task         Task[] 
+  tasks         Task[]  @relation(fields: [taskIDs], references: [id])
+  taskIDs      String[] @db.ObjectId
+  doneTasks         DoneTasks[] @relation(fields: [doneTasksIDs], references: [id])
+  doneTasksIDs      String[] @db.ObjectId
 }
 
 model DisposalFactory {
@@ -108,4 +131,6 @@ model DisposalFactory {
   users User[]
   tasks        Task[] @relation(fields: [tasksIDs], references: [id])
   tasksIDs     String[] @db.ObjectId
+  doneTasks        DoneTasks[] @relation(fields: [doneTasksIDs], references: [id])
+  doneTasksIDs     String[] @db.ObjectId
 }

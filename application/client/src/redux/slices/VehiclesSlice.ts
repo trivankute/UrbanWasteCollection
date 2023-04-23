@@ -21,9 +21,6 @@ const VehiclesSlice = createSlice({
                 if (action.payload.status === "success") {
                     state.vehicles = action.payload.data;
                 }
-                else {
-                    state.vehicles = false;
-                }
             })
             .addCase(getVehicleById.pending, (state, action) => {
                 state.loading = true;
@@ -32,9 +29,6 @@ const VehiclesSlice = createSlice({
                 state.loading = false;
                 if (action.payload.status === "success") {
                     state.vehicle = action.payload.data;
-                }
-                else {
-                    state.vehicle = false;
                 }
             })
             .addCase(handleSearchVehicle.pending, (state, action) => {
@@ -45,9 +39,6 @@ const VehiclesSlice = createSlice({
                 if (action.payload.status === "success") {
                     state.vehicles = action.payload.data;
                 }
-                else {
-                    state.vehicles = false;
-                }
             })
             .addCase(assignWorkersToVehicle.pending, (state, action) => {
                 state.loading = true;
@@ -57,8 +48,14 @@ const VehiclesSlice = createSlice({
                 if (action.payload.status === "success") {
                     state.vehicle = action.payload.data;
                 }
-                else {
-                    state.vehicle = false;
+            })
+            .addCase(resetVehicleHandle.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(resetVehicleHandle.fulfilled, (state, action) => {
+                state.loading = false;
+                if (action.payload.status === "success") {
+                    state.vehicle = action.payload.data;
                 }
             })
 
@@ -186,5 +183,68 @@ export const assignWorkersToVehicle = createAsyncThunk('assignWorkersToVehicle',
     }
 }
 )
+
+export const addVehicle = createAsyncThunk('addVehicle', async (input: any) => {
+    //{{host}}/vehicle/create
+    try {
+        const { data } = await axios.post(`${serverUrl}/vehicle/create`, input, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (data.status === 'success') {
+            return { status: "success", data: data.data };
+        }
+        else {
+            return { status: "fail", message: data.message };
+        }
+    }
+    catch (error: any) {
+        if (Array.isArray(error.response.data)) {
+            let errorMessage = ""
+            error.response.data[0].errors.issues.map((item: any) => {
+                errorMessage += item.message;
+                errorMessage += ", ";
+                return item.message;
+            })
+            return { status: "fail", message: errorMessage };
+        }
+        else {
+            return { status: "fail", message: error.response.data.message };
+        }
+    }
+}
+)
+
+export const resetVehicleHandle = createAsyncThunk('resetVehicleHandle', async (id:any) => {
+    //{{host}}/vehicle/6433815df9807950d0ce5809/refuel
+    try {
+        const { data } = await axios.get(`${serverUrl}/vehicle/${id}/refuel`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (data.status === 'success') {
+            return { status: "success", data: data.data };
+        }
+        else {
+            return { status: "fail", message: data.message };
+        }
+    }
+    catch (error: any) {
+        if (Array.isArray(error.response.data)) {
+            let errorMessage = ""
+            error.response.data[0].errors.issues.map((item: any) => {
+                errorMessage += item.message;
+                errorMessage += ", ";
+                return item.message;
+            })
+            return { status: "fail", message: errorMessage };
+        }
+        else {
+            return { status: "fail", message: error.response.data.message };
+        }
+    }
+})
 
 export default VehiclesSlice

@@ -24,7 +24,7 @@ function SmallNotification() {
         onClick={()=>{
             dispatch(SmallNotificationSlice.actions.handleClose({}))
         }}
-        className={clsx("w-fit h-fit cursor-pointer hover:bg-gray-100 bg-white rounded-xl shadow-md fixed top-[70px] text-sm left-0 z-50 p-4", {
+        className={clsx("w-fit h-fit cursor-pointer font-semibold hover:bg-gray-100 bg-white rounded-xl shadow-md fixed top-[70px] text-sm left-0 z-50 p-4", {
             "text-green-500":error.type==="success",
             "text-red-500":error.type==="error"
         })}

@@ -8,4 +8,7 @@ export const UserStore = (state:any) => state.user
 export const WorkersStore = (state:any) => state.workers
 export const VehiclesStore = (state:any) => state.vehicles
 export const SmallNotificationStore = (state:any) => state.smallNotification
-
+export const TasksStore = (state:any) => state.tasks
+export const DisposalsStore = (state:any) => state.disposals
+export const MCPsStore = (state:any) => state.mcps
+export const HomeInteractingStore = (state:any) => state.homeInteracting

@@ -20,21 +20,19 @@ const createTaskSchema = z.object({
         })
     })),
     routes: z.array(z.string()),
-    mcpId: z.string({
-        required_error: "Mcp id is required",
-    }).nonempty({
-        message: "Mcp id must be not empty"
-    }),
-    mcpPreviousCapacity: z.number({
-        required_error: "Mcp previous capacity is required",
-    }).min(0, {
-        message: "Mcp previous capacity must be at least 0"
-    }).max(100, {
-        message: "Mcp previous capacity must be at most 100"
-        }),
+    mcpIds: z.array(z.object({
+        id: z.string({
+            required_error: "Mcp id is required",
+        }).nonempty({
+            message: "Mcp id must be not empty"
+        })
+    })),
+    createdTime: z.string({
+        required_error: "Created time is required",
+    })
 })
 
-const searchTaskSchema = z.object({
+const searchTasksSchema = z.object({
     page: z.number({
         required_error: "Page is required",
     }).min(1, {
@@ -79,7 +77,7 @@ const backOfficerReviewTaskBodySchema = z.object({
 })
 
 type createTaskInput = z.infer<typeof createTaskSchema>
-type searchTaskInput = z.infer<typeof searchTaskSchema>
+type searchTasksInput = z.infer<typeof searchTasksSchema>
 type updateNeedReviewTaskInput = z.infer<typeof updateNeedReviewTaskSchema>
 type backOfficerReviewTaskParamsInput = z.infer<typeof backOfficerReviewTaskParamsSchema>
 type backOfficerReviewTaskBodyInput = z.infer<typeof backOfficerReviewTaskBodySchema>
@@ -87,7 +85,7 @@ type backOfficerReviewTaskBodyInput = z.infer<typeof backOfficerReviewTaskBodySc
 
 export {
     createTaskSchema, createTaskInput,
-    searchTaskSchema, searchTaskInput,
+    searchTasksSchema, searchTasksInput,
     updateNeedReviewTaskSchema, updateNeedReviewTaskInput,
     backOfficerReviewTaskParamsSchema, backOfficerReviewTaskParamsInput,
     backOfficerReviewTaskBodySchema, backOfficerReviewTaskBodyInput,

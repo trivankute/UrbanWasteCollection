@@ -10,6 +10,10 @@ import UserSlice from './slices/UserSlice';
 import WorkersSlice from './slices/WorkersSlice';
 import VehiclesSlice from './slices/VehiclesSlice';
 import SmallNotificationSlice from './slices/Modals/SmallNotificationSlice';
+import TasksSlice from './slices/TasksSlice';
+import DisposalsSlice from './slices/DisposalsSlice';
+import McpsSlice from './slices/McpsSlice';
+import HomeInteractingSlice from './slices/HomeInteractingMapAndTask/HomeInteractingSlice';
 
 
 
@@ -24,7 +28,11 @@ const store = configureStore({
         user: UserSlice.reducer,
         workers: WorkersSlice.reducer,
         vehicles: VehiclesSlice.reducer,
-        smallNotification: SmallNotificationSlice.reducer
+        smallNotification: SmallNotificationSlice.reducer,
+        tasks: TasksSlice.reducer,
+        disposals: DisposalsSlice.reducer,
+        mcps: McpsSlice.reducer,
+        homeInteracting: HomeInteractingSlice.reducer
     }
 })
 

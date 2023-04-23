@@ -14,6 +14,33 @@ function UserGeneralCard() {
             <span className="text-sm font-semibold capitalize">Role: {user.role}</span>
             <span className="text-sm font-semibold capitalize">Tel: <span className="text-sm font-normal">{user.phone}</span></span>
             <span className="text-sm font-semibold capitalize">Nationality: <span className="text-sm font-normal">{user.nationality}</span></span>
+            {
+                user && (user.role === "janitor" || user.role === "collector") &&
+                <>
+                {
+                    user.checkin ?
+                    <>
+                    <span className="font-semibold capitalize text-sm">Checkin: Yes</span>
+                    <span className="font-semibold capitalize text-sm">Checkin Time: {user.checkinTime}</span>
+                    </>
+                    :
+                    <>
+                    <span className="font-semibold capitalize text-sm">Checkin: No</span>
+                    </>
+                }
+                {
+                    user.checkout ?
+                    <>
+                    <span className="font-semibold capitalize text-sm">CheckOut: Yes</span>
+                    <span className="font-semibold capitalize text-sm">CheckOut Time: {user.checkoutTime}</span>
+                    </>
+                    :
+                    <>
+                    <span className="font-semibold capitalize text-sm">CheckOut: No</span>
+                    </>
+                }
+                </>
+            }
         </div>
     </>);
 }

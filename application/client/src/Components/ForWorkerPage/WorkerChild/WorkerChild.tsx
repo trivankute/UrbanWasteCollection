@@ -1,5 +1,4 @@
 import { memo } from "react";
-import xerac from "../../../assets/vehicles/xerac.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faComment } from '@fortawesome/free-solid-svg-icons'
@@ -8,7 +7,7 @@ import WorkerModalSlice from "../../../redux/slices/Modals/WorkerModalSlice";
 import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 
-function WorkerChild({ role, workerData, name, taskName, vehicleNumberPlate }: { role: "backofficer" | "janitor" | "collector",
+function WorkerChild({image, role, workerData, name, taskName, vehicleNumberPlate }: {image:any, role: "backofficer" | "janitor" | "collector",
 workerData:any,name:string,taskName:string,vehicleNumberPlate:string },
 ) {
     const location = useLocation()
@@ -18,7 +17,7 @@ workerData:any,name:string,taskName:string,vehicleNumberPlate:string },
             if (location.pathname.includes("/workers"))
                 dispatch(WorkerModalSlice.actions.handleOpen({workerData}))
         }} className="w-full h-fit rounded-2xl overflow-hidden items-center px-8 py-4 bg-white shadow-md grid grid-cols-3 md:grid-cols-6 cursor-pointer hover:bg-gray-50">
-            <img src={xerac} alt="" className="w-10 h-10 shadow-md rounded-full" />
+            <img src={image} alt="" className="w-10 h-10 shadow-md rounded-full" />
             <span className="font-semibold text-sm">Name: {name}</span>
             <span className="font-semibold text-sm">Vehicle: {vehicleNumberPlate}</span>
             <span className="font-semibold text-sm">Task: {taskName}</span>
@@ -27,9 +26,8 @@ workerData:any,name:string,taskName:string,vehicleNumberPlate:string },
                 <FontAwesomeIcon icon={faComment as IconProp} className='cursor-pointer hover:text-green-400 w-6 h-6 text-gray-500' />
             </div>
             <div className={clsx("w-28 h-fit p-2 font-semibold  text-white rounded-full text-center capitalize", {
-                "bg-green-400": role === "backofficer",
-                "bg-yellow-400": role === "janitor",
-                "bg-red-400": role === "collector"
+                "bg-red-400": role === "janitor",
+                "bg-green-400": role === "collector"
             })}>
                 {role}
             </div>
