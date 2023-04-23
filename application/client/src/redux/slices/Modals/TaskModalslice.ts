@@ -5,20 +5,17 @@ const TaskModalSlice = createSlice({
     initialState:{
         loading:false,
         show:false,
-        data:{
-            type:"need review"
-        }
+        task: false
     },
     reducers:{
         // handleToggle
         handleOpen: (state, action) => {
             state.show = true;
+            state.task = action.payload.data
         },
         handleClose: (state, action) => {
             state.show = false;
         }
-        
-
     },
     extraReducers(builder) {
         // builder

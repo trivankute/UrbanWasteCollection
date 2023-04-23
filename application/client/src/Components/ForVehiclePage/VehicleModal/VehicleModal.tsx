@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { memo, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ResponsiveStore, VehicleModalStore, VehiclesStore, WorkersStore } from "../../../redux/selectors";
+import { ResponsiveStore, UserStore, VehicleModalStore, VehiclesStore, WorkersStore } from "../../../redux/selectors";
 import VehicleModalSlice from "../../../redux/slices/Modals/VehicleModalSlice";
 import { pageMotionTime } from "../../../configs";
 import xerac from '../../../assets/vehicles/xerac.jpg'
@@ -22,6 +22,7 @@ function VehicleModal() {
     const vehicle = useSelector(VehicleModalStore).vehicle
     const vehicleLoading = useSelector(VehiclesStore).loading
     const responsive = useSelector(ResponsiveStore).data
+    const user = useSelector(UserStore).data
     const [workersTemp, setWorkersTemp] = useState(() => {
         let result: any = {
             type: vehicle.type, // janitor, collector, nothing
@@ -201,7 +202,7 @@ function VehicleModal() {
                                             </div>
                                             <div className="w-full h-fit p-4 pt-0 flex items-center justify-between">
                                                 <div className="flex-1 h-full flex flex-col justify-center items-start gap-y-0 ">
-                                                    <span className="text-sm font-semibold capitalize">Task name: <span className="text-sm font-normal">{vehicle.task.length > 0 ? vehicle.task[0].name : "None"}</span></span>
+                                                    <span className="text-sm font-semibold capitalize">Task name: <span className="text-sm font-normal">{vehicle.task?vehicle.task.length > 0 ? vehicle.task[0].name : "None":"None"}</span></span>
                                                     <span className="text-sm font-semibold capitalize">Current disposal factory name: <span className="text-sm font-normal">{vehicle.currentDisposalFactory.name}</span></span>
                                                     <span className="text-sm font-semibold capitalize">State: <span className="text-sm font-normal">{vehicle.state}</span></span>
                                                     <div className="flex items-center mt-1 w-full capitalize">
@@ -222,14 +223,17 @@ function VehicleModal() {
                                                 Number: {vehicle.workers.length}/4 Workers
                                             </span>
                                             {
+                                                user.data==="backofficer"&&
+                                                <>
+                                                {
                                                 !vehicleLoading ?
                                                     <span onClick={() => {
-                                                        if (adjust === false)
-                                                            isAdjust((prev: boolean) => {
-                                                                return !prev
-                                                            })
-                                                        else
-                                                            handleAssign()
+                                                            if (adjust === false)
+                                                                isAdjust((prev: boolean) => {
+                                                                    return !prev
+                                                                })
+                                                            else
+                                                                handleAssign()
                                                     }} className={clsx("text-sm font-semibold capitalize cursor-pointer", {
                                                         "text-green-500": adjust,
                                                     })}>{adjust ? "Click to accept" : "Click to adjust"}</span>
@@ -237,6 +241,8 @@ function VehicleModal() {
                                                     <div className="w-full h-fit flex justify-center items-center">
                                                         <Spinner />
                                                     </div>
+                                                }
+                                                </>
                                             }
                                         </div>
                                         <div className="w-full p-2"></div>
@@ -244,14 +250,14 @@ function VehicleModal() {
                                             {
                                                 workersTemp.workers.map((item: any, index: number) => {
                                                     return (
-                                                        <WorkerItem adjust={adjust} handleRemoveWorker={handleRemoveWorker} data={item !== -1 ? item : ""} type={item !== -1 ? item.role : "nothing"} key={index} />
+                                                        <WorkerItem adjust={adjust} handleRemoveWorker={handleRemoveWorker} data={item} key={index} />
                                                     )
                                                 })
                                             }
                                             {
                                                 Array.from({ length: 4 - workersTemp.workers.length }).map((item: any, index: number) => {
                                                     return (
-                                                        <WorkerItem data={""} type={"nothing"} key={index} />
+                                                        <WorkerItem data={""} key={index} />
                                                     )
                                                 })
                                             }
@@ -277,7 +283,7 @@ function VehicleModal() {
                                                 {
                                                     workers.length > 0 ? workers.map((worker: any, index: number) => {
                                                         return (
-                                                            <WorkerItem adjust={adjust} handleSortToArrayWorkers={handleSortToArrayWorkers} data={worker} type={worker.role} key={index} />
+                                                            <WorkerItem adjust={adjust} handleSortToArrayWorkers={handleSortToArrayWorkers} data={worker} key={index} />
                                                         )
                                                     }) :
                                                         "None"

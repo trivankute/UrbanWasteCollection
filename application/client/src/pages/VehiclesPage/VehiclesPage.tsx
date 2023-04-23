@@ -14,7 +14,8 @@ function VehiclesPage() {
     const [state, setState] = useState("")
     const [numberPlate, setNumberPlate] = useState("")
     const dispatch = useDispatch<any>()
-    const vehilces = useSelector(VehiclesStore).vehicles
+    const vehicles = useSelector(VehiclesStore).vehicles
+    const vehiclesLoading = useSelector(VehiclesStore).loading
     const handleSearch = () => {
         dispatch(handleSearchVehicle(
             {
@@ -56,13 +57,14 @@ function VehiclesPage() {
             </div>
             <div className="space-y-4 max-h-screen overflow-y-auto">
                 {
-                    vehilces ? vehilces.map((item:any, index:number) => {
-                        return <VehicleChild data={item} key={index} />
-                    })
-                    :
+                    vehiclesLoading ?
                     <div className="w-full h-[300px] flex justify-center items-center">
                         <Spinner />
                     </div>
+                    :
+                    vehicles && vehicles.map((item:any, index:number) => {
+                        return <VehicleChild data={item} key={index} />
+                    })
                 }
             </div>
         </motion.div>

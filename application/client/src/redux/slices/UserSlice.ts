@@ -38,6 +38,27 @@ const UserSlice = createSlice({
             state.data = false;
         }
         )
+        .addCase(workerCheckin.pending, (state, action) => {
+            state.loading = true;
+        })
+        .addCase(workerCheckin.fulfilled, (state, action) => {
+            state.loading = false;
+            if(action.payload.status === "success"){
+                state.data = action.payload.data;
+            }
+        })
+        .addCase(workerCheckout.pending, (state, action) => {
+            state.loading = true;
+        }
+        )
+        .addCase(workerCheckout.fulfilled, (state, action) => {
+            state.loading = false;
+            if(action.payload.status === "success"){
+                state.data = action.payload.data;
+            }
+        }
+        )
+
     }
 })
 
@@ -208,5 +229,68 @@ export const searchUser = createAsyncThunk('searchUser', async (input:{
     }
 }
 )
+
+export const workerCheckin = createAsyncThunk('workerCheckin', async () => {
+    // user/checkin
+    try {
+        const {data} = await axios.get(`${serverUrl}/user/checkin`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if(data.status === 'success'){
+            return {status:"success",data:data.data};
+        }
+        else {
+            return {status:"fail", message:data.message};
+        }
+    }
+    catch (error : any) {
+        if(Array.isArray(error.response.data)) {
+            let errorMessage = ""
+            error.response.data[0].errors.issues.map((item:any)=>{
+                errorMessage += item.message;
+                errorMessage += ", ";
+                return item.message;
+            })
+            return {status:"fail",message:errorMessage};
+        }
+        else {
+            return {status:"fail",message:error.response.data.message};
+        }
+    }
+})
+
+export const workerCheckout = createAsyncThunk('workerCheckout', async () => {
+    // user/checkout
+    try {
+        const {data} = await axios.get(`${serverUrl}/user/checkout`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if(data.status === 'success'){
+            return {status:"success",data:data.data};
+        }
+        else {
+            return {status:"fail", message:data.message};
+        }
+    }
+    catch (error : any) {
+        if(Array.isArray(error.response.data)) {
+            let errorMessage = ""
+            error.response.data[0].errors.issues.map((item:any)=>{
+                errorMessage += item.message;
+                errorMessage += ", ";
+                return item.message;
+            })
+            return {status:"fail",message:errorMessage};
+        }
+        else {
+            return {status:"fail",message:error.response.data.message};
+        }
+    }
+})
+                
 
 export default UserSlice

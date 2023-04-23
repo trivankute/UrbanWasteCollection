@@ -4,7 +4,6 @@ import { UserStore } from "../../../redux/selectors";
 
 function UserDetailCard() {
     const user = useSelector(UserStore).data
-    console.log(user)
     return (<>
         <div className="bg-white shadow-lg rounded-xl overflow-hidden min-w-0 w-[100%] max-w-[500px] h-fit flex flex-col p-8 space-y-4">
             <div className="w-full flex justify-center items-center">
