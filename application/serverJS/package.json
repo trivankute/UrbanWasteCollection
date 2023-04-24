@@ -9,7 +9,7 @@
     "updateIndexDb": "npx prisma db push",
     "updatedb": "npx prisma generate",
     "postinstall": "tsc",
-    "startForDeploy": "node build/src/index.js"
+    "startForDeploy": "set NODE_ENV=production;node build/src/index.js"
   },
   "author": "",
   "license": "ISC",
