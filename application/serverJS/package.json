@@ -8,6 +8,7 @@
     "start": "nodemon src/index.ts",
     "updateIndexDb": "npx prisma db push",
     "updatedb": "npx prisma generate",
+    "postinstall": "tsc",
     "startForDeploy": "node build/src/index.js"
   },
   "author": "",

@@ -49,7 +49,7 @@ const server = http.createServer(app);
 
 configureSocket(server)
 
-server.listen(port, async () => {
+server.listen((process.env.PORT||port), async () => {
     // comment cua Tri Van
     log.info(`server list at http://${host}:${port}`);
 })
