@@ -7,7 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
     "prisma:generate": "npx prisma generate",
     "prepare": "npx prisma generate",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "postinstall": "tsc"
   },
   "type": "module",
