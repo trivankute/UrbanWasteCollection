@@ -15,6 +15,10 @@ import polyline from '@mapbox/polyline';
 import { Feature } from 'geojson';
 import Spinner from "../../Spinner/Spinner";
 
+import mapboxgl from "mapbox-gl";
+import MapboxWorker from 'mapbox-gl';
+// @ts-ignore
+mapboxgl.workerClass = MapboxWorker;
 function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRoutesForAdd }
     : { setDisposalBefore: any, setDisposalAfter: any, setMcpsForAdd: any, setRoutesForAdd: any }) {
     const [viewport, setViewport] = useState({

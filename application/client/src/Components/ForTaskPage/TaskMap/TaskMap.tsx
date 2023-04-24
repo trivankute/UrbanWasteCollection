@@ -9,6 +9,10 @@ import { useDispatch } from "react-redux";
 import { getVehicleById } from "../../../redux/slices/VehiclesSlice";
 import socket, { callVehiclesAfterUpdateAddressEvent, callVehiclesAfterUpdateAddressHandle } from "../../../utils/socket";
 
+import mapboxgl from "mapbox-gl";
+import MapboxWorker from 'mapbox-gl';
+// @ts-ignore
+mapboxgl.workerClass = MapboxWorker;
 function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:string, routes: any, mcps: any, disposalFactories: any, vehicle: any }) {
     const dispatch = useDispatch<any>()
     const [viewport, setViewport] = useState({

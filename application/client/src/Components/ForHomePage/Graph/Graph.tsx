@@ -13,6 +13,10 @@ import formatTime from "../../../utils/formatTime";
 import { handleSearchVehicle } from "../../../redux/slices/VehiclesSlice";
 import HomeInteractingSlice from "../../../redux/slices/HomeInteractingMapAndTask/HomeInteractingSlice";
 import clsx from "clsx";
+import mapboxgl from "mapbox-gl";
+import MapboxWorker from 'mapbox-gl';
+// @ts-ignore
+mapboxgl.workerClass = MapboxWorker;
 function Graph() {
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const [showPopup, setShowPopup] = useState(false);
