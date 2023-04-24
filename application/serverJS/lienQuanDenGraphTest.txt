@@ -36,3 +36,11 @@ Route and points in json format
         }
     ]
 }
+
+
+  // "scripts": {
+  //   "test": "echo \"Error: no test specified\" && exit 1",
+  //   "start": "nodemon src/index.ts",
+  //   "updateIndexDb": "npx prisma db push",
+  //   "updatedb": "npx prisma generate"
+  // },
