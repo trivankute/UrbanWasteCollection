@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-"scripts": {
-  "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
-  "prisma:generate": "npx prisma generate",
-  "prepare": "npx prisma generate",
-  "start": "node build/index.js",
-  "postinstall": "tsc"
-},
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only --exit-child src/index.ts",
+    "prisma:generate": "npx prisma generate",
+    "prepare": "npx prisma generate",
+    "start": "node build/index.js",
+    "postinstall": "tsc"
+  },
   "type": "module",
   "author": "",
   "license": "ISC",
@@ -33,6 +33,7 @@
     "@typegoose/typegoose": "^11.0.0",
     "@types/cookie-parser": "^1.4.3",
     "argon2": "^0.30.3",
+    "cloudinary": "^1.36.1",
     "config": "^3.3.9",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
