@@ -109,6 +109,7 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
         res.status(200).json({ status: "success", accessToken, user: rest })
     }
     catch (err) {
+        console.log(err)
         next(new ExpressError("Cannot login", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }
