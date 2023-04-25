@@ -12,7 +12,7 @@ function WorkerItem({adjust, data, handleSortToArrayWorkers, handleRemoveWorker}
                 <>
                     <img src={data.image} className="w-12 h-12 rounded-full" />
                     <span className="text-sm font-normal capitalize">{data.name}</span>
-                    <span className="text-sm font-normal capitalize">Vehicle: {data.vehicleId?(data.vehicleId.substring(0,4)+"..."):"None"}</span>
+                    <span className="text-sm font-normal capitalize">Vehicle: {data.vehicle?data.vehicle.numberPlate:"None"}</span>
                 </>
                 :
                 <>

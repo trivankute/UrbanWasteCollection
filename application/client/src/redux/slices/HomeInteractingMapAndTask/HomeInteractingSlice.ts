@@ -5,7 +5,8 @@ const HomeInteractingSlice = createSlice({
     initialState:{
         loading:false,
         taskId: "",
-        vehicleId: ""
+        vehicleId: "",
+        forChangeViewtoVehicleId: ""
     },
     reducers:{
         handleFillTaskId: (state,action) => {
@@ -21,6 +22,9 @@ const HomeInteractingSlice = createSlice({
         },
         handleClearVehicleId: (state,action) => {
             state.vehicleId = ""
+        },
+        handleForChangeViewToVehicle: (state, action) => {
+            state.forChangeViewtoVehicleId = action.payload
         }
 
 

@@ -12,14 +12,20 @@ function MCPchild({ content, onClick, taskId, vehicleId }: { content: string, on
                 onClick()
             if (taskId)
                 dispatch(HomeInteractingSlice.actions.handleFillTaskId(taskId));
+            if (vehicleId)
+                dispatch(HomeInteractingSlice.actions.handleForChangeViewToVehicle(vehicleId));
         }}
             onMouseEnter={() => {
                 if (taskId)
                     dispatch(HomeInteractingSlice.actions.handleFillTaskId(taskId));
+                if (vehicleId)
+                    dispatch(HomeInteractingSlice.actions.handleForChangeViewToVehicle(vehicleId));
             }}
             onMouseLeave={() => {
                 if (taskId)
                     dispatch(HomeInteractingSlice.actions.handleFillTaskId(""));
+                if (vehicleId)
+                    dispatch(HomeInteractingSlice.actions.handleForChangeViewToVehicle(""));
             }}
             className={clsx("cursor-pointer w-full border-b-[1px] hover:bg-gray-200 border-gray-200 flex justify-center items-center p-2", {
                 "bg-red-300": vehicleIdForHomeInteracting === vehicleId,

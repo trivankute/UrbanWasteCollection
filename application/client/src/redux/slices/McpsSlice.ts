@@ -37,9 +37,9 @@ export const getAllMcps = createAsyncThunk('getAllMcps', async () => {
         }
     }
     catch (error : any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -65,9 +65,9 @@ export const getAllMcps = createAsyncThunk('getAllMcps', async () => {
 //         }
 //     }
 //     catch (error : any) {
-//         if(Array.isArray(error.response.data)) {
+//         if(Array.isArray(error.response.data.errors)) {
 //             let errorMessage = ""
-//             error.response.data[0].errors.issues.map((item:any)=>{
+//             error.response.data.errors.map((item:any)=>{
 //                 errorMessage += item.message;
 //                 errorMessage += ", ";
 //                 return item.message;

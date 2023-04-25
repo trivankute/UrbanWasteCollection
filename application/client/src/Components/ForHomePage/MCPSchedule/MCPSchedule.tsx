@@ -12,10 +12,10 @@ function MCPSchedule() {
         <div className="w-60 flex flex-col min-h-20 rounded-xl overflow-hidden drop-shadow-lg">
             <div className="border-b p-2 border-black font-bold text-center bg-[#a5f2a5]">MCPs-Schedule:</div>
             <div className="flex flex-col">
-                <MCPChild content= "Click on a vehicle to see the task"/>
+                <MCPChild content= "Click on a vehicle to see the task or hover on the task to see the vehicle"/>
                 {
                     tasks&&tasks.map((task:any, index:number)=>{
-                        return <MCPChild key={index} content= {`Task ${task.name}: Start at ${formatTime(task.createdAt)}`} taskId={task.id} vehicleId={task.vehicle.id}/>
+                        return <MCPChild key={index} content= {`Task ${task.name}: Start at ${formatTime(task.createdAt)} ${task.state==="need review"?"(Need reivew)":""}`} taskId={task.id} vehicleId={task.vehicle.id}/>
                     })
                 }
                 {

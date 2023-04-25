@@ -13,8 +13,7 @@ import formatTime from "../../../utils/formatTime";
 import { handleSearchVehicle } from "../../../redux/slices/VehiclesSlice";
 import HomeInteractingSlice from "../../../redux/slices/HomeInteractingMapAndTask/HomeInteractingSlice";
 import clsx from "clsx";
-
-function Graph() {
+const Graph = () => {
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const [showPopup, setShowPopup] = useState(false);
     const isResponsive = useSelector(ResponsiveStore).data
@@ -34,6 +33,9 @@ function Graph() {
     const handleShowPopUp = ({ latitude, longitude, type, index }: { latitude: number, longitude: number, type: "vehicle" | "disposal" | "mcp", index?: number }) => {
         setPopupInfo({ latitude, longitude, type, index })
         setShowPopup(true)
+        setViewport((prev:any)=>{
+            return {...prev, latitude, longitude}
+        })
     }
     const callAllInProgressVehicle = useCallback(() => {
         dispatch(handleSearchVehicle(
@@ -64,7 +66,7 @@ function Graph() {
                                 currentPointLimit += route.length
                             }
                         })
-                        newVehiclePointsArray.push({ ...vehicle, ...addressPoint }) 
+                        newVehiclePointsArray.push({ ...vehicle, ...addressPoint}) 
                     })
                     setVehiclePoints(newVehiclePointsArray)
                 }
@@ -98,6 +100,16 @@ function Graph() {
     }, [isResponsive])
     // for home interacting
     const taskIdForHomeInteracting = useSelector(HomeInteractingStore).taskId
+    const forChangeViewToVehicleId = useSelector(HomeInteractingStore).forChangeViewtoVehicleId
+    useEffect(()=>{
+        setViewport((prev:any)=>{
+            const vehicle = vehiclePoints.find((vehicle:any)=>vehicle.id === forChangeViewToVehicleId)
+            if(vehicle){
+                return {...prev, latitude: vehicle.latitude, longitude: vehicle.longitude}
+            }
+            return prev
+        })
+    },[forChangeViewToVehicleId])
     return (<>
         <ReactMapGL
             {...viewport}

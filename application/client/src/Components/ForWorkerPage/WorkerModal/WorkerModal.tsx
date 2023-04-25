@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { VehiclesStore, WorkerModalStore } from "../../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import WorkerModalSlice from "../../../redux/slices/Modals/WorkerModalSlice";
-import xerac from "../../../assets/vehicles/xerac.jpg"
 import TaskChild from "../../ForTaskPage/TaskChild/TaskChild";
 import VehicleChild from "../../ForVehiclePage/VehicleChild/VehicleChild";
 import { getVehicleById } from "../../../redux/slices/VehiclesSlice";
@@ -64,7 +63,7 @@ const WorkerModal = () => {
                                     <div className="p-6 space-y-6">
                                         <div className="w-full h-fit p-4 pt-0 flex items-center justify-between">
                                             <div className="flex-1 h-full flex justify-center items-center">
-                                                <img src={xerac} className="w-16 h-16 rounded-full shadow-md" />
+                                                <img src={workerModalData.image} className="w-16 h-16 rounded-full shadow-md" />
                                             </div>
                                             <div className="flex-1 h-full flex flex-col">
                                                 <span className="font-semibold capitalize text-sm">Name: {workerModalData.name}</span>

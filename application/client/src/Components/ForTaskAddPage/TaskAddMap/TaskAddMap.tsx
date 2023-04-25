@@ -14,7 +14,6 @@ import SmallNotification from "../../../redux/slices/Modals/SmallNotificationSli
 import polyline from '@mapbox/polyline';
 import { Feature } from 'geojson';
 import Spinner from "../../Spinner/Spinner";
-
 function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRoutesForAdd }
     : { setDisposalBefore: any, setDisposalAfter: any, setMcpsForAdd: any, setRoutesForAdd: any }) {
     const [viewport, setViewport] = useState({
@@ -68,7 +67,8 @@ function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRou
             id: mcp.id,
             name: mcp.name,
             latitude: JSON.parse(mcp.addressPoint)[1],
-            longitude: JSON.parse(mcp.addressPoint)[0]
+            longitude: JSON.parse(mcp.addressPoint)[0],
+            capacity: mcp.capacity
         }
         if (mcpSignal) {
             // check if exist

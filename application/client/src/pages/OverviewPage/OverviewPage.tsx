@@ -73,12 +73,12 @@ function OverviewPage() {
                     "disposalName": "",
                     "mcpName": ""
                 }))
-        else if ((user.role === "janitor" || user.role === "collector") && user.vehicle && user.vehicle.task) {
+        else if ((user.role === "janitor" || user.role === "collector") && user.vehicle) {
+            if(user.vehicle.task)
             dispatch(getTaskById(user.vehicle.task.id))
             dispatch(getVehicleById(user.vehicle.id))
         }
     }, [])
-    console.log(vehicleLoading)
     return (<>
         <motion.div
             initial={{
