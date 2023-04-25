@@ -6,6 +6,13 @@
 **Task 4**  Implementation - Sprint 1\
 **Date:** March 30<sup>th</sup>, 2022 (task 4)
 
+## **Technologies in used**
+-  Frontend: ReactTS, Redux, TailwindCSS
+-  Backend: ExpressTS, Prisma-Mongodb Online
+-  Made with ❤️ by TV for 10 days
+-  Website is already deployed on [UWC website here](https://trivan-urbanwastecollection.netlify.app)
+-  You will be user role, if you want to try backofficer role or worker role, please contact me for accounts
+
 ## **Members**
 - Trịnh Trí Văn (2012406)
 - Nguyễn Minh Phát (2011795)
