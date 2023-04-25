@@ -27,7 +27,9 @@ const WorkersSlice = createSlice({
         })
         .addCase(searchWorkers.fulfilled, (state, action) => {
             state.loading = false;
-            state.data = action.payload.data;
+            if(action.payload.status === "success") {
+                state.data = action.payload.data;
+            }
         })
     }
 })
@@ -43,8 +45,9 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
     workersTempForAssignVehicle?:any
 }) => {
     //{{host}}/user
+    const {forAssignVehicleModal, workersTempForAssignVehicle, ...rest} = input
     try {
-        const {data} = await axios.post(`${serverUrl}/user`, input, {
+        const {data} = await axios.post(`${serverUrl}/user`, rest, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -52,7 +55,13 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
         if(input.forAssignVehicleModal)
         {
             // filter out workers that are already in workersTempForAssignVehicle
-            data.data = data.data.filter((item:any)=>!input.workersTempForAssignVehicle.find((item2:any)=>item2.id === item.id));
+            data.data = data.data.filter((item:any)=>{
+                if(!input.workersTempForAssignVehicle.workers.find((item2:any)=>{
+                    if(item2.id === item.id)
+                        return true;
+                }))
+                    return item
+            });
         }
         if(data.status === 'success'){
             return {status:"success",data:data.data};
@@ -62,9 +71,9 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
         }
     }
     catch (error : any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;

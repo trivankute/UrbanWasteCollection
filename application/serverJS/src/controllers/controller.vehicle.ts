@@ -48,9 +48,10 @@ const getAllVehicleHandle = async (req: Request, res: Response, next: NextFuncti
                         id: true,
                         name: true,
                         vehicleId:true,
+                        vehicle:true,
                         state: true,
                         role:true,
-                        image:true
+                        image:true,
                     }
                 },
                 task : true
@@ -84,6 +85,7 @@ const getVehicleHandle = async (req: Request, res: Response, next: NextFunction)
                         id: true,
                         name: true,
                         vehicleId:true,
+                        vehicle:true,
                         state: true,
                         role:true,
                         image:true
@@ -167,6 +169,7 @@ const updateWorkerToVehicleHandle = async (req: Request, res: Response, next: Ne
                         id: true,
                         name: true,
                         vehicleId:true,
+                        vehicle:true,
                         state: true,
                         role:true,
                         image:true
@@ -198,12 +201,8 @@ const refuelVehicleHandle = async (req: Request<RefuelVehicleInputParamHandle,{}
             return res.json({ status: "fail", message: "Vehicle not found" })
         }
         // check if vehicle is full
-        if (vehicle.fuel == 100) {
-            return res.json({ status: "fail", message: "Vehicle is full" })
-        }
-        // check if vehicle min capacity
-        if (vehicle.capacity === 0) {
-            return res.json({ status: "fail", message: "Vehicle has nothing to reset capacity" })
+        if (vehicle.fuel == 100 && vehicle.capacity === 0) {
+            return res.json({ status: "fail", message: "Vehicle is full and capacity is nothing to remove" })
         }
         
         // check if state is in progress
@@ -260,6 +259,7 @@ const searchVehicleHandle = async (req: Request<{},{},SearchVehicleInputSchema>,
                         id: true,
                         name: true,
                         vehicleId:true,
+                        vehicle:true,
                         state: true,
                         role:true,
                         image:true

@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.ts",
     "updateIndexDb": "npx prisma db push",
-    "updatedb": "npx prisma generate"
+    "updatedb": "npx prisma generate",
+    "postinstall": "tsc",
+    "startForDeploy": "set NODE_ENV=production;node build/src/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -31,6 +33,7 @@
     "@typegoose/typegoose": "^11.0.0",
     "@types/cookie-parser": "^1.4.3",
     "argon2": "^0.30.3",
+    "cloudinary": "^1.36.1",
     "config": "^3.3.9",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

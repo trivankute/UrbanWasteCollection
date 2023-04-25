@@ -32,45 +32,47 @@ async function updateAllVehiclesPoints(socket: any) {
         return
     }
 
-    const vehiclePointsPromises = vehicles.map(async (vehicle: any) => {
-        const routes = vehicle.task.routes
-        let pointIndex = vehicle.currentMovingPointIndex
-        let currentPointLimit = 0;
-        routes.map(async (routeJson: any, index: number) => {
-            const route = JSON.parse(routeJson).geometry.coordinates
-            if (pointIndex < route.length + currentPointLimit) {
-                pointIndex++;
-                if (index === routes.length - 1 && pointIndex === route.length + currentPointLimit) {
-                    await prisma.vehicle.update({
-                        where: {
-                            id: vehicle.id
-                        },
-                        data: {
-                            currentMovingPointIndex: 0
-                        }
-
-                    })
+    if(vehicles)
+    {
+        const vehicleUpdates = vehicles.map(async (vehicle: any) => {
+            if(vehicle && vehicle.task) {
+              const routes = vehicle.task.routes;
+              let pointIndex = vehicle.currentMovingPointIndex;
+              let currentPointLimit = 0;
+              routes.forEach(async (routeJson: any, index: number) => {
+                const route = JSON.parse(routeJson).geometry.coordinates;
+                if (pointIndex < route.length + currentPointLimit) {
+                  pointIndex++;
+                  if (index === routes.length - 1 && pointIndex === route.length + currentPointLimit) {
+                    return prisma.vehicle.update({
+                      where: {
+                        id: vehicle.id
+                      },
+                      data: {
+                        currentMovingPointIndex: 0
+                      }
+                    });
+                  }
+                  else {
+                    return prisma.vehicle.update({
+                      where: {
+                        id: vehicle.id
+                      },
+                      data: {
+                        currentMovingPointIndex: pointIndex
+                      }
+                    });
+                  }
                 }
                 else {
-                    await prisma.vehicle.update({
-                        where: {
-                            id: vehicle.id
-                        },
-                        data: {
-                            currentMovingPointIndex: pointIndex
-                        }
-
-                    })
+                  currentPointLimit += route.length;
                 }
-                return
+              });
             }
-            else {
-                currentPointLimit += route.length
-            }
-        })
-    })
-
-    await Promise.all(vehiclePointsPromises)
+          });
+          
+          await Promise.all(vehicleUpdates);
+    }
 
     socket.emit("callVehiclesAfterUpdateAddressEvent", {
         status: "success"
@@ -90,7 +92,7 @@ export default function configureSocket(server: any) {
         if (intervalId) clearInterval(intervalId); // Clear previous interval if it exists
         intervalId = setInterval(() => {
             updateAllVehiclesPoints(socket);
-        }, 5000);
+        }, 3000);
         socket.on("disconnect", () => {
             console.log("user disconnected");
         });

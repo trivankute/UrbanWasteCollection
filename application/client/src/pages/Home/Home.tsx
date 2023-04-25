@@ -26,8 +26,8 @@ function Home() {
       <h1 className="text-center text-3xl lg:text-6xl text-white font-semibold">Urban Waste Collection
         UWC 2.0</h1>
       <div className="w-full flex flex-col lg:flex-row justify-between items-center px-32 gap-y-4">
-        <Graph />
-        <MCPSchedule />
+        <Graph/>
+        <MCPSchedule/>
       </div>
     </motion.div>
   );

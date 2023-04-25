@@ -23,7 +23,6 @@ function TaskModal() {
     const taskLoading = useSelector(TasksStore).loading
     const dispatch = useDispatch<any>()
     const user = useSelector(UserStore).data
-    // console.log(taskModalData)
     return (<>
         <div className="w-full h-full fixed flex justify-center items-center  z-30">
             <div onClick={() => {
@@ -90,7 +89,10 @@ function TaskModal() {
                                             </span></span>
                                             <div className="flex items-center">
                                                 <span className="text-sm font-semibold flex justify-center items-center">Type: </span>
-                                                <div className="ml-2 w-20 h-fit rounded-xl bg-green-400 text-white text-sm font-semibold capitalize flex justify-center items-center">{taskModalData.type}</div>
+                                                <div className={clsx("ml-2 w-20 h-fit rounded-xl text-white text-sm font-semibold capitalize flex justify-center items-center", {
+                                                    "bg-green-400": taskModalData.type === "collector",
+                                                    "bg-red-400": taskModalData.type === "janitor",
+                                                })}>{taskModalData.type}</div>
                                             </div>
                                         </div>
                                         <div className="w-full h-fit flex space-y-2 flex-col">
@@ -121,7 +123,7 @@ function TaskModal() {
                                                     <span className="text-sm font-semibold">Workers:</span>
                                                     {taskModalData.vehicle.workers.map((worker: any, index: number) => {
                                                         return (
-                                                            <WorkerItem data={worker} key={index} />
+                                                            <WorkerItem data={{vehicle:taskModalData.vehicle, ...worker}} key={index} />
                                                         )
                                                     })}
                                                 </>
@@ -187,8 +189,8 @@ function TaskModal() {
                                                 </>
                                                 :
                                                 <>
-                                                    <div className="w-full h-fit text-base font-semibold">Departure disposal: {taskModalData.disposalFactories[0].name}</div>
-                                                    <div className="w-full h-fit text-base font-semibold">Arrival disposal: {taskModalData.disposalFactories[1].name}</div>
+                                                    <div className="w-full h-fit text-base font-semibold">Departure disposal: {taskModalData.disposalFactories[1].name}</div>
+                                                    <div className="w-full h-fit text-base font-semibold">Arrival disposal: {taskModalData.disposalFactories[0].name}</div>
                                                 </>
                                         }
 

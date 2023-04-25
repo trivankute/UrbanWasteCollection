@@ -93,6 +93,10 @@ function VehicleAddModal() {
                                                             }
                                                         ))
                                                     }
+                                                    else
+                                                    {
+                                                        dispatch(SmallNotification.actions.handleOpen({ type: "error", content: res.payload.message }))
+                                                    }
                                                 })
                                         else
                                             dispatch(SmallNotification.actions.handleOpen({ type: "error", content: "Please fill all fields" }))

@@ -101,7 +101,7 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
             return res.status(400).json({ status: "fail", message: "Password is not correct" })
         }
         const { password, salt, ...rest } = user;
-        const accessTokenTtl = "15m";
+        const accessTokenTtl = "30m";
         const accessToken = signJwt(
             { ...rest },
             { expiresIn: accessTokenTtl }
@@ -109,6 +109,7 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
         res.status(200).json({ status: "success", accessToken, user: rest })
     }
     catch (err) {
+        console.log(err)
         next(new ExpressError("Cannot login", StatusCodes.INTERNAL_SERVER_ERROR))
     }
 }

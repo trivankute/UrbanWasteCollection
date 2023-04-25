@@ -14,17 +14,10 @@ import SmallNotification from "../../../redux/slices/Modals/SmallNotificationSli
 import polyline from '@mapbox/polyline';
 import { Feature } from 'geojson';
 import Spinner from "../../Spinner/Spinner";
-
+import { beginViewPoint } from "../../../configs";
 function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRoutesForAdd }
     : { setDisposalBefore: any, setDisposalAfter: any, setMcpsForAdd: any, setRoutesForAdd: any }) {
-    const [viewport, setViewport] = useState({
-        height: 350,
-        width: 550,
-        latitude: 10.74427004016835,
-        longitude: 106.65824255703593,
-        name: "cao xuan duc",
-        zoom: 14.5
-    });
+    const [viewport, setViewport] = useState(beginViewPoint);
     const [showPopup, setShowPopup] = useState(false)
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const dispatch = useDispatch<any>()
@@ -33,6 +26,9 @@ function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRou
     const handleShowPopUp = ({ latitude, longitude, type, index }: { latitude: number, longitude: number, type: "vehicle" | "disposal" | "mcp", index?: number }) => {
         setPopupInfo({ latitude, longitude, type, index })
         setShowPopup(true)
+        setViewport((prev:any)=>{
+            return {...prev, latitude, longitude}
+        })
     }
     useEffect(() => {
         dispatch(getAllDisposals())
@@ -68,7 +64,8 @@ function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRou
             id: mcp.id,
             name: mcp.name,
             latitude: JSON.parse(mcp.addressPoint)[1],
-            longitude: JSON.parse(mcp.addressPoint)[0]
+            longitude: JSON.parse(mcp.addressPoint)[0],
+            capacity: mcp.capacity
         }
         if (mcpSignal) {
             // check if exist
@@ -181,7 +178,7 @@ function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRou
             {...viewport}
             mapboxApiAccessToken="pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ"
             onViewportChange={(nextViewport: any) => setViewport({
-                name: viewport.name, ...nextViewport,
+                ...nextViewport,
             })}
             className="rounded-xl drop-shadow-xl"
         // onClick={handleMapClick}

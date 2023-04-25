@@ -13,7 +13,8 @@ import formatTime from "../../../utils/formatTime";
 import { handleSearchVehicle } from "../../../redux/slices/VehiclesSlice";
 import HomeInteractingSlice from "../../../redux/slices/HomeInteractingMapAndTask/HomeInteractingSlice";
 import clsx from "clsx";
-function Graph() {
+import { beginViewPoint } from "../../../configs";
+const Graph = () => {
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const [showPopup, setShowPopup] = useState(false);
     const isResponsive = useSelector(ResponsiveStore).data
@@ -21,18 +22,14 @@ function Graph() {
     const disposals = useSelector(DisposalsStore).disposals
     const mcps = useSelector(MCPsStore).mcps
     const dispatch = useDispatch<any>()
-    const [viewport, setViewport] = useState({
-        height: 350,
-        width: 700,
-        latitude: 10.74427004016835,
-        longitude: 106.65824255703593,
-        name: "cao xuan duc",
-        zoom: 15
-    });
+    const [viewport, setViewport] = useState(beginViewPoint);
     const [vehiclePoints, setVehiclePoints] = useState<any>([])
     const handleShowPopUp = ({ latitude, longitude, type, index }: { latitude: number, longitude: number, type: "vehicle" | "disposal" | "mcp", index?: number }) => {
         setPopupInfo({ latitude, longitude, type, index })
         setShowPopup(true)
+        setViewport((prev:any)=>{
+            return {...prev, latitude, longitude}
+        })
     }
     const callAllInProgressVehicle = useCallback(() => {
         dispatch(handleSearchVehicle(
@@ -63,7 +60,7 @@ function Graph() {
                                 currentPointLimit += route.length
                             }
                         })
-                        newVehiclePointsArray.push({ ...vehicle, ...addressPoint }) 
+                        newVehiclePointsArray.push({ ...vehicle, ...addressPoint}) 
                     })
                     setVehiclePoints(newVehiclePointsArray)
                 }
@@ -97,12 +94,22 @@ function Graph() {
     }, [isResponsive])
     // for home interacting
     const taskIdForHomeInteracting = useSelector(HomeInteractingStore).taskId
+    const forChangeViewToVehicleId = useSelector(HomeInteractingStore).forChangeViewtoVehicleId
+    useEffect(()=>{
+        setViewport((prev:any)=>{
+            const vehicle = vehiclePoints.find((vehicle:any)=>vehicle.id === forChangeViewToVehicleId)
+            if(vehicle){
+                return {...prev, latitude: vehicle.latitude, longitude: vehicle.longitude}
+            }
+            return prev
+        })
+    },[forChangeViewToVehicleId])
     return (<>
         <ReactMapGL
             {...viewport}
             mapboxApiAccessToken="pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ"
             onViewportChange={(nextViewport: any) => setViewport({
-                name: viewport.name, ...nextViewport,
+                ...nextViewport,
                 height: 350,
                 width: isResponsive ? 350 : 700,
             })}

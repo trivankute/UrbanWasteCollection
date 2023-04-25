@@ -58,6 +58,12 @@ const VehiclesSlice = createSlice({
                     state.vehicle = action.payload.data;
                 }
             })
+            .addCase(addVehicle.pending, (state, action) => {
+                state.loading = true;
+            })
+            .addCase(addVehicle.fulfilled, (state, action) => {
+                state.loading = false;
+            })
 
     }
 })
@@ -74,9 +80,9 @@ export const getAllVehicles = createAsyncThunk('getAllVehicles', async () => {
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -102,9 +108,9 @@ export const getVehicleById = createAsyncThunk('getVehicleById', async (id: stri
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -130,9 +136,9 @@ export const handleSearchVehicle = createAsyncThunk('handleSearchVehicle', async
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -168,9 +174,9 @@ export const assignWorkersToVehicle = createAsyncThunk('assignWorkersToVehicle',
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -200,9 +206,9 @@ export const addVehicle = createAsyncThunk('addVehicle', async (input: any) => {
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -232,9 +238,9 @@ export const resetVehicleHandle = createAsyncThunk('resetVehicleHandle', async (
         }
     }
     catch (error: any) {
-        if (Array.isArray(error.response.data)) {
+        if (Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item: any) => {
+            error.response.data.errors.map((item: any) => {
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;

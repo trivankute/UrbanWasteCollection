@@ -86,9 +86,9 @@ export const searchTasks = createAsyncThunk('searchTasks', async (input:
         }
     }
     catch (error:any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -113,9 +113,9 @@ export const getTaskById = createAsyncThunk('getTaskById', async (id:string) => 
         }
     }
     catch (error:any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -145,9 +145,9 @@ export const createTask = createAsyncThunk('createTask', async (input:any) =>{
         }
     }
     catch (error:any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -180,9 +180,9 @@ export const taskAnswer = createAsyncThunk('taskAnswer', async (input:{
         }
     }
     catch (error:any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
@@ -211,9 +211,9 @@ export const updateTaskToNeedReview = createAsyncThunk('updateTaskToNeedReview',
         }
     }
     catch (error:any) {
-        if(Array.isArray(error.response.data)) {
+        if(Array.isArray(error.response.data.errors)) {
             let errorMessage = ""
-            error.response.data[0].errors.issues.map((item:any)=>{
+            error.response.data.errors.map((item:any)=>{
                 errorMessage += item.message;
                 errorMessage += ", ";
                 return item.message;
