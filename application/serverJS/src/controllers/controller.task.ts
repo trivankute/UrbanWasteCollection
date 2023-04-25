@@ -516,7 +516,11 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     }
                 },
                 mcps: true,
-                disposalFactories: true,
+                disposalFactories: {
+                    select: {
+                        id: true,
+                    }
+                },
                 mcpPreviousCapacitys: true,
                 mcpResultCapacitys: true,
                 createdAt: true, updatedAt: true, doneAt: true,
@@ -557,7 +561,7 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     data: {
                         currentDisposalFactory: {
                             connect: {
-                                id: task!.disposalFactories.length === 1 ? task!.disposalFactories[0].id : task!.disposalFactories[1].id
+                                id: task!.disposalFactories.length === 1 ? task!.disposalFactories[0].id : task!.disposalFactories[0].id
                             }
                         },
                         fuel: {
@@ -608,7 +612,7 @@ const backOfficerReviewTaskHandle = async (req: Request<backOfficerReviewTaskPar
                     data: {
                         currentDisposalFactory: {
                             connect: {
-                                id: task!.disposalFactories.length === 1 ? task!.disposalFactories[0].id : task!.disposalFactories[1].id
+                                id: task!.disposalFactories.length === 1 ? task!.disposalFactories[0].id : task!.disposalFactories[0].id
                             }
                         },
                         fuel: {

@@ -101,7 +101,7 @@ const loginHandle = async (req: Request<{}, {}, loginUserInput>, res: Response, 
             return res.status(400).json({ status: "fail", message: "Password is not correct" })
         }
         const { password, salt, ...rest } = user;
-        const accessTokenTtl = "15m";
+        const accessTokenTtl = "30m";
         const accessToken = signJwt(
             { ...rest },
             { expiresIn: accessTokenTtl }
