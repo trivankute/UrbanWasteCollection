@@ -8,16 +8,10 @@ import formatTime from "../../../utils/formatTime";
 import { useDispatch } from "react-redux";
 import { getVehicleById } from "../../../redux/slices/VehiclesSlice";
 import socket, { callVehiclesAfterUpdateAddressEvent, callVehiclesAfterUpdateAddressHandle } from "../../../utils/socket";
+import { beginViewPoint } from "../../../configs";
 function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:string, routes: any, mcps: any, disposalFactories: any, vehicle: any }) {
     const dispatch = useDispatch<any>()
-    const [viewport, setViewport] = useState({
-        height: 350,
-        width: 550,
-        latitude: 10.74427004016835,
-        longitude: 106.65824255703593,
-        name: "cao xuan duc",
-        zoom: 14.5
-    });
+    const [viewport, setViewport] = useState(beginViewPoint);
     const [showPopup, setShowPopup] = useState(false)
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const [vehiclePoint, setVehiclePoint] = useState<any>()
@@ -25,6 +19,9 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
     const handleShowPopUp = ({ latitude, longitude, type, index }: { latitude: number, longitude: number, type: "vehicle" | "disposal" | "mcp", index?: number }) => {
         setPopupInfo({ latitude, longitude, type, index })
         setShowPopup(true)
+        setViewport((prev:any)=>{
+            return {...prev, latitude, longitude}
+        })
     }
 
     const callSpecificVehicle = useCallback(() => {
@@ -62,7 +59,7 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
             {...viewport}
             mapboxApiAccessToken="pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ"
             onViewportChange={(nextViewport: any) => setViewport({
-                name: viewport.name, ...nextViewport,
+                ...nextViewport,
             })}
             className="rounded-xl drop-shadow-xl"
         // onClick={handleMapClick}
