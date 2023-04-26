@@ -30,16 +30,17 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
             let currentPointLimit = 0;
             let pointIndex = res.payload.data.currentMovingPointIndex
             let addressPoint = {}
-            routes.map((routeJson: any, index: number) => {
-                const route = JSON.parse(routeJson).geometry.coordinates
+            for(let i=0; i<routes.length; i++) {
+                const route = JSON.parse(routes[i]).geometry.coordinates
                 if (pointIndex < route.length + currentPointLimit) {
+                    console.log(route, route.length + currentPointLimit, pointIndex)
                     addressPoint = { latitude: route[pointIndex - currentPointLimit][1], longitude: route[pointIndex - currentPointLimit][0] }
-                    return
+                    break
                 }
                 else {
                     currentPointLimit += route.length
                 }
-            })
+            }
             setVehiclePoint({ ...vehicle, ...addressPoint })
         })
     }, [])
