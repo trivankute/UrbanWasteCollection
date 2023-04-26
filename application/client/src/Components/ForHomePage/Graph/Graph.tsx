@@ -53,7 +53,6 @@ const Graph = () => {
                         for(let i=0; i<routes.length; i++) {
                             const route = JSON.parse(routes[i]).geometry.coordinates
                             if (pointIndex < route.length + currentPointLimit) {
-                                console.log(route, route.length + currentPointLimit, pointIndex)
                                 addressPoint = { latitude: route[pointIndex - currentPointLimit][1], longitude: route[pointIndex - currentPointLimit][0] }
                                 break
                             }
@@ -136,6 +135,7 @@ const Graph = () => {
                                     dispatch(HomeInteractingSlice.actions.handleFillVehicleId(vehiclePoint.id))
                                     handleShowPopUp({ latitude: vehiclePoint.latitude, longitude: vehiclePoint.longitude, type: "vehicle", index: index })
                                 }}
+                                style={{zIndex:5}}
                             >
                                 <img src={xerac} alt="My Marker" className={clsx("w-10 h-10 cursor-pointer rounded-full hover:border-pink-700 border-2 border-red-500", {
                                     "border-yellow-500 w-16 h-16": taskIdForHomeInteracting === vehiclePoint.task.id

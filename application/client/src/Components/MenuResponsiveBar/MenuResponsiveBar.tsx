@@ -53,7 +53,7 @@ function MenuResponsiveBar() {
                                             }
                                         })
 
-                                }} className="mx-auto block lg:hidden text-gray-800 bg-red-400  dark:text-white hover:bg-red-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{
+                                }} className="mx-auto block lg:hidden text-white bg-red-400  dark:text-white hover:bg-red-500 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">{
                                 user.loading?
                                 <Spinner/>
                                 :

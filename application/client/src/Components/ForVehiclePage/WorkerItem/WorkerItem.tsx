@@ -10,16 +10,16 @@ function WorkerItem({adjust, data, handleSortToArrayWorkers, handleRemoveWorker}
             {
                 (data.role==="janitor"||data.role==="collector") ?
                 <>
-                    <img src={data.image} className="w-12 h-12 rounded-full" />
-                    <span className="text-sm font-normal capitalize">{data.name}</span>
-                    <span className="text-sm font-normal capitalize">Vehicle: {data.vehicle?data.vehicle.numberPlate:"None"}</span>
+                    <img src={data.image} className="w-8 h-8 sm:w-12 sm:h-12 rounded-full" />
+                    <span className="text-ant sm:text-sm font-normal capitalize">{data.name}</span>
+                    <span className="text-ant sm:text-sm font-normal capitalize">Vehicle: {data.vehicle?data.vehicle.numberPlate:"None"}</span>
                 </>
                 :
                 <>
-                    <span className="font-semibold capitalize text-sm">None</span>
+                    <span className="font-semibold capitalize text-ant sm:text-sm">None</span>
                 </>
             }
-            <div className={clsx("ml-2 w-20 h-fit rounded-xl text-white text-sm font-semibold capitailize flex justify-center items-center",{
+            <div className={clsx("ml-2 w-20 h-fit rounded-xl text-white text-ant sm:text-sm font-semibold capitailize flex justify-center items-center",{
                 "bg-gray-400 p-2":data.role==="nothing",
                 "bg-green-400":data.role==="collector",
                 "bg-red-400":data.role==="janitor"

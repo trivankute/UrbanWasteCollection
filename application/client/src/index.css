@@ -4,20 +4,40 @@
 
 /* Style the scrollbar track */
 *::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
+}
+
+/* Style the scrollbar handle */
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(87, 166, 87);
+  border-radius: 5px;
+}
+
+/* Hide the scrollbar when not hovering over it */
+*::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f5f5f5;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ccc;
+}
+
+@media only screen and (max-width: 800px) {
+  .fc-toolbar-chunk {
+    font-size: .7em;
+    text-align: center;
   }
-  
-  /* Style the scrollbar handle */
-  *::-webkit-scrollbar-thumb {
-    background-color: rgb(87, 166, 87);
-    border-radius: 5px;
+  .fc-button-group {
+    font-size: .7em;
   }
-  
-  /* Hide the scrollbar when not hovering over it */
-  *::-webkit-scrollbar {
-    width: 5px;
-    background-color: #f5f5f5;
+  .fc-col-header-cell-cushion {
+    font-size: .7em;
   }
-  *::-webkit-scrollbar-thumb:hover {
-    background-color: #ccc;
+  .fc-timegrid-axis-cushion.fc-scrollgrid-shrink-cushion.fc-scrollgrid-sync-inner {
+    font-size: .7em;
   }
+  .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion {
+    font-size: .7em;
+  }
+}

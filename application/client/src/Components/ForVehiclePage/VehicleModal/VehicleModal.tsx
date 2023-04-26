@@ -139,7 +139,6 @@ function VehicleModal() {
             typeVehicle: workersTemp.type
         }))
             .then((res: any) => {
-                console.log(res)
                 if (res.payload.status === "success") {
                     dispatch(SmallNotificationSlice.actions.handleOpen({ type: "success", content: "Assign workers successfully" }))
                     dispatch(VehicleModalSlice.actions.handleClose({}))
@@ -178,15 +177,15 @@ function VehicleModal() {
                             <div className="relative rounded-lg overflow-hidden w-full max-h-full flex flex-col md:flex-row">
                                 <div className="flex flex-col flex-1 bg-white z-10">
                                     <div className="relative dark:bg-gray-600">
-                                        <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                        <div className="flex items-start justify-between p-2 sm:p-4 border-b rounded-t dark:border-gray-600">
+                                            <h3 className="text-ant sm:text-sm sm:text-xl font-semibold text-gray-900 dark:text-white">
                                                 Vehicle Detail
                                             </h3>
                                             <button
                                                 onClick={() => {
                                                     dispatch(VehicleModalSlice.actions.handleClose({}))
                                                 }}
-                                                type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                                                type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-ant sm:text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
                                                 <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                                 <span className="sr-only">Close modal</span>
                                             </button>
@@ -194,22 +193,22 @@ function VehicleModal() {
                                         <div className="p-6 pb-0 space-y-6 border-b">
                                             <div className="w-full h-fit p-4 pt-0 flex items-center justify-between">
                                                 <div className="flex-1 h-full flex justify-center items-center">
-                                                    <img src={xerac} className="w-16 h-16 rounded-full shadow-md" />
+                                                    <img src={xerac} className="w-10 h-10 sm:w-16 sm:h-16 rounded-full shadow-md" />
                                                 </div>
                                                 <div className="flex-1 h-full flex flex-col justify-center items-start gap-y-0 ">
-                                                    <span className="font-semibold capitalize text-sm">Vehicle: {vehicle.numberPlate}</span>
-                                                    <span className="text-sm font-semibold">Capacity: <span className="text-sm font-normal">{vehicle.capacity}%</span></span>
-                                                    <span className="text-sm font-semibold">Fuel: <span className="text-sm font-normal">{vehicle.fuel}%</span></span>
+                                                    <span className="font-semibold capitalize text-ant sm:text-sm">Vehicle: {vehicle.numberPlate}</span>
+                                                    <span className="text-ant sm:text-sm font-semibold">Capacity: <span className="text-ant sm:text-sm font-normal">{vehicle.capacity}%</span></span>
+                                                    <span className="text-ant sm:text-sm font-semibold">Fuel: <span className="text-ant sm:text-sm font-normal">{vehicle.fuel}%</span></span>
                                                 </div>
                                             </div>
                                             <div className="w-full h-fit p-4 pt-0 flex items-center justify-between">
                                                 <div className="flex-1 h-full flex flex-col justify-center items-start gap-y-0 ">
-                                                    <span className="text-sm font-semibold capitalize">Task name: <span className="text-sm font-normal">{vehicle.task?vehicle.task.length > 0 ? vehicle.task[0].name : "None":"None"}</span></span>
-                                                    <span className="text-sm font-semibold capitalize">Current disposal factory name: <span className="text-sm font-normal">{vehicle.currentDisposalFactory.name}</span></span>
-                                                    <span className="text-sm font-semibold capitalize">State: <span className="text-sm font-normal">{vehicle.state}</span></span>
+                                                    <span className="text-ant sm:text-sm font-semibold capitalize">Task name: <span className="text-ant sm:text-sm font-normal">{vehicle.task?vehicle.task.length > 0 ? vehicle.task[0].name : "None":"None"}</span></span>
+                                                    <span className="text-ant sm:text-sm font-semibold capitalize">Current disposal factory name: <span className="text-ant sm:text-sm font-normal">{vehicle.currentDisposalFactory.name}</span></span>
+                                                    <span className="text-ant sm:text-sm font-semibold capitalize">State: <span className="text-ant sm:text-sm font-normal">{vehicle.state}</span></span>
                                                     <div className="flex items-center mt-1 w-full capitalize">
-                                                        <span className="text-sm font-semibold flex justify-center items-center">Type: </span>
-                                                        <span className={clsx("ml-2 w-20 h-fit rounded-xl bg-green-400 text-white text-sm font-semibold flex justify-center items-center capitalize", {
+                                                        <span className="text-ant sm:text-sm font-semibold flex justify-center items-center">Type: </span>
+                                                        <span className={clsx("ml-2 w-20 h-fit rounded-xl bg-green-400 text-white text-ant sm:text-sm font-semibold flex justify-center items-center capitalize", {
                                                             "bg-gray-400 p-2": vehicle.type === "nothing",
                                                             "bg-green-400": vehicle.type === "collector",
                                                             "bg-red-400": vehicle.type === "janitor"
@@ -221,7 +220,7 @@ function VehicleModal() {
                                     </div>
                                     <div className="w-full h-fit p-4 pt-2">
                                         <div className="flex w-full justify-between items-center">
-                                            <span className="text-sm font-semibold">
+                                            <span className="text-ant sm:text-sm font-semibold">
                                                 Number: {vehicle.workers.length}/4 Workers
                                             </span>
                                             {
@@ -236,7 +235,7 @@ function VehicleModal() {
                                                                 })
                                                             else
                                                                 handleAssign()
-                                                    }} className={clsx("text-sm font-semibold capitalize cursor-pointer", {
+                                                    }} className={clsx("text-ant sm:text-sm font-semibold capitalize cursor-pointer", {
                                                         "text-green-500": adjust,
                                                     })}>{adjust ? "Click to accept" : "Click to adjust"}</span>
                                                     :

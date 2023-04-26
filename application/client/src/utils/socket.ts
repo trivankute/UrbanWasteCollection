@@ -21,7 +21,6 @@ function callVehiclesAfterUpdateAddressHandle (aFunction: any) {
         })
     }
     catch (e) {
-        console.log(e)
         socket.off(callVehiclesAfterUpdateAddressEvent)
     }
 }

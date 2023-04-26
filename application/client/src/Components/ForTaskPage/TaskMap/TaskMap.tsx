@@ -5,16 +5,18 @@ import mcpImage from '../../../assets/MCP/mcp.png'
 import disposalImage from '../../../assets/Disposal/disposal.png'
 import "./lol.css"
 import formatTime from "../../../utils/formatTime";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getVehicleById } from "../../../redux/slices/VehiclesSlice";
 import socket, { callVehiclesAfterUpdateAddressEvent, callVehiclesAfterUpdateAddressHandle } from "../../../utils/socket";
 import { beginViewPoint } from "../../../configs";
+import { ResponsiveStore } from "../../../redux/selectors";
 function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:string, routes: any, mcps: any, disposalFactories: any, vehicle: any }) {
     const dispatch = useDispatch<any>()
     const [viewport, setViewport] = useState(beginViewPoint);
     const [showPopup, setShowPopup] = useState(false)
     const [popupInfo, setPopupInfo] = useState<any>(null)
     const [vehiclePoint, setVehiclePoint] = useState<any>()
+    const isResponsive = useSelector(ResponsiveStore).data
 
     const handleShowPopUp = ({ latitude, longitude, type, index }: { latitude: number, longitude: number, type: "vehicle" | "disposal" | "mcp", index?: number }) => {
         setPopupInfo({ latitude, longitude, type, index })
@@ -33,7 +35,6 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
             for(let i=0; i<routes.length; i++) {
                 const route = JSON.parse(routes[i]).geometry.coordinates
                 if (pointIndex < route.length + currentPointLimit) {
-                    console.log(route, route.length + currentPointLimit, pointIndex)
                     addressPoint = { latitude: route[pointIndex - currentPointLimit][1], longitude: route[pointIndex - currentPointLimit][0] }
                     break
                 }
@@ -55,12 +56,22 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
             }
         }
     }, [])
+    useEffect(() => {
+        setViewport({
+            ...viewport,
+            height: 350,
+            width: isResponsive ? 350 : 700,
+        })
+
+    }, [isResponsive])
     return (<>
         <ReactMapGL
             {...viewport}
             mapboxApiAccessToken="pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ"
             onViewportChange={(nextViewport: any) => setViewport({
                 ...nextViewport,
+                height: 350,
+                width: isResponsive ? 350 : 700,
             })}
             className="rounded-xl drop-shadow-xl"
         // onClick={handleMapClick}
@@ -77,6 +88,7 @@ function TaskMap({ routes, mcps, disposalFactories, vehicle, state }: { state:st
                     anchor="bottom"
                     offsetTop={-20}
                     offsetLeft={-10}
+                    style={{zIndex:5}}
                     mapStyle="mapbox://styles/mapbox/streets-v9"
                     onClick={() => { handleShowPopUp({ latitude: vehiclePoint.latitude, longitude: vehiclePoint.longitude, type: "vehicle" }) }}
                 >
