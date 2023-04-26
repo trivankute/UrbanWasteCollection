@@ -178,7 +178,7 @@ function VehicleModal() {
                                 <div className="flex flex-col flex-1 bg-white z-10">
                                     <div className="relative dark:bg-gray-600">
                                         <div className="flex items-start justify-between p-2 sm:p-4 border-b rounded-t dark:border-gray-600">
-                                            <h3 className="text-ant sm:text-sm sm:text-xl font-semibold text-gray-900 dark:text-white">
+                                            <h3 className="text-ant sm:text-xl font-semibold text-gray-900 dark:text-white">
                                                 Vehicle Detail
                                             </h3>
                                             <button
@@ -224,7 +224,7 @@ function VehicleModal() {
                                                 Number: {vehicle.workers.length}/4 Workers
                                             </span>
                                             {
-                                                user.role==="backofficer"&&
+                                                user.role==="backofficer"&&vehicle.state!=="in progress"&&
                                                 <>
                                                 {
                                                 !vehicleLoading ?
