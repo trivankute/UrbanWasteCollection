@@ -6,7 +6,7 @@ import "./lol.css"
 import formatTime from "../../../utils/formatTime";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDisposals } from "../../../redux/slices/DisposalsSlice";
-import { DisposalsStore, MCPsStore } from "../../../redux/selectors";
+import { DisposalsStore, MCPsStore, ResponsiveStore } from "../../../redux/selectors";
 import { getAllMcps } from "../../../redux/slices/McpsSlice";
 import clsx from "clsx";
 import SmallNotification from "../../../redux/slices/Modals/SmallNotificationSlice";
@@ -17,6 +17,7 @@ import Spinner from "../../Spinner/Spinner";
 import { beginViewPoint } from "../../../configs";
 function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRoutesForAdd }
     : { setDisposalBefore: any, setDisposalAfter: any, setMcpsForAdd: any, setRoutesForAdd: any }) {
+    const isResponsive = useSelector(ResponsiveStore).data
     const [viewport, setViewport] = useState(beginViewPoint);
     const [showPopup, setShowPopup] = useState(false)
     const [popupInfo, setPopupInfo] = useState<any>(null)
@@ -173,12 +174,22 @@ function TaskAddMap({ setDisposalBefore, setDisposalAfter, setMcpsForAdd, setRou
             dispatch(SmallNotification.actions.handleOpen({ type: "error", content: "Please choose 2 disposals and 1 mcp" }))
         }
     }
+    useEffect(() => {
+        setViewport({
+            ...viewport,
+            height: 350,
+            width: isResponsive ? 350 : 700,
+        })
+
+    }, [isResponsive])
     return (<div className="flex flex-col w-full h-fit space-y-4">
         <ReactMapGL
             {...viewport}
             mapboxApiAccessToken="pk.eyJ1IjoidHJpdmFuN2ExNiIsImEiOiJjbDR3cTlwa2wwMXpzM2NvNHZwODZybmhoIn0.pshfsEO2bV10VYCFWIYLeQ"
             onViewportChange={(nextViewport: any) => setViewport({
                 ...nextViewport,
+                height: 350,
+                width: isResponsive ? 350 : 700,
             })}
             className="rounded-xl drop-shadow-xl"
         // onClick={handleMapClick}

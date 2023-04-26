@@ -47,7 +47,7 @@ function TaskModal() {
                 transition={{
                     duration: pageMotionTime
                 }}
-                className="w-[100%] max-w-[360px] sm:max-w-[600px] h-fit fixed -mt-32  shadow-md "
+                className="w-[100%] max-w-[380px] sm:max-w-[600px] h-fit fixed -mt-32  shadow-md "
             >
                 <div className="relative bg-white rounded-lg overflow-hidden w-full max-h-full flex ">
                     <AnimatePresence mode="wait">
@@ -77,7 +77,7 @@ function TaskModal() {
                                             <span className="sr-only">Close modal</span>
                                         </button>
                                     </div>
-                                    <div className="p-6 space-y-4 w-full border-b">
+                                    <div className="p-2 sm:p-6 space-y-4 w-full border-b">
                                         <div className="w-full h-fit flex justify-around">
                                             <span className="text-sm font-semibold">Task name: <span className="text-sm font-normal">{taskModalData.name}</span></span>
                                             <span className="text-sm font-semibold">State: <span className={clsx("text-sm font-normal capitalize", {
@@ -134,7 +134,7 @@ function TaskModal() {
                                         setRouteMcp(true)
                                     }} className="group p-4 cursor-pointer flex items-center justify-end ml-auto">
                                         <div className="group-hover:text-green-500 flex space-x-2 justify-between items-center">
-                                            <span className="text-base">
+                                            <span className="text-ant sm:text-base">
                                                 {
                                                     taskModalData.state === "in progress" ?
                                                         "Routes And MCPs"
@@ -166,7 +166,7 @@ function TaskModal() {
                                         }} className="group p-4 cursor-pointer flex items-center justify-end mr-auto">
                                             <div className="group-hover:text-green-500 flex space-x-2 justify-between items-center">
                                                 <FontAwesomeIcon icon={faArrowLeft as IconProp} className='group-hover:text-green-500 cursor-pointer hover:text-green-400 w-4 h-4 text-gray-500' />
-                                                <span className="text-base">
+                                                <span className="text-ant sm:text-base">
                                                     Back
                                                 </span>
                                             </div>
@@ -181,20 +181,20 @@ function TaskModal() {
                                             <span className="sr-only">Close modal</span>
                                         </button>
                                     </div>
-                                    <div className="p-6 space-y-4 w-full">
+                                    <div className="p-2 sm:p-6 space-y-4 w-full">
                                         {
                                             taskModalData && taskModalData.disposalFactories && taskModalData.disposalFactories.length === 1 ?
                                                 <>
-                                                    <div className="w-full h-fit text-base font-semibold">Departure and arrival disposal: {taskModalData.disposalFactories[0].name}</div>
+                                                    <div className="w-full h-fit text-ant sm:text-base font-semibold">Departure and arrival disposal: {taskModalData.disposalFactories[0].name}</div>
                                                 </>
                                                 :
                                                 <>
-                                                    <div className="w-full h-fit text-base font-semibold">Departure disposal: {taskModalData.disposalFactories[1].name}</div>
-                                                    <div className="w-full h-fit text-base font-semibold">Arrival disposal: {taskModalData.disposalFactories[0].name}</div>
+                                                    <div className="w-full h-fit text-ant sm:text-base font-semibold">Departure disposal: {taskModalData.disposalFactories[1].name}</div>
+                                                    <div className="w-full h-fit text-ant sm:text-base font-semibold">Arrival disposal: {taskModalData.disposalFactories[0].name}</div>
                                                 </>
                                         }
 
-                                        <div className="w-full h-fit text-base font-semibold">Routes And Current Location with red is departure and green is arrival: </div>
+                                        <div className="w-full h-fit text-ant sm:text-base font-semibold">Routes And Current Location with red is departure and green is arrival: </div>
                                         <TaskMap state={taskModalData.state} routes={taskModalData.routes} mcps={taskModalData.mcps} disposalFactories={taskModalData.disposalFactories}
                                             vehicle={taskModalData.vehicle} />
                                         {
@@ -205,10 +205,10 @@ function TaskModal() {
                                                             return (
                                                                 <>
                                                                     <div className="w-full h-fit flex flex-col space-y-2">
-                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
+                                                                        <span className="w-full h-fit text-ant sm:text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
                                                                     </div>
                                                                     <div className="w-full h-fit flex flex-col space-y-2">
-                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity after: <span className="font-normal">{taskModalData.mcpResultCapacitys[index]}%</span></span>
+                                                                        <span className="w-full h-fit text-ant sm:text-base font-semibold">MCP {mcp.name}'s capacity after: <span className="font-normal">{taskModalData.mcpResultCapacitys[index]}%</span></span>
                                                                     </div>
                                                                 </>
                                                             )
@@ -222,7 +222,7 @@ function TaskModal() {
                                                             return (
                                                                 <>
                                                                     <div className="w-full h-fit flex flex-col space-y-2">
-                                                                        <span className="w-full h-fit text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
+                                                                        <span className="w-full h-fit text-ant sm:text-base font-semibold">MCP {mcp.name}'s capacity before: <span className="font-normal">{taskModalData.mcpPreviousCapacitys[index]}%</span></span>
                                                                     </div>
                                                                 </>
                                                             )

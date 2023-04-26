@@ -50,16 +50,16 @@ const Graph = () => {
                         let currentPointLimit = 0;
                         let pointIndex = vehicle.currentMovingPointIndex
                         let addressPoint = {}
-                        routes.map((routeJson: any, index: number) => {
-                            const route = JSON.parse(routeJson).geometry.coordinates
+                        for(let i=0; i<routes.length; i++) {
+                            const route = JSON.parse(routes[i]).geometry.coordinates
                             if (pointIndex < route.length + currentPointLimit) {
                                 addressPoint = { latitude: route[pointIndex - currentPointLimit][1], longitude: route[pointIndex - currentPointLimit][0] }
-                                return
+                                break
                             }
                             else {
                                 currentPointLimit += route.length
                             }
-                        })
+                        }
                         newVehiclePointsArray.push({ ...vehicle, ...addressPoint}) 
                     })
                     setVehiclePoints(newVehiclePointsArray)
@@ -135,6 +135,7 @@ const Graph = () => {
                                     dispatch(HomeInteractingSlice.actions.handleFillVehicleId(vehiclePoint.id))
                                     handleShowPopUp({ latitude: vehiclePoint.latitude, longitude: vehiclePoint.longitude, type: "vehicle", index: index })
                                 }}
+                                style={{zIndex:5}}
                             >
                                 <img src={xerac} alt="My Marker" className={clsx("w-10 h-10 cursor-pointer rounded-full hover:border-pink-700 border-2 border-red-500", {
                                     "border-yellow-500 w-16 h-16": taskIdForHomeInteracting === vehiclePoint.task.id

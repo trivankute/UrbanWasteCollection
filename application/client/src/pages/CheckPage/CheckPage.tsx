@@ -32,15 +32,15 @@ function CheckPage() {
             className="flex flex-col items-center md:flex-row  md:justify-center gap-12"
         >
             <div className="w-full flex flex-col items-center space-y-4">
-                <div className="w-full h-32 bg-white shadow-md rounded-xl flex items-center p-4">
-                    <span className={clsx("text-base font-semibold", {
+                <div className="w-full h-fit sm:h-32 bg-white shadow-md rounded-xl flex items-center p-4">
+                    <span className={clsx("text-sm sm:text-base font-semibold", {
                         "text-green-500": user.checkin,
                     })}>You are not check in, click the button below to checkin!</span>
                 </div>
                 {
                     user.checkin &&
-                    <div className="w-full h-32 bg-white shadow-md rounded-xl flex items-center p-4">
-                        <span className={clsx("text-base font-semibold", {
+                    <div className="w-full h-fit sm:h-32 bg-white shadow-md rounded-xl flex items-center p-4">
+                        <span className={clsx("text-sm sm:text-base font-semibold", {
                             "text-green-500": user.checkout,
                         })}>You are not check out, click the button below to checkout!</span>
                     </div>
@@ -57,7 +57,7 @@ function CheckPage() {
                                 })
                         else
                             dispatch(SmallNotification.actions.handleOpen({ type: "error", content: "You have already checked in or checked out" }))
-                    }} className="w-32 h-fit p-4 rounded-xl text-white bg-blue-400 hover:bg-blue-500 cursor-pointer shadow-md">{
+                    }} className="w-32 h-fit p-2 sm:p-4 rounded-xl text-white bg-blue-400 hover:bg-blue-500 cursor-pointer shadow-md">{
                         userLoading ?
                             <Spinner />
                             :

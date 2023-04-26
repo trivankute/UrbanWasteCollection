@@ -1,4 +1,4 @@
-import { memo, useState, useRef, useEffect } from 'react'
+import { memo, useRef, useEffect } from 'react'
 import { pageMotionTime } from '../../configs';
 import { motion } from 'framer-motion';
 import FullCalendar from '@fullcalendar/react' // must go before plugins
@@ -96,11 +96,11 @@ function OverviewPage() {
             transition={{
                 duration: pageMotionTime
             }}
-            className="w-full h-fit p-8 rounded-xl bg-white flex flex-col space-y-4">
+            className="w-full h-fit p-2 sm:p-8 rounded-xl bg-white flex flex-col space-y-4">
             {
                 (user.role==="janitor"||user.role==="collector") && 
                 <>
-                <span className="text-base font-semibold w-full h-fit">
+                <span className="text-ant sm:text-base font-semibold w-full h-fit">
                     This is your vehicle:
                 </span>
                 {
@@ -125,10 +125,10 @@ function OverviewPage() {
                                     dispatch(SmallNotification.actions.handleOpen({type:"error", content:res.payload.message}));
                                 }
                             })
-                        }} className="h-fit w-fit p-4 rounded-xl bg-orange-400 hover:bg-orange-500 shadow-md text-white capitalize">Refuel and recapacity</button>
+                        }} className="h-fit w-fit p-2 sm:p-4 text-sm sm:text-base rounded-xl bg-orange-400 hover:bg-orange-500 shadow-md text-white capitalize">Refuel and recapacity</button>
                         </div>
                         :
-                        <span className="text-base font-semibold w-full h-fit">
+                        <span className="text-ant sm:text-base font-semibold w-full h-fit">
                             You are not belong to any vehicle, please contact your manager.
                         </span>
                         }
@@ -136,7 +136,7 @@ function OverviewPage() {
                 }
                 </>
             }
-            <span className="text-base font-semibold w-full h-fit">
+            <span className="text-ant sm:text-base font-semibold w-full h-fit">
                 Click on task to see in detail:
             </span>
             <FullCalendar
@@ -231,7 +231,7 @@ function OverviewPage() {
             />
             <div
                 ref={mainRef} id="overviewPage_show" className="w-full flex flex-col h-fit p-4">
-                <span className="text-base font-semibold w-full h-fit p-4">
+                <span className="text-ant sm:text-base font-semibold w-full h-fit p-4">
                     Task information:
                 </span>
                 {taskLoading ?
@@ -251,10 +251,10 @@ function OverviewPage() {
                         {
                             (user.role === "janitor" || user.role === "collector") && !task &&
                             <div className="w-full h-fit flex flex-col space-y-4">
-                                <span className="text-base font-semibold w-full h-fit p-4">
+                                <span className="text-ant sm:text-base font-semibold w-full h-fit p-4">
                                     You don't have any task yet!
                                 </span>
-                                <span className="text-base font-semibold w-full h-fit p-4">
+                                <span className="text-ant sm:text-base font-semibold w-full h-fit p-4">
                                     Please contact your manager to assign you a task!
                                 </span>
                             </div>
