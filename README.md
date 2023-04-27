@@ -9,6 +9,7 @@
 ## **Technologies in used**
 -  Frontend: ReactTS, Redux, TailwindCSS
 -  Backend: ExpressTS, Prisma-Mongodb Online
+-  RealTime feature for vehicle tracking: Socket.io
 -  Made with ❤️ by TV for 10 days
 -  Website is already deployed on [UWC website here](https://trivan-urbanwastecollection.netlify.app)
 -  You will be user role, if you want to try backofficer role or worker role, please contact me for accounts
