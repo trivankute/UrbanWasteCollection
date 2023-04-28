@@ -271,7 +271,7 @@ const searchVehicleHandle = async (req: Request<{},{},SearchVehicleInputSchema>,
         const count = await prisma.vehicle.findMany({
             where: where,
         })
-        res.json({ status: "success", data: allVehicles, total:count })
+        res.json({ status: "success", data: allVehicles, total:count.length })
     }
     catch (err) {
         // search vehicle fail

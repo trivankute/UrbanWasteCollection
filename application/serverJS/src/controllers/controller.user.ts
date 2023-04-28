@@ -253,10 +253,10 @@ const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Resp
             return rest
         })
         if (!userSelect) {
-            return res.status(404).json({ status: "fail", message: "User not found", total:count })
+            return res.status(404).json({ status: "fail", message: "User not found" })
         }
         else
-            res.status(200).json({ status: "success", data: userSelect })
+            res.status(200).json({ status: "success", data: userSelect, total:count.length })
     }
     catch (err) {
         next(new ExpressError("Cannot search user", StatusCodes.INTERNAL_SERVER_ERROR))

@@ -394,7 +394,7 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                     }
                 },
             })
-            res.status(200).json({ status: "success", data: doneTasks, total:count })
+            res.status(200).json({ status: "success", data: doneTasks, total:count.length })
         }
         else {
             const tasks = await prisma.task.findMany({
@@ -464,7 +464,34 @@ const searchTask = async (req: Request<{}, {}, searchTasksInput>, res: Response,
                     createdAt: true, updatedAt: true, doneAt: true,
                 }
             })
-            res.status(200).json({ status: "success", data: tasks })
+            const count = await prisma.task.findMany({
+                where: {
+                    name: {
+                        contains: name
+                    },
+                    type: {
+                        contains: type
+                    },
+                    state: {
+                        contains: state
+                    },
+                    disposalFactories: {
+                        some: {
+                            name: {
+                                contains: disposalName as string
+                            }
+                        }
+                    },
+                    mcps: {
+                        some: {
+                            name: {
+                                contains: mcpName
+                            }
+                        }
+                    }
+                },
+            })
+            res.status(200).json({ status: "success", data: tasks, total:count.length })
         }
     }
     catch (err) {
