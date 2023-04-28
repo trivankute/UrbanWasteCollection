@@ -8,6 +8,7 @@ import ListFilter from "../../Components/ListFilter/ListFilter";
 import { searchWorkers } from "../../redux/slices/WorkersSlice";
 import { WorkersStore } from "../../redux/selectors";
 import Spinner from "../../Components/Spinner/Spinner";
+import Pagination from "../../Components/Pagination/Pagination";
 
 function WorkersPage() {
     const dispatch = useDispatch<any>();
@@ -15,9 +16,11 @@ function WorkersPage() {
     const [state, setState] = useState("")
     const [name, setName] = useState("")
     const workers = useSelector(WorkersStore)
+    const [currPage, setCurrPage] = useState(1)
+    const pageSize = 8
     useEffect(() => {
         handleSearch()
-    }, [])
+    }, [currPage])
     function handleSearch() {
         dispatch(searchWorkers(
             {
@@ -25,8 +28,8 @@ function WorkersPage() {
                 "role": role,
                 "disposalName": "",
                 "state": state,
-                "page": 1,
-                "pageSize": 10
+                "page": currPage,
+                "pageSize": pageSize
             }
         ))
     }
@@ -49,10 +52,10 @@ function WorkersPage() {
             }}
             className="h-full space-y-4"
         >
-            <PageHeaderSearchAdd setState={setName} state={name} handleSearch={handleSearch} type="workers" />
+            <PageHeaderSearchAdd setState={setName} setCurrPage={setCurrPage} state={name} handleSearch={handleSearch} type="workers" />
             <div className="w-full h-fit flex items-center space-x-4">
-                <ListFilter setState={setRole} ListArrayText={["Select role", "collector", "janitor"]} />
-                <ListFilter setState={setRole} ListArrayText={["Select state", "nothing", "in progress"]} />
+                <ListFilter setState={setRole} setCurrPage={setCurrPage} ListArrayText={["Select role", "collector", "janitor"]} />
+                <ListFilter setState={setState} setCurrPage={setCurrPage} ListArrayText={["Select state", "nothing", "in progress"]} />
             </div>
             {
                 workers.loading ?
@@ -60,13 +63,22 @@ function WorkersPage() {
                         <Spinner />
                     </div>
                     :
-                    workers.data && workers.data.length>0? workers.data.map((worker: any) => {
+                    workers.data && workers.data.length>0? 
+                    <>
+                    <div className="w-full h-fit font-semibold text-ant sm:text-base">Result: {workers.data.length}</div>
+                    {workers.data.map((worker: any) => {
                         return <WorkerChild image={worker.image} workerData={worker} name={worker.name} taskName={(worker.vehicle&& worker.vehicle.task) ? worker.vehicle.task.name.substring(0,10)+"..." : "None"}
                             vehicleNumberPlate={worker.vehicle ? worker.vehicle.numberPlate : "None"} role={worker.role} />
-                    })
+                    })}
+                    </>
                     :
                     <div className="mt-2">
                     None</div>
+            }
+            {
+                <div className="w-full h-fit mt-auto flex justify-end">
+                    <Pagination currPage={currPage} setCurrPage={setCurrPage} totalPage={Math.ceil(workers.total/pageSize)}/>
+                </div>
             }
         </motion.div>
     </>);

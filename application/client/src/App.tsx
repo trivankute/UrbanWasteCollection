@@ -36,6 +36,7 @@ function App() {
   const dispatch = useDispatch<any>();
   const errorIsShow = useSelector(SmallNotificationStore).show
   useEffect(() => {
+    document.title = "Urban Waste Collection 2.0"
     // dispatch(login({
     //   "email": "trivan@gmail.com",
     //   "password":"123456"

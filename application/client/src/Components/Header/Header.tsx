@@ -1,5 +1,6 @@
 import { memo } from "react";
 import xerac from "../../assets/vehicles/xerac.jpg";
+import xe_rac_header from "../../assets/HeaderLogo/xe_rac_header.png";
 import { useDispatch, useSelector } from 'react-redux'
 import MenuSlice from "../../redux/slices/MenuSlice";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ function Header() {
                     <div onClick={() => {
                         navigate('/')
                     }} className="cursor-pointer flex items-center">
-                        <img src={xerac} className="shadow-md rounded-full mr-3 h-6 sm:h-9" alt="Xe rac Logo" />
+                        <img src={xe_rac_header} className="shadow-md rounded-full mr-3 h-6 sm:h-9" alt="Xe rac Logo" />
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">UWC2.0</span>
                     </div>
                     <div className="flex items-center lg:order-2">
