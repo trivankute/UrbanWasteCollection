@@ -7,7 +7,8 @@ const TasksSlice = createSlice({
     initialState:{
         loading:false,
         tasks:false,
-        task:false
+        task:false,
+        total:false
     },
     reducers:{  
     },
@@ -20,6 +21,7 @@ const TasksSlice = createSlice({
             state.loading = false;
             if (action.payload.status === "success") {
                 state.tasks = action.payload.data;
+                state.total = action.payload.total;
             }
         })
         .addCase(getTaskById.pending, (state, action) => {
@@ -79,7 +81,7 @@ export const searchTasks = createAsyncThunk('searchTasks', async (input:
     try {
         const {data} = await axios.post(`${serverUrl}/task`,input)
         if(data.status === 'success'){
-            return {status:"success",data:data.data};
+            return {status:"success",data:data.data, total:data.total};
         }
         else {
             return {status:"fail", message:"Cannot get tasks by something else not server"};

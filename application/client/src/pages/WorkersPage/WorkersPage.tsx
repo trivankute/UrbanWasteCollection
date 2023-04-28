@@ -52,10 +52,10 @@ function WorkersPage() {
             }}
             className="h-full space-y-4"
         >
-            <PageHeaderSearchAdd setState={setName} state={name} handleSearch={handleSearch} type="workers" />
+            <PageHeaderSearchAdd setState={setName} setCurrPage={setCurrPage} state={name} handleSearch={handleSearch} type="workers" />
             <div className="w-full h-fit flex items-center space-x-4">
-                <ListFilter setState={setRole} ListArrayText={["Select role", "collector", "janitor"]} />
-                <ListFilter setState={setRole} ListArrayText={["Select state", "nothing", "in progress"]} />
+                <ListFilter setState={setRole} setCurrPage={setCurrPage} ListArrayText={["Select role", "collector", "janitor"]} />
+                <ListFilter setState={setState} setCurrPage={setCurrPage} ListArrayText={["Select state", "nothing", "in progress"]} />
             </div>
             {
                 workers.loading ?
@@ -65,7 +65,7 @@ function WorkersPage() {
                     :
                     workers.data && workers.data.length>0? 
                     <>
-                    <span className="w-full h-fit font-semibold text-base pt-2">Result: {workers.data.length}</span>
+                    <div className="w-full h-fit font-semibold text-ant sm:text-base">Result: {workers.data.length}</div>
                     {workers.data.map((worker: any) => {
                         return <WorkerChild image={worker.image} workerData={worker} name={worker.name} taskName={(worker.vehicle&& worker.vehicle.task) ? worker.vehicle.task.name.substring(0,10)+"..." : "None"}
                             vehicleNumberPlate={worker.vehicle ? worker.vehicle.numberPlate : "None"} role={worker.role} />
@@ -76,7 +76,6 @@ function WorkersPage() {
                     None</div>
             }
             {
-                workers.total &&
                 <div className="w-full h-fit mt-auto flex justify-end">
                     <Pagination currPage={currPage} setCurrPage={setCurrPage} totalPage={Math.ceil(workers.total/pageSize)}/>
                 </div>

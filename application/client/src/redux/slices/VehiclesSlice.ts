@@ -7,7 +7,8 @@ const VehiclesSlice = createSlice({
     initialState: {
         loading: false,
         vehicles: false,
-        vehicle: false
+        vehicle: false,
+        total:false
     },
     reducers: {
     },
@@ -38,6 +39,7 @@ const VehiclesSlice = createSlice({
                 state.loading = false;
                 if (action.payload.status === "success") {
                     state.vehicles = action.payload.data;
+                    state.total = action.payload.total;
                 }
             })
             .addCase(assignWorkersToVehicle.pending, (state, action) => {
@@ -129,7 +131,7 @@ export const handleSearchVehicle = createAsyncThunk('handleSearchVehicle', async
     try {
         const { data } = await axios.post(`${serverUrl}/vehicle`, input, {});
         if (data.status === 'success') {
-            return { status: "success", data: data.data };
+            return { status: "success", data: data.data, total:data.total };
         }
         else {
             return { status: "fail", message: data.message };
