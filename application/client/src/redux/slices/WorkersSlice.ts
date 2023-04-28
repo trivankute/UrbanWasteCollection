@@ -8,7 +8,8 @@ const WorkersSlice = createSlice({
     name:"WorkersSlice",
     initialState:{
         loading:false,
-        data:false
+        data:false,
+        total:false
     },
     reducers:{  
         handleRemoveWorkerForTemp(state, action) {
@@ -29,6 +30,7 @@ const WorkersSlice = createSlice({
             state.loading = false;
             if(action.payload.status === "success") {
                 state.data = action.payload.data;
+                state.total = action.payload.total;
             }
         })
     }
@@ -64,7 +66,7 @@ export const searchWorkers = createAsyncThunk('searchWorkers', async (input:{
             });
         }
         if(data.status === 'success'){
-            return {status:"success",data:data.data};
+            return {status:"success",data:data.data, total:data.total};
         }
         else {
             return {status:"fail", message:data.message};
