@@ -227,13 +227,33 @@ const searchUserHandle = async (req: Request<{}, {}, searchUserInput>, res: Resp
             }
         })
 
+        let count = await prisma.user.findMany({
+            where: {
+                name: {
+                    contains: name as string
+                },
+                role: {
+                    contains: role as string,
+                    not: "backofficer"
+                },
+                disposalFactory: {
+                    name: {
+                        contains: disposalName as string
+                    }
+                },
+                state: {
+                    contains: state as string
+                },
+            },
+        })
+
         // select the user
         let userSelect = user.map((item) => {
             const { password, salt, ...rest } = item;
             return rest
         })
         if (!userSelect) {
-            return res.status(404).json({ status: "fail", message: "User not found" })
+            return res.status(404).json({ status: "fail", message: "User not found", total:count })
         }
         else
             res.status(200).json({ status: "success", data: userSelect })
