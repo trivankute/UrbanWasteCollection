@@ -217,6 +217,27 @@ const refuelVehicleHandle = async (req: Request<RefuelVehicleInputParamHandle,{}
             data: {
                 fuel: 100,
                 capacity: 0
+            },
+            include: {
+                currentDisposalFactory: {
+                    select: {
+                        id: true,
+                        name: true,
+                        addressPoint: true,
+                    }
+                },
+                workers: {
+                    select: {
+                        id: true,
+                        name: true,
+                        vehicleId:true,
+                        vehicle:true,
+                        state: true,
+                        role:true,
+                        image:true
+                    }
+                },
+                task: true
             }
         })
         res.json({ status: "success", data: vehicle })
